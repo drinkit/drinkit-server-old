@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+    <properties>
+        <property name="pattern">%d{HH:mm:ss.SSS} %level - %m%n%ex</property>
+    </properties>
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}"/>
+        </Console>
+        <File name="log4jdbc_file" fileName="target/log4jdbc_file.log">
+            <PatternLayout pattern="${pattern}"/>
+        </File>
+    </appenders>
+    <loggers>
+        <root level="info">
+            <MarkerFilter marker="LOG4JDBC_NON_STATEMENT" onMatch="DENY" onMismatch="NEUTRAL"/>
+            <appender-ref ref="Console"/>
+        </root>
+        <logger name="jdbc.sqltiming" level="info" additivity="false">
+            <appender-ref ref="log4jdbc_file"/>
+            <appender-ref ref="Console"/>
+        </logger>
+        <logger name="jdbc.sqlonly" level="off" additivity="false"/>
+        <logger name="jdbc.audit" level="off" additivity="false"/>
+        <logger name="jdbc.resultset" level="off" additivity="false"/>
+        <logger name="jdbc.resultsettable" level="off" additivity="false"/>
+        <logger name="jdbc.connection" level="off" additivity="false"/>
+    </loggers>
+</configuration>
+
