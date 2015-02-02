@@ -1,0 +1,8 @@
+#!/bin/bash
+URL=https://raw.githubusercontent.com/pkolmykov/jetty-openshift-java8/maven3/
+
+curl -s ${URL}java_setup.sh | bash -s "http://download.oracle.com/otn-pub/java/jdk/8u25-b17/jdk-8u25-linux-x64.tar.gz"
+curl -s ${URL}jetty_setup.sh | bash -s "http://download.eclipse.org/jetty/stable-9/dist/jetty-distribution-9.2.6.v20141205.tar.gz"
+curl -s ${URL}maven_setup.sh | bash -s "http://apache.cp.if.ua/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz"
+curl -s ${URL}build.sh | bash
+curl -s ${URL}start.sh | bash
