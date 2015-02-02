@@ -1,12 +1,14 @@
 package guru.drinkit.common;
 
-import guru.drinkit.domain.Recipe;
-
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import guru.drinkit.domain.Recipe;
+import org.apache.commons.collections4.Transformer;
+import org.apache.commons.collections4.iterators.ArrayIterator;
+
+import static org.apache.commons.collections4.CollectionUtils.collect;
 
 public class RecipeComparatorByCriteria implements Comparator<Recipe> {
 
@@ -27,8 +29,12 @@ public class RecipeComparatorByCriteria implements Comparator<Recipe> {
 
     private int getOverlapRate(Recipe recipe) {
         Set<Integer> tmp = new HashSet<>(criteria.getIngredients());
-        tmp.retainAll(Arrays.stream(recipe.getCocktailIngredients())
-                .map(val -> val[0]).collect(Collectors.toSet()));
+        tmp.removeAll(collect(new ArrayIterator<Integer[]>(recipe.getCocktailIngredients()), new Transformer<Integer[], Integer>() {
+            @Override
+            public Integer transform(final Integer[] integers) {
+                return integers[0];
+            }
+        }));
         return tmp.size();
     }
 }

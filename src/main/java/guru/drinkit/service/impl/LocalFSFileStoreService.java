@@ -1,15 +1,16 @@
 package guru.drinkit.service.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.Date;
+import javax.annotation.Resource;
+
 import guru.drinkit.service.FileStoreService;
 import guru.drinkit.springconfig.WebConfig;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,13 +29,18 @@ public class LocalFSFileStoreService implements FileStoreService {
     public String save(int recipeId, byte[] media, String mediaType) throws IOException {
         String mediaFolder = environment.getProperty("media.folder");
         long time = new Date().getTime();
-        String filePrefix = recipeId + "_" + mediaType + "_";
+        final String filePrefix = recipeId + "_" + mediaType + "_";
         String fileName = filePrefix + time + ".jpg";
         String filePath = mediaFolder + File.separator + fileName;
 
         File folder = new File(mediaFolder);
         folder.mkdirs();
-        File[] files = folder.listFiles((dir, name) -> name.startsWith(filePrefix));
+        File[] files = folder.listFiles(new FilenameFilter() {
+            @Override
+            public boolean accept(final File dir, final String name) {
+                return name.startsWith(filePrefix);
+            }
+        });
         if (files != null) {
             for (File file : files) {
                 file.delete();
