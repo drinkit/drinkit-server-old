@@ -1,6 +1,7 @@
 package guru.drinkit.springconfig;
 
 import com.mongodb.MongoClient;
+import com.mongodb.ServerAddress;
 import guru.drinkit.repository.RepositoryPackage;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +30,9 @@ public class MongoConfig extends AbstractMongoConfiguration {
     @Override
     @Bean
     public MongoClient mongo() throws Exception {
-        return new MongoClient(env.getRequiredProperty("mongo.host"));
+        String port = env.getProperty("mongo.port");
+        return new MongoClient(env.getRequiredProperty("mongo.host"),
+                port == null ? ServerAddress.defaultPort() : Integer.valueOf(port));
     }
 
     @Override
