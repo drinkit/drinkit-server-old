@@ -2,7 +2,6 @@ package guru.drinkit.springconfig;
 
 import javax.servlet.Filter;
 
-import guru.drinkit.security.SimpleCORSFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
@@ -32,7 +31,7 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Filter[] getServletFilters() {
-        return new Filter[]{new ShallowEtagHeaderFilter(), new SimpleCORSFilter()};
+        return new Filter[]{new ShallowEtagHeaderFilter()};
     }
 
 }
