@@ -17,11 +17,11 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Expose-Headers", "WWW-Authenticate");
         response.setHeader("Access-Control-Max-Age", "3600");
-        if (request.getHeader("Access-Control-Request-Method") != null
-                && "OPTIONS".equals(request.getMethod())) {
-            // CORS "pre-flight" request
+//        if (request.getHeader("Access-Control-Request-Method") != null
+//                && "OPTIONS".equals(request.getMethod())) {
+//            // CORS "pre-flight" request
             response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
             response.setHeader("Access-Control-Allow-Headers", "authorization, content-type");
-        }
+//        }
     }
 }
