@@ -16,6 +16,7 @@ public class SimpleCORSFilter extends OncePerRequestFilter {
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain) throws ServletException, IOException {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Expose-Headers", "WWW-Authenticate");
+        response.setHeader("Access-Control-Max-Age", "3600");
         if (request.getHeader("Access-Control-Request-Method") != null
                 && "OPTIONS".equals(request.getMethod())) {
             // CORS "pre-flight" request
