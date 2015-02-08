@@ -37,10 +37,12 @@ public class RecipeController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createRecipe(@RequestBody Recipe recipe) {
+    @ResponseBody
+    public Recipe createRecipe(@RequestBody Recipe recipe) {
         Assert.isNull(recipe.getId());
         DrinkitUtils.logOperation("Creating recipe", recipe);
         recipeService.save(recipe);
+        return recipe;
     }
 
 
