@@ -21,15 +21,21 @@ public class BarItemsService {
         return barItemsRepository.save(barItem);
     }
 
-    public void delete(final ObjectId itemId) {
+    public void delete(final ObjectId itemId, final Integer ingredientId) {
         barItemsRepository.delete(itemId);
     }
 
-    public void changeStatus(final ObjectId itemId, final boolean isActive) {
-        barItemsRepository.
-    }
 
     public List<BarItem> findAll(final ObjectId userId) {
         return barItemsRepository.find;
+    }
+
+    public BarItem edit(final BarItem barItem) {
+        return null;
+
+    }
+
+    public void changeStatus(final ObjectId userId, final Integer ingredientId, final boolean isActive) {
+
     }
 }

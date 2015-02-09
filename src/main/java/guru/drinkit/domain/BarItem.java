@@ -33,4 +33,6 @@ public class BarItem {
     public void setActive(final boolean isActive) {
         this.isActive = isActive;
     }
+
+    public static
 }

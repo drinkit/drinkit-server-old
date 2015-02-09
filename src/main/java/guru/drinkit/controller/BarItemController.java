@@ -7,6 +7,7 @@ import guru.drinkit.service.BarItemsService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,14 +32,20 @@ public class BarItemController {
         return barItemsService.create(barItem);
     }
 
-    @RequestMapping(value = "${itemId}", method = RequestMethod.DELETE)
-    public void deleteItem(@PathVariable ObjectId itemId){
-        barItemsService.delete(itemId);
+    @RequestMapping(value = "{ingredientId}", method = RequestMethod.DELETE)
+    public void deleteItem(@PathVariable ObjectId itemId, @PathVariable Integer ingredientId){
+        barItemsService.delete(itemId, ingredientId);
     }
 
-    @RequestMapping(value = "${itemId}", method = RequestMethod.PUT)
-    public void changeStatus(@PathVariable ObjectId itemId, boolean isActive){
-        barItemsService.changeStatus(itemId, isActive);
+    @RequestMapping(value = "{ingredientId}", method = RequestMethod.PATCH)
+    public void changeStatus(@PathVariable ObjectId userId, @PathVariable Integer ingredientId, boolean isActive){
+        barItemsService.changeStatus(userId, ingredientId, isActive);
+    }
+
+    @RequestMapping(value = "{ingredientId}", method = RequestMethod.PUT)
+    public BarItem edit(@PathVariable ObjectId userId, @PathVariable Integer ingredientId, BarItem barItem){
+        Assert.isTrue(barItem.getUserId().equals(userId) && barItem.getIngredientId().equals(ingredientId));
+        return barItemsService.edit(barItem);
     }
 
 }
