@@ -16,6 +16,7 @@ public class Recipe {
     private Integer id;
     private Date createdDate = new Date();
     private String addedBy;
+    private boolean hidden;
 
     //-------------------------------------------------------------------
 
@@ -98,6 +99,14 @@ public class Recipe {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(final boolean hidden) {
+        this.hidden = hidden;
     }
 
     @Override
