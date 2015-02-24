@@ -8,4 +8,8 @@ import org.bson.types.ObjectId;
  */
 public interface UserBarRepository {
     void updateBarItem(ObjectId userId, User.BarItem barItem);
+
+    void addBarItem(ObjectId userId, User.BarItem barItem);
+
+    void removeBarItem(ObjectId userId, Integer ingredientId);
 }

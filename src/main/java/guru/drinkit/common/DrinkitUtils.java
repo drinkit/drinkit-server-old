@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.Assert;
 
 public class DrinkitUtils {
 
@@ -36,6 +37,10 @@ public class DrinkitUtils {
             }
         }
         return null;
+    }
+
+    public static void assertEqualsIds(final int id1, final int id2) {
+        Assert.isTrue(id1 == id2, "id from uri and id from json should be identical");
     }
 
 }

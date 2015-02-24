@@ -95,7 +95,7 @@ public class RecipeController {
     @RequestMapping(value = "{recipeId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateRecipe(@PathVariable int recipeId, @RequestBody Recipe recipe) {
-        Assert.isTrue(recipeId == recipe.getId(), "id from uri and id from json should be identical");
+        DrinkitUtils.assertEqualsIds(recipeId, recipe.getId());
         DrinkitUtils.logOperation("Updating recipe", recipe);
         recipeService.save(recipe);
     }

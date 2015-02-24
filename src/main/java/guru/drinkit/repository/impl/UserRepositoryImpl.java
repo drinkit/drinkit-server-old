@@ -5,7 +5,7 @@ import guru.drinkit.repository.UserBarRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.data.mongodb.core.query.Update;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -20,7 +20,26 @@ public class UserRepositoryImpl implements UserBarRepository {
     private MongoOperations mongoOperations;
 
     @Override
-    public void updateBarItem(final ObjectId userId, @RequestBody final User.BarItem barItem) {
-        mongoOperations.updateFirst(query(where("_id").is(userId).and("barItems.ingredientId").is(barItem.getIngredientId())), update("barItems.$", barItem), User.class);
+    public void updateBarItem(ObjectId userId, User.BarItem barItem) {
+        mongoOperations.updateFirst(
+                query(where("_id").is(userId).and("barItems.ingredientId").is(barItem.getIngredientId())),
+                update("barItems.$", barItem),
+                User.class);
+    }
+
+    @Override
+    public void addBarItem(ObjectId userId, User.BarItem barItem) {
+        mongoOperations.updateFirst(
+                query(where("_id").is(userId)),
+                new Update().push("barItems", barItem),
+                User.class);
+    }
+
+    @Override
+    public void removeBarItem(ObjectId userId, Integer ingredientId) {
+        mongoOperations.updateFirst(
+                query(where("_id").is(userId)),
+                new Update().pull("barItems", where("ingredientId").is(ingredientId).getCriteriaObject()),
+                User.class);
     }
 }
