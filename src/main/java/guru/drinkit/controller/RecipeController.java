@@ -49,21 +49,6 @@ public class RecipeController {
     @RequestMapping(method = RequestMethod.GET, params = "criteria")
     @ResponseBody
     public List<Recipe> searchRecipes(@RequestParam(value = "criteria", required = false) Criteria criteria) {
-//        List<Recipe> recipeDtos;
-//        if (json != null) {
-//            ObjectMapper objectMapper = new ObjectMapper();
-//            Criteria criteria;
-//            try {
-//                criteria = objectMapper.readValue(json, Criteria.class);
-//            } catch (IOException e) {
-//                LOGGER.error("Bad criteria", e);
-//                return null;
-//            }
-//            recipeDtos = recipeService.findByCriteria(criteria);
-//        } else {
-//            recipeDtos = recipeService.findAll();
-//        }
-//        return recipeDtos;
         return criteria == null ? recipeService.findAll() : recipeService.findByCriteria(criteria);
     }
 
