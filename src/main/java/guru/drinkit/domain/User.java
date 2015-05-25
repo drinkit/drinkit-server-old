@@ -1,7 +1,8 @@
 package guru.drinkit.domain;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.PersistenceConstructor;
 
 /**
  * Created by pkolmykov on 12/8/2014.
@@ -16,18 +17,27 @@ public class User {
     private String password;
     private String displayName;
     private Integer accessLevel;
+    private List<BarItem> barItems;
 
-    public User() {
+    public List<BarItem> getBarItems() {
+        return barItems;
     }
 
-    @PersistenceConstructor
-    protected User(ObjectId id, String username, String password, String displayName, Integer accessLevel) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.displayName = displayName;
-        this.accessLevel = accessLevel;
+    public void setBarItems(final List<BarItem> barItems) {
+        this.barItems = barItems;
     }
+
+    //    public User() {
+//    }
+//
+//    @PersistenceConstructor
+//    protected User(ObjectId id, String username, String password, String displayName, Integer accessLevel) {
+//        this.id = id;
+//        this.username = username;
+//        this.password = password;
+//        this.displayName = displayName;
+//        this.accessLevel = accessLevel;
+//    }
 
     public ObjectId getId() {
         return id;
@@ -63,5 +73,27 @@ public class User {
 
     public void setAccessLevel(Integer accessLevel) {
         this.accessLevel = accessLevel;
+    }
+
+    public static class BarItem {
+        private Integer ingredientId;
+        private boolean isActive = true;
+
+        public Integer getIngredientId() {
+            return ingredientId;
+        }
+
+        public void setIngredientId(final Integer ingredientId) {
+            this.ingredientId = ingredientId;
+        }
+
+        public boolean isActive() {
+            return isActive;
+        }
+
+        public void setActive(final boolean isActive) {
+            this.isActive = isActive;
+        }
+
     }
 }

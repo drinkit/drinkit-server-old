@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static guru.drinkit.common.DrinkitUtils.assertEqualsIds;
+
 @Controller
 @RequestMapping("ingredients")
 public class IngredientsController {
@@ -35,7 +37,7 @@ public class IngredientsController {
     @RequestMapping(value = "{id}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Updated")
     public void editIngredient(@RequestBody Ingredient ingredient, @PathVariable int id) {
-        Assert.isTrue(id == ingredient.getId(), "id from uri and id from json should be identical");
+        assertEqualsIds(ingredient.getId(), id);
         DrinkitUtils.logOperation("Updating ingredient", ingredient);
         ingredientService.save(ingredient);
     }
