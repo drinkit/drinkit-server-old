@@ -33,7 +33,7 @@ public class DrinkitUtils {
                 return "ANONYMOUS";
             } else if (!((UserDetails) authentication.getPrincipal()).getAuthorities()
                     .contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.name()))) {
-                return ((DetailedUser) authentication.getPrincipal()).getUsername();
+                return ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
             }
         }
         return null;
