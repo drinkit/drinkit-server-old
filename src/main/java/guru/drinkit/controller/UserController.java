@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("user")
+@RequestMapping("users")
 public class UserController {
 
     @Autowired
@@ -26,9 +26,9 @@ public class UserController {
     private UserRepository userRepository;
 
     @RequestMapping("/principal")
-     @ResponseBody
-     @PreAuthorize("isAuthenticated()")
-     public Object getPrincipal() {
+    @ResponseBody
+    @PreAuthorize("isAuthenticated()")
+    public Object getPrincipal() {
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
@@ -40,7 +40,6 @@ public class UserController {
         String username = ((UserDetails) principal).getUsername();
         return userRepository.findByUsername(username);
     }
-
 
 
     @PreAuthorize("isAnonymous()")

@@ -2,17 +2,16 @@ package guru.drinkit.domain;
 
 import java.util.List;
 
-import org.bson.types.ObjectId;
-
 /**
  * Created by pkolmykov on 12/8/2014.
  */
+@SuppressWarnings("unused")
 public class User {
 
     public static final int ACCESS_LVL_USER = 9;
     public static final int ACCESS_LVL_ADMIN = 0;
 
-    private ObjectId id;
+    private String id;
     private String username;
     private String password;
     private String displayName;
@@ -39,7 +38,7 @@ public class User {
 //        this.accessLevel = accessLevel;
 //    }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 

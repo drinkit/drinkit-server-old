@@ -6,6 +6,7 @@ import java.util.Date;
 @SuppressWarnings("UnusedDeclaration")
 public class Recipe {
 
+    private Integer id;
     private int cocktailTypeId;
     private String description;
     private String name;
@@ -13,7 +14,6 @@ public class Recipe {
     private Integer[][] cocktailIngredients;
     private String imageUrl;
     private String thumbnailUrl;
-    private Integer id;
     private Date createdDate = new Date();
     private String addedBy;
     private boolean hidden;
