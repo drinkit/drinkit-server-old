@@ -23,7 +23,7 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
     @Autowired
     UserRepository userRepository;
 
-    private ObjectId testUserId;
+    private String testUserId;
 
     @Before
     public void setUp() throws Exception {

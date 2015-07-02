@@ -1,15 +1,15 @@
 package guru.drinkit.repository;
 
 import guru.drinkit.domain.User;
-import org.bson.types.ObjectId;
+import java.lang.String;
 
 /**
  * @author pkolmykov
  */
 public interface UserBarRepository {
-    void updateBarItem(ObjectId userId, User.BarItem barItem);
+    void updateBarItem(String userId, User.BarItem barItem);
 
-    void addBarItem(ObjectId userId, User.BarItem barItem);
+    void addBarItem(String userId, User.BarItem barItem);
 
-    void removeBarItem(ObjectId userId, Integer ingredientId);
+    void removeBarItem(String userId, Integer ingredientId);
 }

@@ -2,7 +2,6 @@ package guru.drinkit.repository.impl;
 
 import guru.drinkit.domain.User;
 import guru.drinkit.repository.UserBarRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
@@ -20,7 +19,7 @@ public class UserRepositoryImpl implements UserBarRepository {
     private MongoOperations mongoOperations;
 
     @Override
-    public void updateBarItem(ObjectId userId, User.BarItem barItem) {
+    public void updateBarItem(String userId, User.BarItem barItem) {
         mongoOperations.updateFirst(
                 query(where("_id").is(userId).and("barItems.ingredientId").is(barItem.getIngredientId())),
                 update("barItems.$", barItem),
@@ -28,7 +27,7 @@ public class UserRepositoryImpl implements UserBarRepository {
     }
 
     @Override
-    public void addBarItem(ObjectId userId, User.BarItem barItem) {
+    public void addBarItem(String userId, User.BarItem barItem) {
         mongoOperations.updateFirst(
                 query(where("_id").is(userId)),
                 new Update().push("barItems", barItem),
@@ -36,7 +35,7 @@ public class UserRepositoryImpl implements UserBarRepository {
     }
 
     @Override
-    public void removeBarItem(ObjectId userId, Integer ingredientId) {
+    public void removeBarItem(String userId, Integer ingredientId) {
         mongoOperations.updateFirst(
                 query(where("_id").is(userId)),
                 new Update().pull("barItems", where("ingredientId").is(ingredientId).getCriteriaObject()),
