@@ -1,5 +1,6 @@
 package guru.drinkit.repository.impl;
 
+import guru.drinkit.domain.BarItem;
 import guru.drinkit.domain.User;
 import guru.drinkit.repository.UserBarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class UserRepositoryImpl implements UserBarRepository {
     private MongoOperations mongoOperations;
 
     @Override
-    public void updateBarItem(String userId, User.BarItem barItem) {
+    public void updateBarItem(String userId, BarItem barItem) {
         mongoOperations.updateFirst(
                 query(where("_id").is(userId).and("barItems.ingredientId").is(barItem.getIngredientId())),
                 update("barItems.$", barItem),
@@ -27,7 +28,7 @@ public class UserRepositoryImpl implements UserBarRepository {
     }
 
     @Override
-    public void addBarItem(String userId, User.BarItem barItem) {
+    public void addBarItem(String userId, BarItem barItem) {
         mongoOperations.updateFirst(
                 query(where("_id").is(userId)),
                 new Update().push("barItems", barItem),
