@@ -1,35 +1,44 @@
 package guru.drinkit.domain;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.PersistenceConstructor;
+import java.util.List;
 
 /**
  * Created by pkolmykov on 12/8/2014.
  */
+@SuppressWarnings("unused")
 public class User {
 
     public static final int ACCESS_LVL_USER = 9;
     public static final int ACCESS_LVL_ADMIN = 0;
 
-    private ObjectId id;
+    private String id;
     private String username;
     private String password;
     private String displayName;
     private Integer accessLevel;
+    private List<BarItem> barItems;
 
-    public User() {
+    public List<BarItem> getBarItems() {
+        return barItems;
     }
 
-    @PersistenceConstructor
-    protected User(ObjectId id, String username, String password, String displayName, Integer accessLevel) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.displayName = displayName;
-        this.accessLevel = accessLevel;
+    public void setBarItems(final List<BarItem> barItems) {
+        this.barItems = barItems;
     }
 
-    public ObjectId getId() {
+    //    public User() {
+//    }
+//
+//    @PersistenceConstructor
+//    protected User(ObjectId id, String username, String password, String displayName, Integer accessLevel) {
+//        this.id = id;
+//        this.username = username;
+//        this.password = password;
+//        this.displayName = displayName;
+//        this.accessLevel = accessLevel;
+//    }
+
+    public String getId() {
         return id;
     }
 
@@ -64,4 +73,5 @@ public class User {
     public void setAccessLevel(Integer accessLevel) {
         this.accessLevel = accessLevel;
     }
+
 }

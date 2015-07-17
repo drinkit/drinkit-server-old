@@ -4,6 +4,7 @@ import guru.drinkit.domain.Ingredient;
 import guru.drinkit.service.IngredientService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 
 import java.util.List;
 
@@ -29,9 +30,11 @@ public class IngredientsControllerIT extends AbstractRestMockMvc {
                 .andExpect(content().json(objectMapper.writeValueAsString(ingredients)));
     }
 
-    @Test
-    public void testAddNewIngredient() throws Exception {
-
+    @Test(expected = DuplicateKeyException.class)//todo test through controller
+    public void testAddNewIngredientWithDuplicatedName() throws Exception {
+        Ingredient ingredient = new Ingredient();
+        ingredient.setName(firstIngredient.getName());
+        ingredientService.save(ingredient);
     }
 
     @Test

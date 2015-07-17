@@ -34,7 +34,7 @@ public abstract class AbstractBaseTest {
 
     @Before
     public void initTestData() {
-        mongoTemplate.getDb().dropDatabase();
+        cleanUp();
         firstIngredient = new Ingredient();
         firstIngredient.setDescription("firstIngredient");
         firstIngredient.setName("First");
@@ -46,6 +46,14 @@ public abstract class AbstractBaseTest {
         secondIngredient.setName("Second");
         secondIngredient.setVol(40);
         secondIngredient = ingredientService.save(secondIngredient);
+    }
+
+    private void cleanUp() {
+        for (String collectionName : mongoTemplate.getCollectionNames()) {
+            if (!collectionName.startsWith("system.")) {
+                mongoTemplate.getCollection(collectionName).findAndRemove(null);
+            }
+        }
     }
 
     protected Recipe createNewRecipeDto() {

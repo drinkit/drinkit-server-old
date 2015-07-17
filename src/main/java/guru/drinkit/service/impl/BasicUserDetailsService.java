@@ -3,7 +3,6 @@ package guru.drinkit.service.impl;
 import java.util.Collection;
 import javax.annotation.Resource;
 
-import guru.drinkit.common.DetailedUser;
 import guru.drinkit.common.Role;
 import guru.drinkit.domain.User;
 import guru.drinkit.repository.UserRepository;
@@ -29,8 +28,8 @@ public class BasicUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("Test msg");
         }
-        return new DetailedUser(user.getUsername(), user.getPassword(),
-                getAuthorities(user.getAccessLevel()), user.getDisplayName());
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                getAuthorities(user.getAccessLevel()));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Integer accessLevel) {

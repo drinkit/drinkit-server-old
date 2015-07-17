@@ -1,13 +1,27 @@
 package guru.drinkit.domain;
 
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 /**
  * @author pkolmykov
  */
+@Document
 public class Ingredient {
+
     private Integer id;
+
+    @Indexed(unique = true)
     private String name;
+
     private Integer vol;
+
     private String description;
+
+    private String category;
+
+
 
     public Integer getId() {
         return id;
@@ -41,13 +55,16 @@ public class Ingredient {
         this.description = description;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
-        return "Ingredient{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", vol=" + vol +
-                ", description='" + description + '\'' +
-                '}';
+        return new ReflectionToStringBuilder(this).toString();
     }
 }
