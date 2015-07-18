@@ -16,7 +16,7 @@ public class Recipe {
     private String thumbnailUrl;
     private Date createdDate = new Date();
     private String addedBy;
-    private boolean hidden;
+    private boolean published;
 
     //-------------------------------------------------------------------
 
@@ -101,12 +101,12 @@ public class Recipe {
         this.id = id;
     }
 
-    public boolean isHidden() {
-        return hidden;
+    public boolean isPublished() {
+        return published;
     }
 
-    public void setHidden(final boolean hidden) {
-        this.hidden = hidden;
+    public void setPublished(final boolean published) {
+        this.published = published;
     }
 
     @Override
