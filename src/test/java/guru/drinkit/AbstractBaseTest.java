@@ -1,5 +1,6 @@
 package guru.drinkit;
 
+import com.mongodb.BasicDBObject;
 import guru.drinkit.domain.Ingredient;
 import guru.drinkit.domain.Recipe;
 import guru.drinkit.service.IngredientService;
@@ -51,7 +52,7 @@ public abstract class AbstractBaseTest {
     private void cleanUp() {
         for (String collectionName : mongoTemplate.getCollectionNames()) {
             if (!collectionName.startsWith("system.")) {
-                mongoTemplate.getCollection(collectionName).findAndRemove(null);
+                mongoTemplate.getCollection(collectionName).remove(new BasicDBObject());
             }
         }
     }
