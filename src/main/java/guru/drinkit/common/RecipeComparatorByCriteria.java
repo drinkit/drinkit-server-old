@@ -29,6 +29,7 @@ public class RecipeComparatorByCriteria implements Comparator<Recipe> {
 
     private int getOverlapRate(Recipe recipe) {
         Set<Integer> tmp = new HashSet<>(criteria.getIngredients());
+
         tmp.removeAll(collect(new ArrayIterator<Integer[]>(recipe.getCocktailIngredients()), new Transformer<Integer[], Integer>() {
             @Override
             public Integer transform(final Integer[] integers) {

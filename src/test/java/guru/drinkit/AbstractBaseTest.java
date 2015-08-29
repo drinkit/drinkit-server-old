@@ -1,8 +1,12 @@
 package guru.drinkit;
 
+import java.util.ArrayList;
+
 import com.mongodb.BasicDBObject;
 import guru.drinkit.domain.Ingredient;
 import guru.drinkit.domain.Recipe;
+import guru.drinkit.domain.User;
+import guru.drinkit.repository.UserRepository;
 import guru.drinkit.service.IngredientService;
 import guru.drinkit.springconfig.AppConfig;
 import org.junit.Before;
@@ -27,8 +31,12 @@ import org.springframework.transaction.annotation.Transactional;
 public abstract class AbstractBaseTest {
     protected Ingredient firstIngredient;
     protected Ingredient secondIngredient;
+    protected User user;
     @Autowired
     private IngredientService ingredientService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     MongoTemplate mongoTemplate;
@@ -47,6 +55,13 @@ public abstract class AbstractBaseTest {
         secondIngredient.setName("Second");
         secondIngredient.setVol(40);
         secondIngredient = ingredientService.save(secondIngredient);
+
+        user = new User();
+        user.setDisplayName("Test user");
+        user.setBarItems(new ArrayList<User.BarItem>(){{
+            add(new User.BarItem(firstIngredient.getId()));
+        }});
+        userRepository.save(user);
     }
 
     private void cleanUp() {

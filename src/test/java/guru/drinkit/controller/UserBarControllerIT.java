@@ -1,14 +1,13 @@
 package guru.drinkit.controller;
 
-import guru.drinkit.domain.BarItem;
+import java.util.List;
+
 import guru.drinkit.domain.User;
 import guru.drinkit.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,7 +34,7 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
 
     @Test
     public void testAddNew() throws Exception {
-        BarItem barItem = new BarItem();
+        User.BarItem barItem = new User.BarItem();
         barItem.setIngredientId(1);
         mockMvc.perform(
                 post("/users/" + testUserId + "/barItems")
@@ -43,7 +42,7 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
                         .content(objectMapper.writeValueAsBytes(barItem))
         )
                 .andExpect(status().isCreated());
-        List<BarItem> barItems = userRepository.findOne(testUserId).getBarItems();
+        List<User.BarItem> barItems = userRepository.findOne(testUserId).getBarItems();
         assertThat(barItems.size(), is(1));
         assertThat(barItems.get(0).getIngredientId(), is(barItem.getIngredientId()));
         userRepository.removeBarItem(testUserId, barItem.getIngredientId());
@@ -56,7 +55,7 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
 
     @Test
     public void testUpdate() throws Exception {
-        BarItem barItem = new BarItem();
+        User.BarItem barItem = new User.BarItem();
         barItem.setIngredientId(1);
         barItem.setActive(true);
         userRepository.addBarItem(testUserId, barItem);
@@ -67,21 +66,21 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
                         .content(objectMapper.writeValueAsBytes(barItem))
         )
                 .andExpect(status().isNoContent());
-        List<BarItem> barItems = userRepository.findOne(testUserId).getBarItems();
+        List<User.BarItem> barItems = userRepository.findOne(testUserId).getBarItems();
         assertThat(barItems.size(), is(1));
         assertThat(barItems.get(0).isActive(), is(false));
     }
 
     @Test
     public void testRemove() throws Exception {
-        BarItem barItem = new BarItem();
+        User.BarItem barItem = new User.BarItem();
         barItem.setIngredientId(1);
         userRepository.addBarItem(testUserId, barItem);
         mockMvc.perform(
                 delete("/users/" + testUserId + "/barItems/" + barItem.getIngredientId())
         )
                 .andExpect(status().isNoContent());
-        List<BarItem> barItems = userRepository.findOne(testUserId).getBarItems();
+        List<User.BarItem> barItems = userRepository.findOne(testUserId).getBarItems();
         assertThat(barItems.size(), is(0));
     }
 }
