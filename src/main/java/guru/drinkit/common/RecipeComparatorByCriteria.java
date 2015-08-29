@@ -19,14 +19,14 @@ public class RecipeComparatorByCriteria implements Comparator<Recipe> {
 
     @Override
     public int compare(Recipe recipe1, Recipe recipe2) {
-        int result = getOverlapRate(recipe2) - getOverlapRate(recipe1);
+        int result = getNotMatchesIngredientsCount(recipe1) - getNotMatchesIngredientsCount(recipe2);
         if (result == 0) {
-            result = recipe1.getCocktailIngredients().length - recipe2.getCocktailIngredients().length;
+            result = recipe2.getCocktailIngredients().length - recipe1.getCocktailIngredients().length;
         }
         return result;
     }
 
-    private int getOverlapRate(Recipe recipe) {
+    private int getNotMatchesIngredientsCount(Recipe recipe) {
 
         Collection<Integer> ingredientsIdsFromRecipe = collect(new ArrayIterator<Integer[]>(recipe.getCocktailIngredients()), new Transformer<Integer[], Integer>() {
             @Override
