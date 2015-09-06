@@ -24,7 +24,7 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     public List<Recipe> findByCriteria(guru.drinkit.common.Criteria criteria) {
         Criteria mongoCriteria = new Criteria();
         if (criteria.getIngredients().size() > 0) {
-            mongoCriteria.and("ingredientsWithQuantity").elemMatch(where("ingredientId").in(criteria.getIngredients()));
+            mongoCriteria.and("ingredientsWithQuantities").elemMatch(where("ingredientId").in(criteria.getIngredients()));
         }
         if (criteria.getOptions().size() > 0) {
             mongoCriteria.and("options").all(criteria.getOptions());
