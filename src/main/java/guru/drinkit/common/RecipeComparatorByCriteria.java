@@ -5,7 +5,6 @@ import java.util.Comparator;
 
 import guru.drinkit.domain.Recipe;
 import org.apache.commons.collections4.Transformer;
-import org.apache.commons.collections4.iterators.ArrayIterator;
 
 import static org.apache.commons.collections4.CollectionUtils.collect;
 
@@ -27,11 +26,10 @@ public class RecipeComparatorByCriteria implements Comparator<Recipe> {
     }
 
     private int getNotMatchesIngredientsCount(Recipe recipe) {
-
-        Collection<Integer> ingredientsIdsFromRecipe = collect(new ArrayIterator<Integer[]>(recipe.getIngredientsWithQuantities()), new Transformer<Integer[], Integer>() {
+        Collection<Integer> ingredientsIdsFromRecipe = collect(recipe.getIngredientsWithQuantities(), new Transformer<Recipe.IngredientWithQuantity, Integer>() {
             @Override
-            public Integer transform(final Integer[] integers) {
-                return integers[0];
+            public Integer transform(final Recipe.IngredientWithQuantity ingredientWithQuantity) {
+                return ingredientWithQuantity.getIngredientId();
             }
         });
         ingredientsIdsFromRecipe.removeAll(criteria.getIngredients());
