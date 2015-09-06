@@ -7,6 +7,7 @@ import guru.drinkit.service.RecipeService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,7 +27,7 @@ public class RestEndpointsITCase extends AbstractRestMockMvc {
     public void testDeleteRecipeShouldReturn409() throws Exception {
         int ingredientId = ingredientService.save(createNewIngredient()).getId();
         Recipe newRecipe = createNewRecipeDto();
-        newRecipe.setCocktailIngredients(new Integer[][]{{ingredientId, 100}});
+        newRecipe.setIngredientsWithQuantities(singletonList(new Recipe.IngredientWithQuantity(ingredientId, 100)));
         recipeService.save(newRecipe);
         mockMvc.perform(delete("/ingredients/" + ingredientId))
                 .andExpect(status().isConflict());

@@ -21,14 +21,14 @@ public class RecipeComparatorByCriteria implements Comparator<Recipe> {
     public int compare(Recipe recipe1, Recipe recipe2) {
         int result = getNotMatchesIngredientsCount(recipe1) - getNotMatchesIngredientsCount(recipe2);
         if (result == 0) {
-            result = recipe2.getCocktailIngredients().length - recipe1.getCocktailIngredients().length;
+            result = recipe2.getIngredientsWithQuantities().size() - recipe1.getIngredientsWithQuantities().size();
         }
         return result;
     }
 
     private int getNotMatchesIngredientsCount(Recipe recipe) {
 
-        Collection<Integer> ingredientsIdsFromRecipe = collect(new ArrayIterator<Integer[]>(recipe.getCocktailIngredients()), new Transformer<Integer[], Integer>() {
+        Collection<Integer> ingredientsIdsFromRecipe = collect(new ArrayIterator<Integer[]>(recipe.getIngredientsWithQuantities()), new Transformer<Integer[], Integer>() {
             @Override
             public Integer transform(final Integer[] integers) {
                 return integers[0];

@@ -1,7 +1,5 @@
 package guru.drinkit.controller;
 
-import java.util.Collections;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import guru.drinkit.domain.Recipe;
 import guru.drinkit.repository.RecipesStatisticsRepository;
@@ -13,6 +11,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import static java.util.Collections.singletonList;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -94,7 +94,7 @@ public class RecipeControllerIT extends AbstractRestMockMvc {
 
     @Test
     public void testUpdateRecipe() throws Exception {
-        insertedRecipe.setCocktailIngredients(new Integer[][]{{firstIngredient.getId(), 13}});
+        insertedRecipe.setIngredientsWithQuantities(singletonList(new Recipe.IngredientWithQuantity(firstIngredient.getId(), 13)));
         insertedRecipe.setName("modified");
         mockMvc.perform(
                 put(RESOURCE_ENDPOINT + "/" + insertedRecipe.getId())
@@ -125,10 +125,10 @@ public class RecipeControllerIT extends AbstractRestMockMvc {
     public void testFindRecipesByNamePart() throws Exception {
         mockMvc.perform(get(RESOURCE_ENDPOINT).param("namePart", "Integration Tests"))
                 .andExpect(status().isOk())
-                .andExpect(content().json(objectMapper.writeValueAsString(Collections.singletonList(insertedRecipe))));
+                .andExpect(content().json(objectMapper.writeValueAsString(singletonList(insertedRecipe))));
 
         mockMvc.perform(get(RESOURCE_ENDPOINT).param("namePart", "%%%%%%%not exist$$$$$$$"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 }

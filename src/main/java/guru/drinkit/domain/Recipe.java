@@ -2,6 +2,7 @@ package guru.drinkit.domain;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 public class Recipe {
@@ -11,7 +12,7 @@ public class Recipe {
     private String description;
     private String name;
     private int[] options;
-    private Integer[][] cocktailIngredients;
+    private List<IngredientWithQuantity> ingredientsWithQuantities;
     private String imageUrl;
     private String thumbnailUrl;
     private Date createdDate = new Date();
@@ -69,12 +70,12 @@ public class Recipe {
         this.options = options;
     }
 
-    public Integer[][] getCocktailIngredients() {
-        return cocktailIngredients;
+    public List<IngredientWithQuantity> getIngredientsWithQuantities() {
+        return ingredientsWithQuantities;
     }
 
-    public void setCocktailIngredients(Integer[][] cocktailIngredients) {
-        this.cocktailIngredients = cocktailIngredients;
+    public void setIngredientsWithQuantities(final List<IngredientWithQuantity> ingredientsWithQuantities) {
+        this.ingredientsWithQuantities = ingredientsWithQuantities;
     }
 
     public String getImageUrl() {
@@ -140,5 +141,34 @@ public class Recipe {
         result = 31 * result + (thumbnailUrl != null ? thumbnailUrl.hashCode() : 0);
         result = 31 * result + (id != null ? id.hashCode() : 0);
         return result;
+    }
+
+    public static class IngredientWithQuantity {
+        private Integer ingredientId;
+        private Integer quantity;
+
+        public IngredientWithQuantity() {
+        }
+
+        public IngredientWithQuantity(final Integer ingredientId, final Integer quantity) {
+            this.ingredientId = ingredientId;
+            this.quantity = quantity;
+        }
+
+        public Integer getIngredientId() {
+            return ingredientId;
+        }
+
+        public void setIngredientId(final Integer ingredientId) {
+            this.ingredientId = ingredientId;
+        }
+
+        public Integer getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(final Integer quantity) {
+            this.quantity = quantity;
+        }
     }
 }

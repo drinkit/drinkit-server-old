@@ -1,6 +1,7 @@
 package guru.drinkit;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.mongodb.BasicDBObject;
 import guru.drinkit.domain.Ingredient;
@@ -78,7 +79,9 @@ public abstract class AbstractBaseTest {
         recipe.setDescription("desc");
         recipe.setName("Recipe for integration tests");
         recipe.setOptions(new int[]{1, 2});
-        recipe.setCocktailIngredients(new Integer[][]{{firstIngredient.getId(), 50}, {secondIngredient.getId(), 60}});
+        recipe.setIngredientsWithQuantities(Arrays.asList(
+                new Recipe.IngredientWithQuantity(firstIngredient.getId(), 50),
+                new Recipe.IngredientWithQuantity(secondIngredient.getId(), 60)));
         return recipe;
     }
 
