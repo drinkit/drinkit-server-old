@@ -1,5 +1,7 @@
 package guru.drinkit.domain;
 
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -7,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * @author pkolmykov
  */
+@SuppressWarnings("unused")
 @Document
 public class Ingredient {
 
@@ -21,7 +24,7 @@ public class Ingredient {
 
     private String category;
 
-
+    private List<String> alias;
 
     public Integer getId() {
         return id;
@@ -61,6 +64,14 @@ public class Ingredient {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public List<String> getAlias() {
+        return alias;
+    }
+
+    public void setAlias(final List<String> alias) {
+        this.alias = alias;
     }
 
     @Override
