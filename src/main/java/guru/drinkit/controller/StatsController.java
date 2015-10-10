@@ -24,7 +24,7 @@ public class StatsController {
     @RequestMapping(method = RequestMethod.PATCH, value = "{recipeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @EnableStats
-    @PreAuthorize("permitAll")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void incrementViewsCount(@PathVariable int recipeId) {
     }
 
