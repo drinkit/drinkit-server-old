@@ -2,6 +2,7 @@ package guru.drinkit.controller;
 
 import guru.drinkit.service.aspect.EnableStats;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ public class StatsController {
     @RequestMapping(method = RequestMethod.PATCH, value = "{recipeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @EnableStats
+    @PreAuthorize("permitAll")
     public void incrementViewsCount(@PathVariable int recipeId) {
     }
 
