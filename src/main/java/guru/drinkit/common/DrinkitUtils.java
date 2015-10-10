@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.Assert;
 
 public class DrinkitUtils {
@@ -31,8 +30,7 @@ public class DrinkitUtils {
             if (authentication.getAuthorities().size() != 0 &&
                     authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
                 return "ANONYMOUS";
-            } else if (!((UserDetails) authentication.getPrincipal()).getAuthorities()
-                    .contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.name()))) {
+            } else {
                 return ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
             }
         }
