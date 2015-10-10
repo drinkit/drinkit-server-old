@@ -23,7 +23,7 @@ public class SimpleCORSFilter implements Filter {
         if (request.getHeader("Access-Control-Request-Method") != null
                 && "OPTIONS".equals(request.getMethod())) {
             // CORS "pre-flight" request
-            response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, PATCH");
             response.setHeader("Access-Control-Allow-Headers", "authorization, content-type");
         }
         chain.doFilter(req, res);
