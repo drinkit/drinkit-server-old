@@ -56,7 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(digestAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new SimpleCORSFilter(), DigestAuthenticationFilter.class)
                 .authorizeRequests().antMatchers("/rest/admin/**").hasRole("ADMIN")
-                .and().authorizeRequests().antMatchers("/rest/**").anonymous()
+                .antMatchers("/rest/**").anonymous()
+//                .and().authorizeRequests().antMatchers("/rest/**").anonymous()
         ;
     }
 
