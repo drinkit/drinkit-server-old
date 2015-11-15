@@ -8,6 +8,7 @@ import guru.drinkit.service.impl.BasicUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -55,8 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatcher("/rest/**")
                 .addFilterAfter(digestAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new SimpleCORSFilter(), DigestAuthenticationFilter.class)
-                .authorizeRequests().antMatchers("/rest/admin/**").hasRole("ADMIN")
-                .antMatchers("/rest/**").permitAll()
+                .authorizeRequests().antMatchers(HttpMethod.PUT).hasRole("ADMIN")
+//                .antMatchers("/rest/**").permitAll()
 //                .and().authorizeRequests().antMatchers("/rest/**").anonymous()
         ;
     }
