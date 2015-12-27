@@ -2,18 +2,14 @@ package guru.drinkit.controller;
 
 import javax.servlet.Filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.drinkit.domain.Recipe;
 import guru.drinkit.springconfig.AppConfig;
+import guru.drinkit.springconfig.MockDBConfig;
 import guru.drinkit.springconfig.SecurityConfig;
 import guru.drinkit.springconfig.WebConfig;
 import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -25,18 +21,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcConfigurerAdapter;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 /**
  * @author pkolmykov
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebConfig.class, SecurityConfig.class, AppConfig.class})
+@ContextConfiguration(classes = {WebConfig.class, SecurityConfig.class, MockDBConfig.class, AppConfig.class, SecurityConfig.class})
 @WebAppConfiguration
-public class RecipeControllerSecurityTest {
-
-
+public class MvcTestAbstract {
     @Autowired
     private WebApplicationContext context;
 
@@ -44,7 +35,7 @@ public class RecipeControllerSecurityTest {
     private Filter springSecurityFilterChain;
 
 
-    private MockMvc mockMvc;
+    protected MockMvc mockMvc;
 
     @Before
     public void setup() {
@@ -67,49 +58,5 @@ public class RecipeControllerSecurityTest {
                 })
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
-    }
-
-    @Test
-    public void testGetRecipeById() throws Exception {
-
-    }
-
-    @Test
-    public void testCreateRecipe() throws Exception {
-
-    }
-
-    @Test
-    public void testSearchRecipes() throws Exception {
-
-    }
-
-    @Test
-    public void testDeleteRecipe() throws Exception {
-
-    }
-
-    @Test
-    @WithMockUser(roles = "USER")
-    public void testUpdateRecipe() throws Exception {
-        Recipe recipe = new Recipe();
-        recipe.setId(1);
-        mockMvc.perform(
-                put("asd")
-                        .content(new ObjectMapper().writeValueAsBytes(recipe))
-                        .contentType(MediaType.APPLICATION_JSON)
-//                .servletPath("/rest")
-//                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("ADMIN_ROLE"))
-        ).andExpect(status().isForbidden());
-    }
-
-    @Test
-    public void testFindRecipesByNamePart() throws Exception {
-
-    }
-
-    @Test
-    public void testUploadMedia() throws Exception {
-
     }
 }
