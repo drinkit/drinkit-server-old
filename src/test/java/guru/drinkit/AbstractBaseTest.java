@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Time: 16:45
  */
 @ContextConfiguration(classes = {AppConfig.class})
-@Transactional()
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
 public abstract class AbstractBaseTest {

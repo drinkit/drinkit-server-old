@@ -18,6 +18,16 @@ public class User {
     private Integer accessLevel;
     private List<BarItem> barItems;
 
+    public List<Integer> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Integer> likes) {
+        this.likes = likes;
+    }
+
+    private List<Integer> likes;
+
     public List<BarItem> getBarItems() {
         return barItems;
     }

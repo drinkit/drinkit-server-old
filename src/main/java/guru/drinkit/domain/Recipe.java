@@ -18,6 +18,8 @@ public class Recipe {
     private Date createdDate = new Date();
     private String addedBy;
     private boolean published;
+    private Integer likes;
+
 
     //-------------------------------------------------------------------
 
@@ -70,6 +72,47 @@ public class Recipe {
         this.options = options;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Recipe recipe = (Recipe) o;
+
+        if (cocktailTypeId != recipe.cocktailTypeId) return false;
+        if (published != recipe.published) return false;
+        if (!id.equals(recipe.id)) return false;
+        if (description != null ? !description.equals(recipe.description) : recipe.description != null) return false;
+        if (!name.equals(recipe.name)) return false;
+        if (!Arrays.equals(options, recipe.options)) return false;
+        if (ingredientsWithQuantities != null ? !ingredientsWithQuantities.equals(recipe.ingredientsWithQuantities) : recipe.ingredientsWithQuantities != null)
+            return false;
+        if (imageUrl != null ? !imageUrl.equals(recipe.imageUrl) : recipe.imageUrl != null) return false;
+        if (thumbnailUrl != null ? !thumbnailUrl.equals(recipe.thumbnailUrl) : recipe.thumbnailUrl != null)
+            return false;
+        if (createdDate != null ? !createdDate.equals(recipe.createdDate) : recipe.createdDate != null) return false;
+        if (addedBy != null ? !addedBy.equals(recipe.addedBy) : recipe.addedBy != null) return false;
+        return likes != null ? likes.equals(recipe.likes) : recipe.likes == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + cocktailTypeId;
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + name.hashCode();
+        result = 31 * result + Arrays.hashCode(options);
+        result = 31 * result + (ingredientsWithQuantities != null ? ingredientsWithQuantities.hashCode() : 0);
+        result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
+        result = 31 * result + (thumbnailUrl != null ? thumbnailUrl.hashCode() : 0);
+        result = 31 * result + (createdDate != null ? createdDate.hashCode() : 0);
+        result = 31 * result + (addedBy != null ? addedBy.hashCode() : 0);
+        result = 31 * result + (published ? 1 : 0);
+        result = 31 * result + (likes != null ? likes.hashCode() : 0);
+        return result;
+    }
+
     public List<IngredientWithQuantity> getIngredientsWithQuantities() {
         return ingredientsWithQuantities;
     }
@@ -110,37 +153,12 @@ public class Recipe {
         this.published = published;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Recipe recipe = (Recipe) o;
-
-        if (cocktailTypeId != recipe.cocktailTypeId) return false;
-        if (description != null ? !description.equals(recipe.description) : recipe.description != null)
-            return false;
-        if (id != null ? !id.equals(recipe.id) : recipe.id != null) return false;
-        if (imageUrl != null ? !imageUrl.equals(recipe.imageUrl) : recipe.imageUrl != null)
-            return false;
-        if (!name.equals(recipe.name)) return false;
-        if (!Arrays.equals(options, recipe.options)) return false;
-        if (thumbnailUrl != null ? !thumbnailUrl.equals(recipe.thumbnailUrl) : recipe.thumbnailUrl != null)
-            return false;
-
-        return true;
+    public Integer getLikes() {
+        return likes;
     }
 
-    @Override
-    public int hashCode() {
-        int result = cocktailTypeId;
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + name.hashCode();
-        result = 31 * result + (options != null ? Arrays.hashCode(options) : 0);
-        result = 31 * result + (imageUrl != null ? imageUrl.hashCode() : 0);
-        result = 31 * result + (thumbnailUrl != null ? thumbnailUrl.hashCode() : 0);
-        result = 31 * result + (id != null ? id.hashCode() : 0);
-        return result;
+    public void setLikes(Integer likes) {
+        this.likes = likes;
     }
 
     public static class IngredientWithQuantity {
@@ -169,6 +187,25 @@ public class Recipe {
 
         public void setQuantity(final Integer quantity) {
             this.quantity = quantity;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            IngredientWithQuantity that = (IngredientWithQuantity) o;
+
+            if (!ingredientId.equals(that.ingredientId)) return false;
+            return quantity.equals(that.quantity);
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = ingredientId.hashCode();
+            result = 31 * result + quantity.hashCode();
+            return result;
         }
     }
 }

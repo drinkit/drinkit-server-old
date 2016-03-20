@@ -1,7 +1,9 @@
 package guru.drinkit.controller;
 
 import guru.drinkit.domain.User;
+import guru.drinkit.repository.RecipeRepository;
 import guru.drinkit.repository.UserRepository;
+import guru.drinkit.service.UserService;
 import guru.drinkit.service.impl.BasicUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,10 +12,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("users")
@@ -23,7 +24,13 @@ public class UserController {
     private BasicUserDetailsService basicUserDetailsService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @RequestMapping("/principal")
     @ResponseBody
@@ -54,4 +61,15 @@ public class UserController {
         return new ResponseEntity<>(created ? HttpStatus.CREATED : HttpStatus.FORBIDDEN);
     }
 
+    @RequestMapping(path = "/me", method = RequestMethod.PATCH)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("isAuthenticated()")
+    public void updateUserFields(@RequestBody User updatedUser) throws IOException {
+        User currentUser = getCurrentUser();
+
+        if (updatedUser.getLikes() != null) {
+            userService.updateLikes(currentUser, updatedUser.getLikes());
+        }
+    }
 }
+

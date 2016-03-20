@@ -10,4 +10,8 @@ import java.util.List;
  */
 public interface RecipeRepositoryCustom {
     List<Recipe> findByCriteria(Criteria criteria);
+
+    void incrementLikes(Integer recipeId);
+
+    void decrementLikes(Integer recipeId);
 }
