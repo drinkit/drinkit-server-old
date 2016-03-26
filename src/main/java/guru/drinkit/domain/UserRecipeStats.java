@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by pkolmykov on 12/10/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class RecipeStatistics {
+public class UserRecipeStats {
 
     private ObjectId id;
     private String userId;
@@ -17,7 +17,7 @@ public class RecipeStatistics {
     private int views;
     private Date lastViewed;
 
-    public RecipeStatistics(int recipeId, String userId) {
+    public UserRecipeStats(int recipeId, String userId) {
         this.recipeId = recipeId;
         this.userId = userId;
         this.views = 1;
@@ -25,7 +25,7 @@ public class RecipeStatistics {
     }
 
     @PersistenceConstructor
-    public RecipeStatistics(String userId, int recipeId, int views, Date lastViewed) {
+    public UserRecipeStats(String userId, int recipeId, int views, Date lastViewed) {
         this.userId = userId;
         this.recipeId = recipeId;
         this.views = views;

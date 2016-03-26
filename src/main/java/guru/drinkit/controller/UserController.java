@@ -29,9 +29,6 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private RecipeRepository recipeRepository;
-
     @RequestMapping("/principal")
     @ResponseBody
     @PreAuthorize("isAuthenticated()")

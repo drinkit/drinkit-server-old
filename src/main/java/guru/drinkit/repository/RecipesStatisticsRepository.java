@@ -1,10 +1,10 @@
 package guru.drinkit.repository;
 
-import guru.drinkit.domain.RecipeStatistics;
+import guru.drinkit.domain.UserRecipeStats;
 import org.bson.types.ObjectId;
 import org.springframework.data.repository.Repository;
 
-public interface RecipesStatisticsRepository extends Repository<RecipeStatistics, ObjectId> {
+public interface RecipesStatisticsRepository extends Repository<UserRecipeStats, ObjectId> {
 
-    RecipeStatistics findOneByRecipeId(Integer id);
+    UserRecipeStats findOneByRecipeId(Integer id);
 }

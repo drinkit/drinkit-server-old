@@ -1,7 +1,7 @@
 package guru.drinkit.service.aspect;
 
 import guru.drinkit.common.DrinkitUtils;
-import guru.drinkit.domain.RecipeStatistics;
+import guru.drinkit.domain.UserRecipeStats;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class StatsAspect {
         if (userName != null) {
             mongoOperations.upsert(query(
                             where("recipeId").is(id).and("userId").is(userName)),
-                    new Update().inc("views", 1).set("lastViewed", new Date()), RecipeStatistics.class);
+                    new Update().inc("views", 1).set("lastViewed", new Date()), UserRecipeStats.class);
         }
     }
 

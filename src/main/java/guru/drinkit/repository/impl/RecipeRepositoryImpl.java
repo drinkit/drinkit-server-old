@@ -47,6 +47,11 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
         changeLikesCount(recipeId, -1);
     }
 
+    @Override
+    public void incrementViews(Integer recipeId) {
+        operations.findAndModify(query(where("id").is(recipeId)), new Update().inc("views", 1), Recipe.class);
+    }
+
     private void changeLikesCount(Integer id, Integer likesOffset) {
         operations.findAndModify(query(where("id").is(id)), new Update().inc("likes", likesOffset), Recipe.class);
     }

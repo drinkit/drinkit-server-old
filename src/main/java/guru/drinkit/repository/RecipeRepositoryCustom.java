@@ -14,4 +14,6 @@ public interface RecipeRepositoryCustom {
     void incrementLikes(Integer recipeId);
 
     void decrementLikes(Integer recipeId);
+
+    void incrementViews(Integer recipeId);
 }
