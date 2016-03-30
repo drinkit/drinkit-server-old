@@ -1,7 +1,6 @@
 package guru.drinkit.controller;
 
 import guru.drinkit.domain.User;
-import guru.drinkit.repository.RecipeRepository;
 import guru.drinkit.repository.UserRepository;
 import guru.drinkit.service.UserService;
 import guru.drinkit.service.impl.BasicUserDetailsService;
