@@ -1,5 +1,9 @@
 package guru.drinkit.controller;
 
+import java.beans.PropertyEditorSupport;
+import java.io.IOException;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.drinkit.common.Criteria;
@@ -12,11 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
-
-import java.beans.PropertyEditorSupport;
-import java.io.IOException;
-import java.util.List;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import static guru.drinkit.controller.RecipeController.RESOURCE_NAME;
 
@@ -27,7 +34,7 @@ public class RecipeController {
     public static final String RESOURCE_NAME = "recipes";
 
     @Autowired
-    RecipeService recipeService;
+    private RecipeService recipeService;
 
     @RequestMapping(value = "/{recipeId}", method = RequestMethod.GET)
     @ResponseBody
@@ -66,11 +73,11 @@ public class RecipeController {
         });
     }
 
-    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteRecipe(@PathVariable int id) {
-        if (recipeService.findById(id) != null) {
-            DrinkitUtils.logOperation("Deleting recipe", id);
-            recipeService.delete(id);
+    @RequestMapping(value = "{recipeId}", method = RequestMethod.DELETE)
+    public ResponseEntity<Void> deleteRecipe(@PathVariable int recipeId) {
+        if (recipeService.findById(recipeId) != null) {
+            DrinkitUtils.logOperation("Deleting recipe", recipeId);
+            recipeService.delete(recipeId);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();

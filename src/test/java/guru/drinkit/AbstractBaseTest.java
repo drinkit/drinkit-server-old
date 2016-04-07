@@ -10,6 +10,7 @@ import guru.drinkit.domain.User;
 import guru.drinkit.repository.UserRepository;
 import guru.drinkit.service.IngredientService;
 import guru.drinkit.springconfig.AppConfig;
+import guru.drinkit.springconfig.MongoConfig;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Date: 09.11.2014
  * Time: 16:45
  */
-@ContextConfiguration(classes = {AppConfig.class})
+@ContextConfiguration(classes = {AppConfig.class, MongoConfig.class})
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
