@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import javax.servlet.Filter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.istack.internal.Nullable;
 import guru.drinkit.security.Role;
 import guru.drinkit.springconfig.AppConfig;
 import guru.drinkit.springconfig.MockDBConfig;
@@ -17,6 +20,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,6 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -48,6 +53,8 @@ public class AbstractMockMvcTest {
 
     @Autowired
     private Filter springSecurityFilterChain;
+
+    protected ObjectMapper objectMapper = new ObjectMapper();
 
 
     protected MockMvc mockMvc;
@@ -79,19 +86,23 @@ public class AbstractMockMvcTest {
                 .build();
     }
 
-    protected void verifyAccess(HttpMethod httpMethod, String uri, final ResultMatcher noContent, Role... allowed) throws Exception {
+    protected void verifyAccess(HttpMethod httpMethod, String uri, final ResultMatcher resultMatcher, Role... allowed) throws Exception {
+        verifyAccess(httpMethod, uri, null, resultMatcher, allowed);
+    }
+
+    protected void verifyAccess(HttpMethod httpMethod, String uri, @Nullable Object body, final ResultMatcher resultMatcher, Role... allowed) throws Exception {
         if (allowed.length == 0) {
             allowed = Role.values();
         }
         List<Role> roles = new ArrayList<>(Arrays.asList(Role.values()));
         for (final Role role : allowed) {
-            mockMvc.perform(request(httpMethod, uri)
+            mockMvc.perform(getMockHttpServletRequestBuilder(httpMethod, uri, body)
                     .with(user("testUser").roles(role.name()))
-            ).andExpect(noContent);
+            ).andExpect(resultMatcher);
             roles.remove(role);
         }
         if (roles.size() > 0) {
-            mockMvc.perform(request(httpMethod, uri)
+            mockMvc.perform(getMockHttpServletRequestBuilder(httpMethod, uri, body)
                     .with(user("testUser").roles(CollectionUtils.collect(roles, new Transformer<Role, String>() {
                         @Override
                         public String transform(final Role role) {
@@ -101,6 +112,12 @@ public class AbstractMockMvcTest {
             ).andExpect(status().isForbidden());
         }
 
+    }
+
+    private MockHttpServletRequestBuilder getMockHttpServletRequestBuilder(final HttpMethod httpMethod, final String uri, final @Nullable Object body) throws JsonProcessingException {
+        return request(httpMethod, uri)
+                .content(objectMapper.writeValueAsBytes(body))
+                .contentType(MediaType.APPLICATION_JSON);
     }
 
 }
