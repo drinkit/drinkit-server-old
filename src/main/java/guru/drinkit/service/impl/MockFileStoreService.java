@@ -1,11 +1,11 @@
 package guru.drinkit.service.impl;
 
+import java.io.IOException;
+
 import guru.drinkit.service.FileStoreService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +19,7 @@ import java.io.IOException;
 public class MockFileStoreService implements FileStoreService {
 
 
-    private String mockFileName;
+    private final String mockFileName;
 
     public MockFileStoreService() {
         mockFileName = "defaultFileName.ext";

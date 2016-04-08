@@ -1,19 +1,21 @@
 package guru.drinkit.controller;
 
+import java.util.List;
+
 import guru.drinkit.common.DrinkitUtils;
 import guru.drinkit.domain.Comment;
-import guru.drinkit.domain.User;
-import guru.drinkit.repository.UserRepository;
 import guru.drinkit.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Created by Crabar on 27.03.2016.

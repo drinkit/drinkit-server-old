@@ -1,9 +1,9 @@
 package guru.drinkit.domain;
 
+import java.util.Date;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.PersistenceConstructor;
-
-import java.util.Date;
 
 /**
  * Created by pkolmykov on 12/10/2014.
@@ -12,10 +12,10 @@ import java.util.Date;
 public class UserRecipeStats {
 
     private ObjectId id;
-    private String userId;
-    private int recipeId;
-    private int views;
-    private Date lastViewed;
+    private final String userId;
+    private final int recipeId;
+    private final int views;
+    private final Date lastViewed;
 
     public UserRecipeStats(int recipeId, String userId) {
         this.recipeId = recipeId;

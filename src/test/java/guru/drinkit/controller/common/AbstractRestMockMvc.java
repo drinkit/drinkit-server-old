@@ -25,7 +25,7 @@ public abstract class AbstractRestMockMvc extends AbstractBaseTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
-    protected ObjectMapper objectMapper = new ObjectMapper();
+    protected final ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
     public void initMockMvc() {

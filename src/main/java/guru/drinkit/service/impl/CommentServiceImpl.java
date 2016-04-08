@@ -1,17 +1,14 @@
 package guru.drinkit.service.impl;
 
-import guru.drinkit.common.DrinkitUtils;
+import java.util.List;
+
 import guru.drinkit.domain.Comment;
-import guru.drinkit.domain.User;
 import guru.drinkit.exception.RecordNotFoundException;
 import guru.drinkit.repository.CommentRepository;
 import guru.drinkit.repository.UserRepository;
 import guru.drinkit.service.CommentService;
-import netscape.security.ForbiddenTargetException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * Created by Crabar on 27.03.2016.
