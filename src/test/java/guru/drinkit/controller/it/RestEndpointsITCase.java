@@ -1,5 +1,6 @@
-package guru.drinkit.controller;
+package guru.drinkit.controller.it;
 
+import guru.drinkit.controller.common.AbstractRestMockMvc;
 import guru.drinkit.domain.Ingredient;
 import guru.drinkit.domain.Recipe;
 import guru.drinkit.service.IngredientService;

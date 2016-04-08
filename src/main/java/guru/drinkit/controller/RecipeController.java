@@ -3,6 +3,7 @@ package guru.drinkit.controller;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.util.List;
+import javax.validation.Valid;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -86,7 +87,7 @@ public class RecipeController {
 
     @RequestMapping(value = "{recipeId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateRecipe(@PathVariable int recipeId, @RequestBody Recipe recipe) {
+    public void updateRecipe(@PathVariable int recipeId, @RequestBody @Valid Recipe recipe) {
         DrinkitUtils.assertEqualsIds(recipeId, recipe.getId());
         DrinkitUtils.logOperation("Updating recipe", recipe);
         recipeService.save(recipe);

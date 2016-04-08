@@ -1,11 +1,11 @@
 package guru.drinkit.service;
 
+import java.io.IOException;
+import java.util.List;
+
 import guru.drinkit.common.Criteria;
 import guru.drinkit.domain.Recipe;
 import org.springframework.security.access.prepost.PreAuthorize;
-
-import java.io.IOException;
-import java.util.List;
 
 public interface RecipeService {
 
@@ -23,5 +23,6 @@ public interface RecipeService {
 
     Recipe findById(int id);
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     void saveMedia(int recipeId, byte[] image, byte[] thumbnail) throws IOException;
 }

@@ -1,4 +1,4 @@
-package guru.drinkit.controller;
+package guru.drinkit.controller.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,7 +7,6 @@ import javax.servlet.Filter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.istack.internal.Nullable;
 import guru.drinkit.security.Role;
 import guru.drinkit.springconfig.AppConfig;
 import guru.drinkit.springconfig.MockDBConfig;
@@ -23,6 +22,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -45,9 +46,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {WebConfig.class, SecurityConfig.class, MockDBConfig.class, AppConfig.class, SecurityConfig.class})
+@ActiveProfiles("test")
 @WebAppConfiguration
 @Configurable
-public class AbstractMockMvcTest {
+@DirtiesContext
+public abstract class AbstractMockMvcTest {
     @Autowired
     private WebApplicationContext context;
 
@@ -90,7 +93,7 @@ public class AbstractMockMvcTest {
         verifyAccess(httpMethod, uri, null, resultMatcher, allowed);
     }
 
-    protected void verifyAccess(HttpMethod httpMethod, String uri, @Nullable Object body, final ResultMatcher resultMatcher, Role... allowed) throws Exception {
+    protected void verifyAccess(HttpMethod httpMethod, String uri, Object body, final ResultMatcher resultMatcher, Role... allowed) throws Exception {
         if (allowed.length == 0) {
             allowed = Role.values();
         }
@@ -98,7 +101,9 @@ public class AbstractMockMvcTest {
         for (final Role role : allowed) {
             mockMvc.perform(getMockHttpServletRequestBuilder(httpMethod, uri, body)
                     .with(user("testUser").roles(role.name()))
-            ).andExpect(resultMatcher);
+            )
+//                    .andDo(MockMvcResultHandlers.print())
+                    .andExpect(resultMatcher);
             roles.remove(role);
         }
         if (roles.size() > 0) {
@@ -114,7 +119,7 @@ public class AbstractMockMvcTest {
 
     }
 
-    private MockHttpServletRequestBuilder getMockHttpServletRequestBuilder(final HttpMethod httpMethod, final String uri, final @Nullable Object body) throws JsonProcessingException {
+    private MockHttpServletRequestBuilder getMockHttpServletRequestBuilder(final HttpMethod httpMethod, final String uri, final Object body) throws JsonProcessingException {
         return request(httpMethod, uri)
                 .content(objectMapper.writeValueAsBytes(body))
                 .contentType(MediaType.APPLICATION_JSON);

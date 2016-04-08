@@ -1,6 +1,6 @@
 package guru.drinkit.controller;
 
-import guru.drinkit.common.Criteria;
+import guru.drinkit.controller.common.AbstractMockMvcTest;
 import guru.drinkit.domain.Recipe;
 import guru.drinkit.repository.RecipeRepository;
 import guru.drinkit.security.Role;
@@ -43,7 +43,7 @@ public class RecipeControllerTest extends AbstractMockMvcTest {
 
     @Test
     public void searchRecipes() throws Exception {
-        verifyAccess(GET, RESOURCE_NAME + "?criteria=" + objectMapper.writeValueAsString(new Criteria()), status().isOk());//// TODO: 4/7/2016
+        verifyAccess(GET, RESOURCE_NAME + "?criteria=null", status().isOk());
     }
 
     @Test
@@ -53,7 +53,9 @@ public class RecipeControllerTest extends AbstractMockMvcTest {
 
     @Test
     public void updateRecipe() throws Exception {
-        verifyAccess(PUT, RESOURCE_NAME + "/1", status().isNoContent(), Role.ADMIN);// TODO: 4/7/2016
+        Recipe recipe = new Recipe();
+        recipe.setId(1);
+        verifyAccess(PUT, RESOURCE_NAME + "/1", recipe, status().isNoContent(), Role.ADMIN);
     }
 
     @Test
@@ -63,7 +65,7 @@ public class RecipeControllerTest extends AbstractMockMvcTest {
 
     @Test
     public void uploadMedia() throws Exception {
-        verifyAccess(PUT, RESOURCE_NAME + "/1", status().isNoContent(), Role.ADMIN);/// TODO: 4/7/2016
+        verifyAccess(POST, RESOURCE_NAME + "/1/media", status().isNoContent(), Role.ADMIN);
     }
 
 }

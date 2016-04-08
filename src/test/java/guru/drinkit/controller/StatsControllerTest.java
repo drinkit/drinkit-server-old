@@ -1,6 +1,7 @@
 package guru.drinkit.controller;
 
 import guru.drinkit.common.DrinkitUtils;
+import guru.drinkit.controller.common.AbstractMockMvcTest;
 import guru.drinkit.repository.RecipeRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
-package guru.drinkit.controller;
+package guru.drinkit.controller.it;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import guru.drinkit.controller.common.AbstractRestMockMvc;
 import guru.drinkit.domain.Recipe;
 import guru.drinkit.repository.RecipesStatisticsRepository;
 import guru.drinkit.service.RecipeService;
