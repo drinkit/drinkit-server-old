@@ -1,4 +1,4 @@
-package guru.drinkit.controller;
+package guru.drinkit.controller.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.drinkit.AbstractBaseTest;

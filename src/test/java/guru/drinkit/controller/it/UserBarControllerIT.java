@@ -1,7 +1,8 @@
-package guru.drinkit.controller;
+package guru.drinkit.controller.it;
 
 import java.util.List;
 
+import guru.drinkit.controller.common.AbstractRestMockMvc;
 import guru.drinkit.domain.User;
 import guru.drinkit.repository.UserRepository;
 import org.junit.Before;

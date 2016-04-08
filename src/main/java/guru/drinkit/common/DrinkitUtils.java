@@ -34,7 +34,7 @@ public class DrinkitUtils {
                 return ((org.springframework.security.core.userdetails.User) authentication.getPrincipal()).getUsername();
             }
         }
-        return null;
+        return "ANONYMOUS";
     }
 
     public static void assertEqualsIds(final int id1, final int id2) {

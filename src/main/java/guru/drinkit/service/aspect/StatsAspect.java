@@ -1,15 +1,16 @@
 package guru.drinkit.service.aspect;
 
+import java.util.Date;
+
 import guru.drinkit.common.DrinkitUtils;
 import guru.drinkit.domain.UserRecipeStats;
+import guru.drinkit.repository.RecipeRepository;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -20,11 +21,15 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @Component
 @Aspect
 public class StatsAspect {
+
     @Autowired
-    MongoOperations mongoOperations;
+    private MongoOperations mongoOperations;
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @After(value = "@annotation(EnableStats) && args(id)")
     public void writeStats(int id) {
+        recipeRepository.incrementViews(id);
         String userName = DrinkitUtils.getUserName();
         if (userName != null) {
             mongoOperations.upsert(query(

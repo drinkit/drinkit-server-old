@@ -1,4 +1,4 @@
-package guru.drinkit.controller;
+package guru.drinkit.controller.common;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
