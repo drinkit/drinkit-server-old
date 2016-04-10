@@ -1,5 +1,7 @@
 package guru.drinkit.controller;
 
+import java.util.Collections;
+
 import guru.drinkit.controller.common.AbstractMockMvcTest;
 import guru.drinkit.domain.Recipe;
 import guru.drinkit.repository.RecipeRepository;
@@ -38,7 +40,9 @@ public class RecipeControllerTest extends AbstractMockMvcTest {
 
     @Test
     public void createRecipe() throws Exception {
-        verifyAccess(POST, RESOURCE_NAME, new Recipe(), status().isCreated(), Role.ADMIN);
+        Recipe recipe = new Recipe();
+        recipe.setIngredientsWithQuantities(Collections.singletonList(new Recipe.IngredientWithQuantity(1, 11)));
+        verifyAccess(POST, RESOURCE_NAME, recipe, status().isCreated(), Role.ADMIN);
     }
 
     @Test
