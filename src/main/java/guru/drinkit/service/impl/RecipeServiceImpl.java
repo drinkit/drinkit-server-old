@@ -13,7 +13,6 @@ import guru.drinkit.domain.Recipe;
 import guru.drinkit.repository.RecipeRepository;
 import guru.drinkit.service.FileStoreService;
 import guru.drinkit.service.RecipeService;
-import guru.drinkit.service.aspect.EnableStats;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,11 +29,13 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe save(Recipe recipe) {
-        if (recipe.getId() == null) {
+        boolean insert = recipe.getId() == null;
+        if (insert) {
             Recipe lastRecipe = recipeRepository.findFirstByOrderByIdDesc();
             recipe.setId(lastRecipe == null ? 1 : lastRecipe.getId() + 1);
             recipe.setAddedBy(DrinkitUtils.getUserName());
             recipe.setCreatedDate(new Date());
+            recipe.setStats(new Recipe.Stats(0, 0));
         }
         return recipeRepository.save(recipe);
     }
@@ -59,7 +60,6 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    @EnableStats
     @Transactional(readOnly = true)
     public Recipe findById(int id) {
         return recipeRepository.findOne(id);

@@ -1,5 +1,6 @@
 package guru.drinkit.domain
 
+import org.springframework.data.mongodb.core.index.Indexed
 import java.util.*
 
 /**
@@ -17,7 +18,16 @@ data class Recipe(
         var createdDate: Date? = Date(),
         var addedBy: String? = null,
         var published: Boolean = false,
-        var likes: Int? = null,
-        var views: Int? = null) {
+        var stats: Stats? = null) {
+    data class Stats(val likes: Int = 0, val views: Int = 0)
     data class IngredientWithQuantity(val ingredientId: Int, val quantity: Int)
 }
+
+data class Ingredient(
+        var id: Int? = null,
+        @Indexed(unique = true)
+        var name: String? = null,
+        var vol: Int? = null,
+        var description: String? = null,
+        var category: String? = null,
+        var alias: List<String>? = null)

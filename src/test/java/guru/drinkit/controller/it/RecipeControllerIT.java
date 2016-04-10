@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class RecipeControllerIT extends AbstractRestMockMvc {
 
     private static final String RESOURCE_ENDPOINT = "/recipes";
+    public static final int VIEWS = 419;
 
 
     @Autowired
@@ -41,7 +42,8 @@ public class RecipeControllerIT extends AbstractRestMockMvc {
 
     @Before
     public void insertTestRecipe() {
-        insertedRecipe = recipeService.save(createNewRecipeDto());
+        Recipe newRecipeDto = createNewRecipeDto();
+        insertedRecipe = recipeService.save(newRecipeDto);
     }
 
 
@@ -69,13 +71,18 @@ public class RecipeControllerIT extends AbstractRestMockMvc {
 
     @Test
     public void testCreateRecipe() throws Exception {
+        Recipe newRecipeDto = createNewRecipeDto();
+        newRecipeDto.setName("new name");
+//        newRecipeDto.setRecipeStats(new Recipe.RecipeStats(2,123,123));
         mockMvc.perform(
                 post(RESOURCE_ENDPOINT)
-                        .content(objectMapper.writeValueAsBytes(createNewRecipeDto()))
+                        .content(objectMapper.writeValueAsBytes(newRecipeDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 //                .andExpect(jsonPath("$.id").exists())
 //                .andExpect(jsonPath("$.name").value(createNewRecipeDto().getName()));
+        Recipe recipe = recipeService.findById(2);
+//        assertThat(recipe.getName()).isEqualToIgnoringCase("new name");
     }
 
     @Test

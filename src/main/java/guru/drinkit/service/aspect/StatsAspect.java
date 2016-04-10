@@ -3,6 +3,7 @@ package guru.drinkit.service.aspect;
 import java.util.Date;
 
 import guru.drinkit.common.DrinkitUtils;
+import guru.drinkit.domain.Recipe;
 import guru.drinkit.domain.UserRecipeStats;
 import guru.drinkit.repository.RecipeRepository;
 import org.aspectj.lang.annotation.After;
@@ -33,9 +34,12 @@ public class StatsAspect {
         String userName = DrinkitUtils.getUserName();
         if (userName != null) {
             mongoOperations.upsert(query(
-                            where("recipeId").is(id).and("userId").is(userName)),
+                    where("recipeId").is(id).and("userId").is(userName)),
                     new Update().inc("views", 1).set("lastViewed", new Date()), UserRecipeStats.class);
         }
+
+        mongoOperations.updateFirst(
+                query(where("id").is(id)), new Update().inc("stats.views", 1), Recipe.class);
     }
 
 
