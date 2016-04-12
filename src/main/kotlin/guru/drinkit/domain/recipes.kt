@@ -1,11 +1,13 @@
 package guru.drinkit.domain
 
 import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
 /**
  * @author pkolmykov
  */
+@Document
 data class Recipe(
         var id: Int? = null,
         var cocktailTypeId: Int = 0,
@@ -23,6 +25,7 @@ data class Recipe(
     data class IngredientWithQuantity(val ingredientId: Int, val quantity: Int)
 }
 
+@Document
 data class Ingredient(
         var id: Int? = null,
         @Indexed(unique = true)
