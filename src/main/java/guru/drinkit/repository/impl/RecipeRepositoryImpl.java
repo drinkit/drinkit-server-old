@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.repository.support.Repositories;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -20,6 +21,9 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
 
     @Autowired
     private MongoOperations operations;
+
+    @Autowired
+    private Repositories repositories;
 
     @Override
     public List<Recipe> findByCriteria(guru.drinkit.common.Criteria criteria) {
@@ -50,6 +54,14 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     @Override
     public void incrementViews(Integer recipeId) {
 //        operations.findAndModify(query(where("id").is(recipeId)), new Update().inc("views", 1), Recipe.class);
+    }
+
+    @Override
+    public boolean update(final Recipe recipe) {
+        Recipe originalRecipe = operations.findById(recipe.getId(), Recipe.class);
+        repositories.getEntityInformationFor(Recipe.class);
+        return false;
+//        operations.updateFirst()
     }
 
     private void changeLikesCount(Integer id, Integer likesOffset) {

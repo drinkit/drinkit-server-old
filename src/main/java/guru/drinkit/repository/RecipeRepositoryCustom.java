@@ -1,9 +1,9 @@
 package guru.drinkit.repository;
 
+import java.util.List;
+
 import guru.drinkit.common.Criteria;
 import guru.drinkit.domain.Recipe;
-
-import java.util.List;
 
 /**
  * Created by pkolmykov on 12/8/2014.
@@ -16,4 +16,6 @@ public interface RecipeRepositoryCustom {
     void decrementLikes(Integer recipeId);
 
     void incrementViews(Integer recipeId);
+
+    boolean update(Recipe recipe);
 }

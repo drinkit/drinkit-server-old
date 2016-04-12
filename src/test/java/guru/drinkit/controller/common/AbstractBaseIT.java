@@ -1,4 +1,4 @@
-package guru.drinkit;
+package guru.drinkit.controller.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,7 @@ import com.mongodb.BasicDBObject;
 import guru.drinkit.domain.Ingredient;
 import guru.drinkit.domain.Recipe;
 import guru.drinkit.domain.User;
+import guru.drinkit.repository.RecipeRepository;
 import guru.drinkit.repository.UserRepository;
 import guru.drinkit.service.IngredientService;
 import guru.drinkit.springconfig.AppConfig;
@@ -26,10 +27,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Time: 16:45
  */
 @ContextConfiguration(classes = {AppConfig.class, MongoConfig.class})
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
-public abstract class AbstractBaseTest {
+public abstract class AbstractBaseIT {
     protected Ingredient firstIngredient;
     protected Ingredient secondIngredient;
     protected User user;
@@ -38,6 +38,9 @@ public abstract class AbstractBaseTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RecipeRepository recipeRepository;
 
     @Autowired
     MongoTemplate mongoTemplate;

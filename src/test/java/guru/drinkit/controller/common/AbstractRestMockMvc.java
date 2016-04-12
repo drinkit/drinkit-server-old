@@ -1,7 +1,6 @@
 package guru.drinkit.controller.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import guru.drinkit.AbstractBaseTest;
 import guru.drinkit.springconfig.WebConfig;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @ContextConfiguration(classes = WebConfig.class)
 @WebAppConfiguration
-public abstract class AbstractRestMockMvc extends AbstractBaseTest {
+public abstract class AbstractRestMockMvc extends AbstractBaseIT {
 
     protected MockMvc mockMvc;
 

@@ -1,6 +1,6 @@
 package guru.drinkit.service
 
-import guru.drinkit.AbstractBaseTest
+import guru.drinkit.controller.common.AbstractBaseIT
 import guru.drinkit.domain.Recipe
 import guru.drinkit.repository.RecipeRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 /**
  * @author pkolmykov
  */
-class RecipeServiceTest : AbstractBaseTest() {
+class RecipeServiceIT : AbstractBaseIT() {
 
     @Autowired lateinit var recipeService: RecipeService
     @Autowired lateinit var recipeRepository: RecipeRepository
