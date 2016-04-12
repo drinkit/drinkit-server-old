@@ -78,7 +78,7 @@ public abstract class AbstractBaseTest {
         recipe.setCocktailTypeId(1);
         recipe.setDescription("desc");
         recipe.setName("Recipe for integration tests");
-        recipe.setOptions(new int[]{1, 2});
+        recipe.setOptions(Arrays.asList(1, 2));
         recipe.setIngredientsWithQuantities(Arrays.asList(
                 new Recipe.IngredientWithQuantity(firstIngredient.getId(), 50),
                 new Recipe.IngredientWithQuantity(secondIngredient.getId(), 60)));

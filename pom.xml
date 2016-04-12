@@ -15,18 +15,16 @@
         <kotlin.version>1.0.1-2</kotlin.version>
     </properties>
 
-    <!--<repositories>-->
-        <!--<repository>-->
-            <!--<id>eap</id>-->
-            <!--<url>http://maven.repository.redhat.com/techpreview/all</url>-->
-            <!--<releases>-->
-                <!--<enabled>true</enabled>-->
-            <!--</releases>-->
-            <!--<snapshots>-->
-                <!--<enabled>true</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-    <!--</repositories>-->
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-nhaarman-maven</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/nhaarman/maven</url>
+        </repository>
+    </repositories>
 
 
 
@@ -427,6 +425,12 @@
             <artifactId>hibernate-validator</artifactId>
             <version>5.2.4.Final</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.nhaarman</groupId>
+            <artifactId>mockito-kotlin</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+            <type>pom</type>
+        </dependency>
     </dependencies>
 </project>

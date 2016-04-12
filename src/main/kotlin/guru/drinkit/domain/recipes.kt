@@ -11,7 +11,7 @@ data class Recipe(
         var cocktailTypeId: Int = 0,
         var description: String? = null,
         var name: String? = null,
-        var options: IntArray? = null,
+        var options: List<Int>? = null,
         var ingredientsWithQuantities: List<IngredientWithQuantity>? = null,
         var imageUrl: String? = null,
         var thumbnailUrl: String? = null,

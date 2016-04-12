@@ -29,7 +29,7 @@ public class RestEndpointsITCase extends AbstractRestMockMvc {
         int ingredientId = ingredientService.save(createNewIngredient()).getId();
         Recipe newRecipe = createNewRecipeDto();
         newRecipe.setIngredientsWithQuantities(singletonList(new Recipe.IngredientWithQuantity(ingredientId, 100)));
-        recipeService.save(newRecipe);
+        recipeService.insert(newRecipe);
         mockMvc.perform(delete("/ingredients/" + ingredientId))
                 .andExpect(status().isConflict());
         assertNotNull(ingredientService.getIngredientById(ingredientId));

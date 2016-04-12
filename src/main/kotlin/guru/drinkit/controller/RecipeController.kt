@@ -5,12 +5,11 @@ import guru.drinkit.common.Criteria
 import guru.drinkit.common.DrinkitUtils
 import guru.drinkit.controller.RecipeController.Companion.RESOURCE_NAME
 import guru.drinkit.domain.Recipe
+import guru.drinkit.exception.RecordNotFoundException
 import guru.drinkit.service.RecipeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
-import org.springframework.util.Assert
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestMethod.*
@@ -35,16 +34,15 @@ class RecipeController @Autowired constructor(
     @RequestMapping(value = "/{recipeId}", method = arrayOf(GET))
     @ResponseBody
     fun getRecipeById(@PathVariable recipeId: Int): Recipe {
-        return recipeService.findById(recipeId)
+        return recipeService.findById(recipeId) ?: throw RecordNotFoundException("Recipe not found")
     }
 
     @RequestMapping(method = arrayOf(POST))
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     fun createRecipe(@RequestBody recipe: Recipe): Recipe {
-        Assert.isNull(recipe.id)
         DrinkitUtils.logOperation("Creating recipe", recipe)
-        recipeService.save(recipe)
+        recipeService.insert(recipe)
         return recipe
     }
 
@@ -71,14 +69,11 @@ class RecipeController @Autowired constructor(
     }
 
     @RequestMapping(value = "{recipeId}", method = arrayOf(DELETE))
-    fun deleteRecipe(@PathVariable recipeId: Int): ResponseEntity<Void> {
-        if (recipeService.findById(recipeId) != null) {
-            DrinkitUtils.logOperation("Deleting recipe", recipeId)
-            recipeService.delete(recipeId)
-            return ResponseEntity.noContent().build()
-        } else {
-            return ResponseEntity.notFound().build()
-        }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun deleteRecipe(@PathVariable recipeId: Int) {
+        recipeService.findById(recipeId) ?: throw RecordNotFoundException("Recipe not found")
+        DrinkitUtils.logOperation("Deleting recipe", recipeId)
+        recipeService.delete(recipeId)
     }
 
     @RequestMapping(value = "{recipeId}", method = arrayOf(PUT))
@@ -86,7 +81,7 @@ class RecipeController @Autowired constructor(
     fun updateRecipe(@PathVariable recipeId: Int, @RequestBody @Valid recipe: Recipe) {
         DrinkitUtils.assertEqualsIds(recipeId, recipe.id!!)
         DrinkitUtils.logOperation("Updating recipe", recipe)
-        recipeService.save(recipe)
+        recipeService.update(recipe)
     }
 
     @RequestMapping(method = arrayOf(GET), params = arrayOf("namePart"))
