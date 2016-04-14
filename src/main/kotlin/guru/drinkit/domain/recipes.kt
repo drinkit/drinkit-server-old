@@ -22,7 +22,7 @@ data class Recipe(
         var published: Boolean = false,
         var stats: Stats? = null) {
     data class Stats(val likes: Int = 0, val views: Int = 0)
-    data class IngredientWithQuantity(val ingredientId: Int, val quantity: Int)
+    data class IngredientWithQuantity(val ingredientId: Int, val quantity: Int?)
 }
 
 @Document
