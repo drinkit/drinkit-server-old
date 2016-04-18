@@ -26,7 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Time: 16:45
  */
 @ContextConfiguration(classes = {AppConfig.class, MongoConfig.class})
-
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
 public abstract class AbstractBaseTest {

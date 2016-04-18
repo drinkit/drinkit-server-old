@@ -2,6 +2,8 @@ package guru.drinkit.domain
 
 import org.bson.types.ObjectId
 import org.springframework.data.annotation.PersistenceConstructor
+import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
 /**
@@ -29,13 +31,14 @@ data class User(
 
 }
 
+@Document
 data class Comment(
-        var id: Int? = null,
-        val recipeId: Int,
-        val posted: Date,
-        val author: CommentAuthor,
-        val text: String) {
-    data class CommentAuthor(var id: String? = null, val name: String)
+        override val id: String?,
+        @Indexed val recipeId: Int,
+        var posted: Date,
+        var author: Author,
+        val text: String) : Entity<String> {
+    data class Author(val userId: String, val name: String)
 }
 
 data class UserRecipeStats(

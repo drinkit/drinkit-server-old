@@ -4,6 +4,7 @@ import guru.drinkit.common.Criteria
 import guru.drinkit.common.DrinkitUtils
 import guru.drinkit.common.RecipeComparatorByCriteria
 import guru.drinkit.domain.Recipe
+import guru.drinkit.exception.RecordNotFoundException
 import guru.drinkit.repository.RecipeRepository
 import guru.drinkit.service.FileStoreService
 import guru.drinkit.service.RecipeService
@@ -12,14 +13,13 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.Assert
 import java.util.*
-import javax.annotation.Resource
 
 
 @Service
 @Transactional
 class RecipeServiceImpl @Autowired constructor(
-        @Resource val fileStoreService: FileStoreService,
-        @Resource val recipeRepository: RecipeRepository
+        @Autowired private val fileStoreService: FileStoreService,
+        @Autowired private val recipeRepository: RecipeRepository
 ) : RecipeService {
 
     override fun insert(recipe: Recipe): Recipe {
@@ -34,7 +34,7 @@ class RecipeServiceImpl @Autowired constructor(
 
     override fun update(recipe: Recipe): Recipe {
         Assert.notNull(recipe.id)
-        val original = recipeRepository.findOne(recipe.id)!!
+        val original = findById(recipe.id!!)
         recipeRepository.save(recipe.copy(
                 stats = original.stats,
                 createdDate = original.createdDate,
@@ -42,7 +42,10 @@ class RecipeServiceImpl @Autowired constructor(
         return recipeRepository.findOne(recipe.id)
     }
 
-    override fun delete(id: Int) = recipeRepository.delete(id)
+    override fun delete(id: Int) {
+        findById(id)
+        recipeRepository.delete(id)
+    }
 
     @Transactional(readOnly = true)
     override fun findAll() = recipeRepository.findAll()
@@ -55,14 +58,14 @@ class RecipeServiceImpl @Autowired constructor(
     }
 
     @Transactional(readOnly = true)
-    override fun findById(id: Int) = recipeRepository.findOne(id)
+    override fun findById(id: Int) = recipeRepository.findOne(id) ?: throw RecordNotFoundException("Recipe not found")
 
     override fun findByRecipeNameContaining(namePart: String) =
             recipeRepository.findByNameContainingIgnoreCase(namePart)
 
     @Transactional
     override fun saveMedia(recipeId: Int, image: ByteArray?, thumbnail: ByteArray?) {
-        val recipe = recipeRepository.findOne(recipeId)
+        val recipe = findById(recipeId)
         recipe.imageUrl = fileStoreService.getUrl(fileStoreService.save(recipeId, image, "image"))
         recipe.thumbnailUrl = fileStoreService.getUrl(fileStoreService.save(recipeId, thumbnail, "thumbnail"))
         recipeRepository.save(recipe)

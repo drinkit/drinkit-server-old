@@ -30,7 +30,7 @@ public class CommentsController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Comment> getRecipeComments(@PathVariable Integer recipeId) {
-        return commentService.getCommentsByRecipeId(recipeId);
+        return commentService.findAllByRecipeId(recipeId);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -46,8 +46,8 @@ public class CommentsController {
 
     //TODO: need to check equality of author and current user
     @RequestMapping(method = RequestMethod.DELETE, value = "/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Integer commentId) {
-        if (commentService.findById(commentId) != null) {
+    public ResponseEntity<Void> deleteComment(@PathVariable String commentId) {
+        if (commentService.find(commentId) != null) {
             DrinkitUtils.logOperation("Deleting comment", commentId);
             commentService.delete(commentId);
             return ResponseEntity.noContent().build();
