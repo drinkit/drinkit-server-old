@@ -59,7 +59,7 @@ public abstract class AbstractBaseTest {
         user = new User();
         user.setDisplayName("Test user");
         user.setBarItems(new ArrayList<User.BarItem>(){{
-            add(new User.BarItem(firstIngredient.getId()));
+            add(new User.BarItem(firstIngredient.getId(), true));
         }});
         userRepository.save(user);
     }

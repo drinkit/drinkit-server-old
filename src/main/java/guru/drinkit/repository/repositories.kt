@@ -33,9 +33,14 @@ interface RecipeRepository : MongoRepository<Recipe, Int>, RecipeRepositoryCusto
 
 interface RecipeRepositoryCustom {
     fun findByCriteria(criteria: Criteria): List<Recipe>
-    fun incrementLikes(recipeId: Int)
-    fun decrementLikes(recipeId: Int)
-    fun incrementViews(recipeId: Int)
+
+    fun adjustLikesCount(recipeId: Int, shiftValue: Int)
+    fun incrementLikes(recipeId: Int) = adjustLikesCount(recipeId, 1)
+    fun decrementLikes(recipeId: Int) = adjustLikesCount(recipeId, -1)
+
+    fun adjustViewsCount(recipeId: Int, shiftValue: Int)
+    fun incrementViews(recipeId: Int) = adjustViewsCount(recipeId, 1)
+
 }
 
 interface RecipesStatisticsRepository : Repository<UserRecipeStats, ObjectId>

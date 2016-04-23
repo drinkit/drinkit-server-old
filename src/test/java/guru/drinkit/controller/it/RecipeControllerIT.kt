@@ -2,6 +2,7 @@ package guru.drinkit.controller.it
 
 import guru.drinkit.controller.common.AbstractRestMockMvc
 import guru.drinkit.domain.Recipe
+import guru.drinkit.repository.RecipeRepository
 import guru.drinkit.repository.RecipesStatisticsRepository
 import guru.drinkit.service.RecipeService
 import org.apache.commons.io.IOUtils
@@ -20,6 +21,9 @@ class RecipeControllerIT : AbstractRestMockMvc() {
 
     @Autowired
     internal lateinit var recipeService: RecipeService
+
+    @Autowired
+    internal lateinit var recipeRepository: RecipeRepository
 
     @Autowired
     internal lateinit var recipesStatisticsRepository: RecipesStatisticsRepository
@@ -80,9 +84,9 @@ class RecipeControllerIT : AbstractRestMockMvc() {
     @Test
     @Throws(Exception::class)
     fun testDeleteRecipe() {
-        assertNotNull(recipeService.findById(insertedRecipe.id!!))
+        assertNotNull(recipeRepository.findOne(insertedRecipe.id!!))
         mockMvc.perform(delete(RESOURCE_ENDPOINT + "/" + insertedRecipe.id)).andExpect(status().isNoContent)
-        assertNull(recipeService.findById(insertedRecipe.id!!))
+        assertNull(recipeRepository.findOne(insertedRecipe.id!!))
         mockMvc.perform(delete(RESOURCE_ENDPOINT + "/" + insertedRecipe.id!!)).andExpect(status().isNotFound)
     }
 

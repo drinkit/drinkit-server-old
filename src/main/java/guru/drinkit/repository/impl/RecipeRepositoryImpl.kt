@@ -33,15 +33,12 @@ class RecipeRepositoryImpl @Autowired constructor(
         return operations.find(query(mongoCriteria), Recipe::class.java)
     }
 
-    override fun incrementLikes(recipeId: Int) = changeLikesCount(recipeId, 1)
 
-    override fun decrementLikes(recipeId: Int) = changeLikesCount(recipeId, -1)
-
-    override fun incrementViews(recipeId: Int) {
-        operations.findAndModify(query(where("id").`is`(recipeId)), Update().inc("views", 1), Recipe::class.java);
+    override fun adjustViewsCount(recipeId: Int, shiftValue: Int) {
+        operations.findAndModify(query(where("id").`is`(recipeId)), Update().inc("stats.views", 1), Recipe::class.java);
     }
 
-    private fun changeLikesCount(id: Int, likesOffset: Int) {
-        operations.findAndModify(query(where("id").`is`(id)), Update().inc("stats.likes", likesOffset), Recipe::class.java)
+    override  fun adjustLikesCount(recipeId: Int, shiftValue: Int) {
+        operations.findAndModify(query(where("id").`is`(recipeId)), Update().inc("stats.likes", shiftValue), Recipe::class.java)
     }
 }

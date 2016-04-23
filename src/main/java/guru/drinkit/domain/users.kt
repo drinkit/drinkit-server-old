@@ -19,10 +19,7 @@ data class User(
         var barItems: List<BarItem>? = null,
         var likes: List<Int>? = null) {
 
-
-    data class BarItem(var ingredientId: Int? = null, var isActive: Boolean = true) {
-        constructor(ingredientId: Int?) : this(ingredientId, isActive = true)
-    }
+    data class BarItem(var ingredientId: Int? = null, var isActive: Boolean = true)
 
     companion object {
         const val ACCESS_LVL_USER = 9
@@ -32,7 +29,8 @@ data class User(
 }
 
 @Document
-data class Comment(
+data class Comment
+@PersistenceConstructor constructor(
         override val id: String?,
         @Indexed val recipeId: Int,
         var posted: Date,
@@ -48,11 +46,5 @@ data class UserRecipeStats(
         val views: Int,
         val lastViewed: Date) {
 
-    constructor(recipeId: Int, userId: String)
-    : this(userId, recipeId, 1, Date())
-
-    @PersistenceConstructor
-    constructor(userId: String, recipeId: Int, views: Int, lastViewed: Date)
-    : this(null, userId, recipeId, views, lastViewed)
 }
 
