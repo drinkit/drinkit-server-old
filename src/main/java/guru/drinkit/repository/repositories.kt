@@ -1,12 +1,13 @@
 package guru.drinkit.repository
 
 import guru.drinkit.common.Criteria
-import guru.drinkit.domain.*
-import org.bson.types.ObjectId
+import guru.drinkit.domain.Comment
+import guru.drinkit.domain.Ingredient
+import guru.drinkit.domain.Recipe
+import guru.drinkit.domain.User
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.mongodb.repository.Query
 import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.Repository
 
 /**
  * @author pkolmykov
@@ -42,8 +43,6 @@ interface RecipeRepositoryCustom {
     fun incrementViews(recipeId: Int) = adjustViewsCount(recipeId, 1)
 
 }
-
-interface RecipesStatisticsRepository : Repository<UserRecipeStats, ObjectId>
 
 interface UserBarRepository {
     fun updateBarItem(userId: String, barItem: User.BarItem)
