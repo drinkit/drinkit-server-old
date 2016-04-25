@@ -1,7 +1,7 @@
 package guru.drinkit.repository.impl
 
 import guru.drinkit.domain.User
-import guru.drinkit.repository.UserBarRepository
+import guru.drinkit.repository.UserRepositoryCustom
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.mongodb.core.query.Criteria.where
@@ -15,7 +15,15 @@ import org.springframework.data.mongodb.core.query.Update.update
 @Suppress("unused")
 class UserRepositoryImpl @Autowired constructor(
         val mongoOperations: MongoOperations
-) : UserBarRepository {
+) : UserRepositoryCustom {
+
+    override fun incrementRecipeViews(userId: String, recipeId: Int) {
+        throw UnsupportedOperationException()
+    }
+
+    override fun changeRecipeLike(userId: String, recipeId: Int, liked: Boolean) {
+        throw UnsupportedOperationException()
+    }
 
     override fun updateBarItem(userId: String, barItem: User.BarItem) {
         mongoOperations.updateFirst(

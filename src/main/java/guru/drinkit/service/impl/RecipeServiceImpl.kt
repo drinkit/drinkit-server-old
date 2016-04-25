@@ -26,7 +26,7 @@ class RecipeServiceImpl @Autowired constructor(
         Assert.isNull(recipe.id)
         val lastRecipeId = recipeRepository.findFirstByOrderByIdDesc()?.id ?: 0
         recipe.id = lastRecipeId + 1;
-        recipe.addedBy = DrinkitUtils.getUserName()
+        recipe.addedBy = DrinkitUtils.getUserNameAndId().name
         recipe.createdDate = Date()
         recipe.stats = Recipe.Stats(0, 0)
         return recipeRepository.save(recipe)

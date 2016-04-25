@@ -38,8 +38,8 @@ public class CommentsController {
     @ResponseBody
     public Comment createComment(@PathVariable Integer recipeId, @RequestBody Comment comment) {
         Assert.isNull(comment.getId());
-        DrinkitUtils.assertEqualsIds(recipeId, comment.getRecipeId());
-        DrinkitUtils.logOperation("Creating comment", comment);
+        DrinkitUtils.INSTANCE.assertEqualsIds(recipeId, comment.getRecipeId());
+        DrinkitUtils.INSTANCE.logOperation("Creating comment", comment);
         commentService.save(comment);
         return comment;
     }
@@ -48,7 +48,7 @@ public class CommentsController {
     @RequestMapping(method = RequestMethod.DELETE, value = "/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable String commentId) {
         if (commentService.find(commentId) != null) {
-            DrinkitUtils.logOperation("Deleting comment", commentId);
+            DrinkitUtils.INSTANCE.logOperation("Deleting comment", commentId);
             commentService.delete(commentId);
             return ResponseEntity.noContent().build();
         } else {
@@ -60,8 +60,8 @@ public class CommentsController {
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateContent(@PathVariable Integer recipeId, @RequestBody Comment comment) {
-        DrinkitUtils.assertEqualsIds(recipeId, comment.getRecipeId());
-        DrinkitUtils.logOperation("Updating comment", comment);
+        DrinkitUtils.INSTANCE.assertEqualsIds(recipeId, comment.getRecipeId());
+        DrinkitUtils.INSTANCE.logOperation("Updating comment", comment);
         commentService.save(comment);
     }
 }

@@ -1,7 +1,5 @@
 package guru.drinkit.domain
 
-import org.bson.types.ObjectId
-import org.springframework.data.annotation.PersistenceConstructor
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
@@ -9,28 +7,33 @@ import java.util.*
 /**
  * @author pkolmykov
  */
+@Document
 data class User(
-
         var id: String? = null,
-        var username: String? = null,
-        var password: String? = null,
-        var displayName: String? = null,
-        var accessLevel: Int? = null,
-        var barItems: List<BarItem>? = null,
-        var likes: List<Int>? = null) {
+        @Indexed(unique = true) var username: String = ANONYMOUS_USER_NAME,
+        var password: String = "",
+        var displayName: String = "",
+        var accessLevel: Int = ACCESS_LVL_USER,
+        var barItems: List<BarItem> = emptyList(),
+        var recipesStats: Map<Int, RecipeStats> = emptyMap()) {
 
-    data class BarItem(var ingredientId: Int? = null, var isActive: Boolean = true)
+    data class BarItem(val ingredientId: Int, var isActive: Boolean)
+
+    data class RecipeStats(
+            val views: Int,
+            val lastViewed: Date,
+            val liked: Boolean)
 
     companion object {
         const val ACCESS_LVL_USER = 9
         const val ACCESS_LVL_ADMIN = 0
+        const val ANONYMOUS_USER_NAME = "ANONYMOUS"
     }
 
 }
 
 @Document
-data class Comment
-@PersistenceConstructor constructor(
+data class Comment(
         override val id: String?,
         @Indexed val recipeId: Int,
         var posted: Date,
@@ -39,12 +42,6 @@ data class Comment
     data class Author(val userId: String, val name: String)
 }
 
-data class UserRecipeStats(
-        val id: ObjectId? = null,
-        val userId: String,
-        val recipeId: Int,
-        val views: Int,
-        val lastViewed: Date) {
 
-}
+
 

@@ -3,7 +3,6 @@ package guru.drinkit.controller.it
 import guru.drinkit.controller.common.AbstractRestMockMvc
 import guru.drinkit.domain.Recipe
 import guru.drinkit.repository.RecipeRepository
-import guru.drinkit.repository.RecipesStatisticsRepository
 import guru.drinkit.service.RecipeService
 import org.apache.commons.io.IOUtils
 import org.hamcrest.collection.IsCollectionWithSize.hasSize
@@ -24,9 +23,6 @@ class RecipeControllerIT : AbstractRestMockMvc() {
 
     @Autowired
     internal lateinit var recipeRepository: RecipeRepository
-
-    @Autowired
-    internal lateinit var recipesStatisticsRepository: RecipesStatisticsRepository
 
 
     private lateinit var insertedRecipe: Recipe

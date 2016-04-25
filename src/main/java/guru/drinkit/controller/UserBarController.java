@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import static guru.drinkit.common.DrinkitUtils.assertEqualsIds;
-
 /**
  * @author pkolmykov
  */
@@ -41,7 +39,6 @@ public class UserBarController {
     @RequestMapping(value = "{ingredientId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable String userId, @PathVariable Integer ingredientId, @RequestBody User.BarItem barItem) {
-        assertEqualsIds(barItem.getIngredientId(), ingredientId);
         userRepository.updateBarItem(userId, barItem);
     }
 

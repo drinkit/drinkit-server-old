@@ -1,12 +1,13 @@
 package guru.drinkit.repository
 
 import guru.drinkit.common.Criteria
-import guru.drinkit.domain.*
-import org.bson.types.ObjectId
+import guru.drinkit.domain.Comment
+import guru.drinkit.domain.Ingredient
+import guru.drinkit.domain.Recipe
+import guru.drinkit.domain.User
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.mongodb.repository.Query
 import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.Repository
 
 /**
  * @author pkolmykov
@@ -43,16 +44,16 @@ interface RecipeRepositoryCustom {
 
 }
 
-interface RecipesStatisticsRepository : Repository<UserRecipeStats, ObjectId>
-
-interface UserBarRepository {
+interface UserRepositoryCustom {
+    fun incrementRecipeViews(userId: String, recipeId: Int)
+    fun changeRecipeLike(userId: String, recipeId: Int, liked: Boolean)
     fun updateBarItem(userId: String, barItem: User.BarItem)
     fun addBarItem(userId: String, barItem: User.BarItem)
     fun removeBarItem(userId: String, ingredientId: Int)
 }
 
-interface UserRepository : CrudRepository<User, String>, UserBarRepository {
-    fun findByUsername(username: String): User
-    @Query("{barItems : {\$elemMatch : {ingredientId : ?0}}}")
+interface UserRepository : CrudRepository<User, String>, UserRepositoryCustom {
+    fun findByUsername(username: String): User?
+    @Query("{barItems : {\$elemMatch : {ingredientId : ?0}}}") //todo projection
     fun findByUserBarIngredientId(id: Int): List<User>
 }
