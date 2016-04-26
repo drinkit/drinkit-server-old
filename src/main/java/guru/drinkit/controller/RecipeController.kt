@@ -5,10 +5,10 @@ import guru.drinkit.common.Criteria
 import guru.drinkit.common.DrinkitUtils
 import guru.drinkit.controller.RecipeController.Companion.RESOURCE_NAME
 import guru.drinkit.domain.Recipe
-import guru.drinkit.exception.RecordNotFoundException
 import guru.drinkit.service.RecipeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.*
@@ -23,7 +23,7 @@ import javax.validation.Valid
 
 @Controller
 @RequestMapping(value = RESOURCE_NAME)
-class RecipeController @Autowired constructor(
+open class RecipeController @Autowired constructor(
         val recipeService: RecipeService,
         val objectMapper: ObjectMapper) {
 
@@ -33,14 +33,15 @@ class RecipeController @Autowired constructor(
 
     @RequestMapping(value = "/{recipeId}", method = arrayOf(GET))
     @ResponseBody
-    fun getRecipeById(@PathVariable recipeId: Int): Recipe {
-        return recipeService.findById(recipeId) ?: throw RecordNotFoundException("Recipe not found")
+    open fun getRecipeById(@PathVariable recipeId: Int): Recipe {
+        return recipeService.findSafe(recipeId)
     }
 
     @RequestMapping(method = arrayOf(POST))
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    fun createRecipe(@RequestBody recipe: Recipe): Recipe {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    open fun createRecipe(@RequestBody recipe: Recipe): Recipe {
         DrinkitUtils.logOperation("Creating recipe", recipe)
         recipeService.insert(recipe)
         return recipe
@@ -49,50 +50,49 @@ class RecipeController @Autowired constructor(
 
     @RequestMapping(method = arrayOf(GET), params = arrayOf("criteria"))
     @ResponseBody
-    fun searchRecipes(@RequestParam(value = "criteria", required = false) criteria: Criteria?): List<Recipe> {
+    open fun searchRecipes(@RequestParam(value = "criteria", required = false) criteria: Criteria?): List<Recipe> {
         return if (criteria == null) recipeService.findAll() else recipeService.findByCriteria(criteria)
     }
 
     @InitBinder
-    fun initBinder(webDataBinder: WebDataBinder) {
+    open fun initBinder(webDataBinder: WebDataBinder) {
         webDataBinder.registerCustomEditor(Criteria::class.java, object : PropertyEditorSupport() {
-
-            override fun setAsText(text: String) {
-                try {
-                    value = objectMapper.readValue(text, Criteria::class.java)
+            override open fun setAsText(text: String) {
+                value = try {
+                    objectMapper.readValue(text, Criteria::class.java)
                 } catch (e: IOException) {
                     throw IllegalArgumentException(e)
                 }
-
             }
         })
     }
 
     @RequestMapping(value = "{recipeId}", method = arrayOf(DELETE))
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteRecipe(@PathVariable recipeId: Int) {
-        recipeService.findById(recipeId) ?: throw RecordNotFoundException("Recipe not found")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    open fun deleteRecipe(@PathVariable recipeId: Int) {
         DrinkitUtils.logOperation("Deleting recipe", recipeId)
         recipeService.delete(recipeId)
     }
 
     @RequestMapping(value = "{recipeId}", method = arrayOf(PUT))
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun updateRecipe(@PathVariable recipeId: Int, @RequestBody @Valid recipe: Recipe) {
-        DrinkitUtils.assertEqualsIds(recipeId, recipe.id!!)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    open fun updateRecipe(@PathVariable recipeId: Int, @RequestBody @Valid recipe: Recipe) {
         DrinkitUtils.logOperation("Updating recipe", recipe)
-        recipeService.update(recipe)
+        recipeService.update(recipeId, recipe)
     }
 
     @RequestMapping(method = arrayOf(GET), params = arrayOf("namePart"))
     @ResponseBody
-    fun findRecipesByNamePart(@RequestParam namePart: String): List<Recipe> {
+    open fun findRecipesByNamePart(@RequestParam namePart: String): List<Recipe> {
         return recipeService.findByRecipeNameContaining(namePart)
     }
 
     @RequestMapping(value = "{recipeId}/media", method = arrayOf(POST))
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun uploadMedia(@RequestBody json: String, @PathVariable recipeId: Int) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    open fun uploadMedia(@RequestBody json: String, @PathVariable recipeId: Int) {
         val objectMapper = ObjectMapper()
         val root = objectMapper.readTree(json)
         val image = objectMapper.convertValue(root.get("image"), ByteArray::class.java)

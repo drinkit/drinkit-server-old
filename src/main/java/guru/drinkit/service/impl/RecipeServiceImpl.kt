@@ -17,34 +17,33 @@ import java.util.*
 
 @Service
 @Transactional
-class RecipeServiceImpl @Autowired constructor(
+open class RecipeServiceImpl @Autowired constructor(
         @Autowired private val fileStoreService: FileStoreService,
         @Autowired private val recipeRepository: RecipeRepository
 ) : RecipeService {
 
-    override fun insert(recipe: Recipe): Recipe {
-        Assert.isNull(recipe.id)
+    override fun insert(entity: Recipe): Recipe {
+        Assert.isNull(entity.id)
         val lastRecipeId = recipeRepository.findFirstByOrderByIdDesc()?.id ?: 0
-        recipe.id = lastRecipeId + 1;
-        recipe.addedBy = DrinkitUtils.getUserNameAndId().name
-        recipe.createdDate = Date()
-        recipe.stats = Recipe.Stats(0, 0)
-        return recipeRepository.save(recipe)
+        entity.id = lastRecipeId + 1;
+        entity.addedBy = DrinkitUtils.getUserNameAndId().name
+        entity.createdDate = Date()
+        entity.stats = Recipe.Stats(0, 0)
+        return recipeRepository.save(entity)
     }
 
-    override fun update(recipe: Recipe): Recipe {
-        Assert.notNull(recipe.id)
-        val original = findById(recipe.id!!)
-        recipeRepository.save(recipe.copy(
+    override fun save(entity: Recipe): Recipe {
+        Assert.notNull(entity.id)
+        val original = find(entity.id!!)
+        recipeRepository.save(entity.copy(
                 stats = original.stats,
                 createdDate = original.createdDate,
                 addedBy = original.addedBy))
-        return recipeRepository.findOne(recipe.id)
+        return recipeRepository.findOne(entity.id)
     }
 
-    override fun delete(id: Int) {
-        findById(id)
-        recipeRepository.delete(id)
+    override fun delete(entity: Recipe) {
+        recipeRepository.delete(entity)
     }
 
     @Transactional(readOnly = true)
@@ -58,14 +57,14 @@ class RecipeServiceImpl @Autowired constructor(
     }
 
     @Transactional(readOnly = true)
-    override fun findById(id: Int) = recipeRepository.findOne(id) ?: throw RecordNotFoundException("Recipe not found")
+    override fun find(id: Int) = recipeRepository.findOne(id) ?: throw RecordNotFoundException("Recipe not found")
 
     override fun findByRecipeNameContaining(namePart: String) =
             recipeRepository.findByNameContainingIgnoreCase(namePart)
 
     @Transactional
     override fun saveMedia(recipeId: Int, image: ByteArray?, thumbnail: ByteArray?) {
-        val recipe = findById(recipeId)
+        val recipe = find(recipeId)
         recipe.imageUrl = fileStoreService.getUrl(fileStoreService.save(recipeId, image, "image"))
         recipe.thumbnailUrl = fileStoreService.getUrl(fileStoreService.save(recipeId, thumbnail, "thumbnail"))
         recipeRepository.save(recipe)

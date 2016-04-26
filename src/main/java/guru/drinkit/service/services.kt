@@ -1,28 +1,19 @@
 package guru.drinkit.service
 
+import guru.drinkit.common.Criteria
+import guru.drinkit.domain.Recipe
+
 /**
  * @author pkolmykov
  */
-interface StatsService{
-    fun addViewToRecipe(recipeId: Int, userId: String)
+interface RecipeService :CrudService<Int, Recipe>{
+    fun findAll(): List<Recipe>
+    fun findByCriteria(criteria: Criteria): List<Recipe>
+    fun findByRecipeNameContaining(namePart: String): List<Recipe>
+    fun saveMedia(recipeId: Int, image: ByteArray?, thumbnail: ByteArray?)
 }
 
 
-//@Autowired
-//private val mongoOperations: MongoOperations? = null
-//@Autowired
-//private val recipeRepository: RecipeRepository? = null
-//
-//@After(value = "@annotation(EnableStats) && args(id)")
-//fun writeStats(id: Int) {
-//    recipeRepository!!.incrementViews(id)
-//    val userName = DrinkitUtils.getUserName()
-//    if (userName != null) {
-//        mongoOperations!!.upsert(query(
-//                where("recipeId").`is`(id).and("userId").`is`(userName)),
-//                Update().inc("views", 1).set("lastViewed", Date()), UserRecipeStats::class.java)
-//    }
-//
-//    mongoOperations!!.updateFirst(
-//            query(where("id").`is`(id)), Update().inc("stats.views", 1), Recipe::class.java)
-//}
+interface StatsService{
+    fun addViewToRecipe(recipeId: Int, userId: String)
+}

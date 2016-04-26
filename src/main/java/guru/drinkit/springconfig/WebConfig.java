@@ -8,7 +8,6 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -26,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
         "guru.drinkit.common"
 })
 @EnableWebMvc
-@EnableAspectJAutoProxy
+//@EnableAspectJAutoProxy
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     public static final String REST_ENDPOINT = "/rest";

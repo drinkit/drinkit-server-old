@@ -13,7 +13,7 @@ import java.util.*
  * Created by Crabar on 27.03.2016.
  */
 @Service
-class CommentServiceImpl @Autowired constructor(
+open class CommentServiceImpl @Autowired constructor(
         private val commentRepository: CommentRepository,
         private val userRepository: UserRepository
 ) : CommentService, CrudServiceImpl<String, Comment>(commentRepository) {

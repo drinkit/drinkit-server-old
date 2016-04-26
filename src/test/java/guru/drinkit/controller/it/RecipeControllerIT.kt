@@ -67,7 +67,7 @@ class RecipeControllerIT : AbstractRestMockMvc() {
                 post(RESOURCE_ENDPOINT).content(objectMapper.writeValueAsBytes(newRecipeDto)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated)
         //                .andExpect(jsonPath("$.id").exists())
         //                .andExpect(jsonPath("$.name").value(createNewRecipeDto().getName()));
-        val recipe = recipeService.findById(2)
+        val recipe = recipeService.find(2)
         //        assertThat(recipe.getName()).isEqualToIgnoringCase("new name");
     }
 
@@ -93,7 +93,7 @@ class RecipeControllerIT : AbstractRestMockMvc() {
         insertedRecipe.name = "modified"
         mockMvc.perform(
                 put(RESOURCE_ENDPOINT + "/" + insertedRecipe.id!!).content(objectMapper.writeValueAsBytes(insertedRecipe)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNoContent)
-        val actualRecipe = recipeService.findById(insertedRecipe.id!!)
+        val actualRecipe = recipeService.find(insertedRecipe.id!!)
 
         assertEquals(insertedRecipe, actualRecipe)                       //fail
     }
@@ -108,7 +108,7 @@ class RecipeControllerIT : AbstractRestMockMvc() {
 
         mockMvc.perform(post(RESOURCE_ENDPOINT + "/" + insertedRecipe.id + "/media").contentType(MediaType.APPLICATION_JSON).content(objectNode.toString())).andExpect(status().isNoContent)
 
-        val recipe = recipeService.findById(insertedRecipe.id!!)!!
+        val recipe = recipeService.find(insertedRecipe.id!!)!!
         assertNotNull(recipe.imageUrl)
         assertNotNull(recipe.thumbnailUrl)
     }

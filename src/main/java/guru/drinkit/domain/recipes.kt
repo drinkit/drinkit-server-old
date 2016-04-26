@@ -9,7 +9,7 @@ import java.util.*
  */
 @Document
 data class Recipe(
-        var id: Int? = null,
+        override var id: Int? = null,
         var cocktailTypeId: Int = 0,
         var description: String? = null,
         var name: String? = null,
@@ -20,7 +20,7 @@ data class Recipe(
         var createdDate: Date? = Date(),
         var addedBy: String? = null,
         var published: Boolean = false,
-        var stats: Stats? = null) {
+        var stats: Stats? = null) : Entity<Int>{
     data class Stats(val likes: Int = 0, val views: Int = 0)
     data class IngredientWithQuantity(val ingredientId: Int, val quantity: Int?)
 }
