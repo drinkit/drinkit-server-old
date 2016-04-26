@@ -3,6 +3,11 @@ package guru.drinkit.service
 /**
  * @author pkolmykov
  */
+interface StatsService{
+    fun addViewToRecipe(recipeId: Int, userId: String)
+}
+
+
 //@Autowired
 //private val mongoOperations: MongoOperations? = null
 //@Autowired

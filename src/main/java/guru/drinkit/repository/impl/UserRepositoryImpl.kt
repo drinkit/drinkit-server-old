@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.core.query.Update.update
+import java.util.*
 
 /**
  * @author pkolmykov
@@ -18,11 +19,17 @@ class UserRepositoryImpl @Autowired constructor(
 ) : UserRepositoryCustom {
 
     override fun incrementRecipeViews(userId: String, recipeId: Int) {
-        throw UnsupportedOperationException()
+        mongoOperations.upsert(query(
+                where("_id").`is`(userId)),
+                Update().inc("recipeStatsMap.$recipeId.views", 1).set("recipeStatsMap.$recipeId.lastViewed", Date()),
+                User::class.java);
     }
 
     override fun changeRecipeLike(userId: String, recipeId: Int, liked: Boolean) {
-        throw UnsupportedOperationException()
+        mongoOperations.upsert(query(
+                where("_id").`is`(userId)),
+                Update().set("recipeStatsMap.$recipeId.liked", liked),
+                User::class.java);
     }
 
     override fun updateBarItem(userId: String, barItem: User.BarItem) {

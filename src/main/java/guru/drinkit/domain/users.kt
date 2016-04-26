@@ -15,14 +15,14 @@ data class User(
         var displayName: String = "",
         var accessLevel: Int = ACCESS_LVL_USER,
         var barItems: List<BarItem> = emptyList(),
-        var recipesStats: Map<Int, RecipeStats> = emptyMap()) {
+        var recipeStatsMap: Map<Int, RecipeStats> = emptyMap()) {
 
-    data class BarItem(val ingredientId: Int, var isActive: Boolean)
+    data class BarItem(val ingredientId: Int, var active: Boolean)
 
     data class RecipeStats(
             val views: Int,
             val lastViewed: Date,
-            val liked: Boolean)
+            val liked: Boolean?)
 
     companion object {
         const val ACCESS_LVL_USER = 9

@@ -2,8 +2,7 @@ package guru.drinkit.controller
 
 import guru.drinkit.common.DrinkitUtils
 import guru.drinkit.controller.RecipeStatsController.Companion.RESOURCE_NAME
-import guru.drinkit.repository.RecipeRepository
-import guru.drinkit.repository.UserRepository
+import guru.drinkit.service.StatsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -19,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus
 @Controller
 @RequestMapping(value = RESOURCE_NAME)
 class RecipeStatsController @Autowired constructor(
-        private val recipeRepository: RecipeRepository,
-        private val userRepository: UserRepository
+        private val statsService: StatsService
+
 ) {
 
     companion object {
@@ -32,7 +31,8 @@ class RecipeStatsController @Autowired constructor(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun incrementViewsCount(@PathVariable recipeId: Int) {
         val userId = DrinkitUtils.getUserNameAndId().id!!
-        userRepository.incrementRecipeViews(userId, recipeId)
-        recipeRepository.incrementViews(recipeId)
+        statsService.addViewToRecipe(recipeId, userId)
     }
+
+
 }

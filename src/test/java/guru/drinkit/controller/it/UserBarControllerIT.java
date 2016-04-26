@@ -66,7 +66,7 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
                 .andExpect(status().isNoContent());
         List<User.BarItem> barItems = userRepository.findOne(testUserId).getBarItems();
         assertThat(barItems.size(), is(1));
-        assertThat(barItems.get(0).isActive(), is(false));
+        assertThat(barItems.get(0).getActive(), is(false));
     }
 
     @Test

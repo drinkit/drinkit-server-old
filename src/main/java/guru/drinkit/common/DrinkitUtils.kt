@@ -2,7 +2,6 @@ package guru.drinkit.common
 
 import guru.drinkit.domain.User
 import org.slf4j.LoggerFactory
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.util.Assert
 
@@ -26,7 +25,7 @@ object DrinkitUtils {
     fun getUserNameAndId(): SimpleUser {
         val authentication = SecurityContextHolder.getContext().authentication
         if (authentication != null) {
-            if (authentication.authorities.size == 0 || !authentication.authorities.contains(SimpleGrantedAuthority("ROLE_ANONYMOUS"))) {
+            if (authentication.authorities.size == 0 && authentication.principal is ExtendedUser) {
                 val user = authentication.principal as ExtendedUser
                 return SimpleUser(user.userId, user.username)
             }
