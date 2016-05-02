@@ -4,8 +4,9 @@ import guru.drinkit.domain.Comment
 import guru.drinkit.domain.Entity
 import guru.drinkit.domain.Ingredient
 import guru.drinkit.domain.Recipe
-import guru.drinkit.exception.RecordNotFoundException
+import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.ResponseStatus
 
 /**
  * @author pkolmykov
@@ -61,3 +62,6 @@ interface CrudService<ID, T : Entity<ID>> {
     fun delete(entity: T)
 
 }
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Record not found")
+class RecordNotFoundException(message: String) : RuntimeException(message)

@@ -1,13 +1,14 @@
 package guru.drinkit.service.impl
 
 import guru.drinkit.domain.Ingredient
-import guru.drinkit.exception.RecipesFoundException
 import guru.drinkit.repository.IngredientRepository
 import guru.drinkit.repository.RecipeRepository
 import guru.drinkit.repository.UserRepository
 import guru.drinkit.service.IngredientService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.ResponseStatus
 
 @Service
 open class IngredientServiceImpl @Autowired constructor(
@@ -30,11 +31,15 @@ open class IngredientServiceImpl @Autowired constructor(
         if (count === 0) {
             ingredientRepository.delete(id)
         } else {
-            throw RecipesFoundException(count)
+            throw IngredientConstraintException(count)
         }
         ingredientRepository.delete(id)
         removeBarItems(id)
     }
+
+    @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Found recipes with this ingredient")
+    class IngredientConstraintException(val size: Int) :
+            RuntimeException("Ingredient could not be deleted. Used in $size recipes")
 
     /**
      * @return count of users with removed bar items
