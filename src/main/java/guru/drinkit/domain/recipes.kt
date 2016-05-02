@@ -27,10 +27,10 @@ data class Recipe(
 
 @Document
 data class Ingredient(
-        var id: Int? = null,
+        override var id: Int? = null,
         @Indexed(unique = true)
         var name: String? = null,
         var vol: Int? = null,
         var description: String? = null,
         var category: String? = null,
-        var alias: List<String>? = null)
+        var alias: List<String>? = null) : Entity<Int>

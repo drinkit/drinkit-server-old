@@ -12,4 +12,5 @@ abstract class CrudServiceImpl<ID : Serializable, T : Entity<ID>>(val mongoRepos
     override fun find(id: ID): T? = mongoRepository.findOne(id)
     override fun save(entity: T): T = mongoRepository.save(entity)
     override fun delete(entity: T) = mongoRepository.delete(entity)
+    override fun findAll() = mongoRepository.findAll()
 }

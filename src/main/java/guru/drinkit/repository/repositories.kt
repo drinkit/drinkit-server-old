@@ -22,7 +22,7 @@ interface CommentRepository : MongoRepository<Comment, String> {
 }
 
 interface IngredientRepository : MongoRepository<Ingredient, Int> {
-    fun findFirstByOrderByIdDesc(): Ingredient
+    fun findFirstByOrderByIdDesc(): Ingredient?
 }
 
 interface RecipeRepository : MongoRepository<Recipe, Int>, RecipeRepositoryCustom {

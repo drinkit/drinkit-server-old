@@ -10,13 +10,11 @@ import guru.drinkit.service.FileStoreService
 import guru.drinkit.service.RecipeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.Assert
 import java.util.*
 
 
 @Service
-@Transactional
 open class RecipeServiceImpl @Autowired constructor(
         @Autowired private val fileStoreService: FileStoreService,
         @Autowired private val recipeRepository: RecipeRepository
@@ -46,24 +44,20 @@ open class RecipeServiceImpl @Autowired constructor(
         recipeRepository.delete(entity)
     }
 
-    @Transactional(readOnly = true)
     override fun findAll() = recipeRepository.findAll()
 
-    @Transactional(readOnly = true)
     override fun findByCriteria(criteria: Criteria): List<Recipe> {
         val recipes = recipeRepository.findByCriteria(criteria)
         Collections.sort(recipes, RecipeComparatorByCriteria(criteria))
         return recipes
     }
 
-    @Transactional(readOnly = true)
     override fun find(id: Int) = recipeRepository.findOne(id) ?: throw RecordNotFoundException("Recipe not found")
 
     override fun findByRecipeNameContaining(namePart: String) =
             recipeRepository.findByNameContainingIgnoreCase(namePart)
 
-    @Transactional
-    override fun saveMedia(recipeId: Int, image: ByteArray?, thumbnail: ByteArray?) {
+    override fun saveMedia(recipeId: Int, image: ByteArray, thumbnail: ByteArray) {
         val recipe = find(recipeId)
         recipe.imageUrl = fileStoreService.getUrl(fileStoreService.save(recipeId, image, "image"))
         recipe.thumbnailUrl = fileStoreService.getUrl(fileStoreService.save(recipeId, thumbnail, "thumbnail"))

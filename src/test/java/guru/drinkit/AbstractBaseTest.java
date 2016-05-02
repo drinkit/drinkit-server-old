@@ -33,13 +33,11 @@ public abstract class AbstractBaseTest {
     protected Ingredient secondIngredient;
     protected User user;
     @Autowired
+    MongoTemplate mongoTemplate;
+    @Autowired
     private IngredientService ingredientService;
-
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    MongoTemplate mongoTemplate;
 
     @Before
     public void initTestData() {
@@ -48,13 +46,13 @@ public abstract class AbstractBaseTest {
         firstIngredient.setDescription("firstIngredient");
         firstIngredient.setName("First");
         firstIngredient.setVol(30);
-        firstIngredient = ingredientService.save(firstIngredient);
+        firstIngredient = ingredientService.insert(firstIngredient);
 
         secondIngredient = new Ingredient();
         secondIngredient.setDescription("secondIngredient");
         secondIngredient.setName("Second");
         secondIngredient.setVol(40);
-        secondIngredient = ingredientService.save(secondIngredient);
+        secondIngredient = ingredientService.insert(secondIngredient);
 
         user = new User();
         user.setDisplayName("Test user");

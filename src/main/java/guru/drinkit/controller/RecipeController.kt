@@ -97,6 +97,9 @@ open class RecipeController @Autowired constructor(
         val root = objectMapper.readTree(json)
         val image = objectMapper.convertValue(root.get("image"), ByteArray::class.java)
         val thumbnail = objectMapper.convertValue(root.get("thumbnail"), ByteArray::class.java)
+        if (image == null || thumbnail == null) {
+            throw IllegalArgumentException("image AND thumbnail is required")
+        }
         recipeService.saveMedia(recipeId, image, thumbnail)
     }
 

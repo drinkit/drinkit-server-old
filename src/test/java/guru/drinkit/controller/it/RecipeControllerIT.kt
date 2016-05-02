@@ -38,7 +38,7 @@ class RecipeControllerIT : AbstractRestMockMvc() {
     @Ignore
     @Throws(Exception::class)
     fun testGetRecipeByIdWithStats() {
-        val recipeId = insertedRecipe.id
+        //        val recipeId = insertedRecipe.id
         //        mockMvc.perform(get(RESOURCE_ENDPOINT + "/" + recipeId))
         //                .andExpect(status().isOk())
         //                .andExpect(content().json(objectMapper.writeValueAsString(insertedRecipe)));
@@ -67,7 +67,7 @@ class RecipeControllerIT : AbstractRestMockMvc() {
                 post(RESOURCE_ENDPOINT).content(objectMapper.writeValueAsBytes(newRecipeDto)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isCreated)
         //                .andExpect(jsonPath("$.id").exists())
         //                .andExpect(jsonPath("$.name").value(createNewRecipeDto().getName()));
-        val recipe = recipeService.find(2)
+        //        val recipe = recipeService.find(2)
         //        assertThat(recipe.getName()).isEqualToIgnoringCase("new name");
     }
 

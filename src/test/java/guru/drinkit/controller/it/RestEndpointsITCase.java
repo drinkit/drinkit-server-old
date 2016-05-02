@@ -26,13 +26,13 @@ public class RestEndpointsITCase extends AbstractRestMockMvc {
 
     @Test
     public void testDeleteRecipeShouldReturn409() throws Exception {
-        int ingredientId = ingredientService.save(createNewIngredient()).getId();
+        int ingredientId = ingredientService.insert(createNewIngredient()).getId();
         Recipe newRecipe = createNewRecipeDto();
         newRecipe.setIngredientsWithQuantities(singletonList(new Recipe.IngredientWithQuantity(ingredientId, 100)));
         recipeService.insert(newRecipe);
         mockMvc.perform(delete("/ingredients/" + ingredientId))
                 .andExpect(status().isConflict());
-        assertNotNull(ingredientService.getIngredientById(ingredientId));
+        assertNotNull(ingredientService.find(ingredientId));
     }
 
     private Ingredient createNewIngredient() {

@@ -17,7 +17,7 @@ class IngredientsController @Autowired constructor(
 
     @RequestMapping(method = arrayOf(RequestMethod.GET))
     @ResponseBody
-    fun getIngredients(): List<Ingredient> = ingredientService.ingredients
+    fun getIngredients(): List<Ingredient> = ingredientService.findAll()
 
     @RequestMapping(method = arrayOf(RequestMethod.POST))
     @ResponseStatus(HttpStatus.CREATED)

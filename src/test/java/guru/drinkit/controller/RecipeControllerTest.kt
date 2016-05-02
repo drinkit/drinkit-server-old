@@ -5,6 +5,7 @@ import guru.drinkit.controller.common.AbstractMockMvcTest
 import guru.drinkit.domain.Recipe
 import guru.drinkit.repository.RecipeRepository
 import guru.drinkit.security.Role
+import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito
@@ -12,6 +13,7 @@ import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpMethod.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import org.springframework.web.util.NestedServletException
 
 /**
  * @author pkolmykov
@@ -72,7 +74,13 @@ class RecipeControllerTest : AbstractMockMvcTest() {
 
     @Test
     fun uploadMedia() {
-        verifyAccess(POST, RESOURCE_NAME + "/1/media", status().isNoContent, Role.ADMIN)
+        try {
+            verifyAccess(POST, RESOURCE_NAME + "/1/media", status().isNoContent, Role.ADMIN)
+        } catch(e: NestedServletException) {
+            Assertions.assertThat(e.cause).isInstanceOf(IllegalArgumentException::class.java)
+            Assertions.assertThat(e.cause?.message).isEqualTo("image AND thumbnail is required")
+        }
+
     }
 
 }
