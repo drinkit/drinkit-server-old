@@ -1,10 +1,10 @@
 package guru.drinkit.repository
 
-import guru.drinkit.common.Criteria
 import guru.drinkit.domain.Comment
 import guru.drinkit.domain.Ingredient
 import guru.drinkit.domain.Recipe
 import guru.drinkit.domain.User
+import guru.drinkit.service.Criteria
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.data.mongodb.repository.Query
 import org.springframework.data.repository.CrudRepository

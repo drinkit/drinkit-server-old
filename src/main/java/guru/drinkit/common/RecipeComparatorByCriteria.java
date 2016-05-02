@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Comparator;
 
 import guru.drinkit.domain.Recipe;
+import guru.drinkit.service.Criteria;
 import org.apache.commons.collections4.Transformer;
 
 import static org.apache.commons.collections4.CollectionUtils.collect;

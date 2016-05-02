@@ -18,7 +18,7 @@ class RecipeRepositoryImpl @Autowired constructor(
 ) : RecipeRepositoryCustom {
 
 
-    override fun findByCriteria(criteria: guru.drinkit.common.Criteria): List<Recipe> {
+    override fun findByCriteria(criteria: guru.drinkit.service.Criteria): List<Recipe> {
         val mongoCriteria = Criteria()
         if (criteria.ingredients.size > 0) {
             mongoCriteria.and("ingredientsWithQuantities").elemMatch(where("ingredientId").`in`(criteria.ingredients))

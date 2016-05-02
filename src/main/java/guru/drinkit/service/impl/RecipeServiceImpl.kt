@@ -1,11 +1,11 @@
 package guru.drinkit.service.impl
 
-import guru.drinkit.common.Criteria
 import guru.drinkit.common.DrinkitUtils
 import guru.drinkit.common.RecipeComparatorByCriteria
 import guru.drinkit.domain.Recipe
 import guru.drinkit.exception.RecordNotFoundException
 import guru.drinkit.repository.RecipeRepository
+import guru.drinkit.service.Criteria
 import guru.drinkit.service.FileStoreService
 import guru.drinkit.service.RecipeService
 import org.springframework.beans.factory.annotation.Autowired

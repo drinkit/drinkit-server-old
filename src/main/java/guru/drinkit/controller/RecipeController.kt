@@ -1,10 +1,10 @@
 package guru.drinkit.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import guru.drinkit.common.Criteria
 import guru.drinkit.common.DrinkitUtils
 import guru.drinkit.controller.RecipeController.Companion.RESOURCE_NAME
 import guru.drinkit.domain.Recipe
+import guru.drinkit.service.Criteria
 import guru.drinkit.service.RecipeService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -57,7 +57,7 @@ open class RecipeController @Autowired constructor(
     @InitBinder
     open fun initBinder(webDataBinder: WebDataBinder) {
         webDataBinder.registerCustomEditor(Criteria::class.java, object : PropertyEditorSupport() {
-            override open fun setAsText(text: String) {
+            override fun setAsText(text: String) {
                 value = try {
                     objectMapper.readValue(text, Criteria::class.java)
                 } catch (e: IOException) {

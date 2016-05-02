@@ -1,6 +1,5 @@
 package guru.drinkit.service
 
-import guru.drinkit.common.Criteria
 import guru.drinkit.domain.Comment
 import guru.drinkit.domain.Entity
 import guru.drinkit.domain.Ingredient
@@ -16,6 +15,11 @@ interface RecipeService : CrudService<Int, Recipe> {
     fun findByRecipeNameContaining(namePart: String): List<Recipe>
     fun saveMedia(recipeId: Int, image: ByteArray, thumbnail: ByteArray)
 }
+
+data class Criteria(
+        val cocktailTypes: Set<Int> = emptySet(),
+        val ingredients: Set<Int> = emptySet(),
+        val options: Set<Int> = emptySet())
 
 interface IngredientService : CrudService<Int, Ingredient>
 
