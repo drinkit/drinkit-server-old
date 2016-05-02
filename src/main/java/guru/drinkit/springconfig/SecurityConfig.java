@@ -5,7 +5,7 @@ import javax.annotation.Resource;
 import guru.drinkit.repository.UserRepository;
 import guru.drinkit.security.CustomDigestAuthenticationEntryPoint;
 import guru.drinkit.security.SimpleCORSFilter;
-import guru.drinkit.service.impl.BasicUserDetailsService;
+import guru.drinkit.service.BasicUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

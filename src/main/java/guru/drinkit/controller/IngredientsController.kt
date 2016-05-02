@@ -1,6 +1,5 @@
 package guru.drinkit.controller
 
-import guru.drinkit.common.DrinkitUtils
 import guru.drinkit.domain.Ingredient
 import guru.drinkit.service.IngredientService
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,22 +22,18 @@ class IngredientsController @Autowired constructor(
     @ResponseStatus(HttpStatus.CREATED)
     fun addNewIngredient(@RequestBody ingredient: Ingredient) {
         Assert.isNull(ingredient.id)
-        DrinkitUtils.logOperation("Creating ingredient", ingredient)
         ingredientService.save(ingredient)
     }
 
     @RequestMapping(value = "{id}", method = arrayOf(RequestMethod.PUT))
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Updated")
     fun editIngredient(@RequestBody ingredient: Ingredient, @PathVariable id: Int) {
-        DrinkitUtils.assertEqualsIds(ingredient.id!!, id)
-        DrinkitUtils.logOperation("Updating ingredient", ingredient)
-        ingredientService.save(ingredient)
+        ingredientService.update(id, ingredient)
     }
 
     @RequestMapping(value = "{id}", method = arrayOf(RequestMethod.DELETE))
     @ResponseStatus(value = HttpStatus.NO_CONTENT, reason = "Deleted")
     fun delete(@PathVariable id: Int) {
-        DrinkitUtils.logOperation("Deleting ingredient", id)
         ingredientService.delete(id)
 
     }

@@ -1,7 +1,6 @@
 package guru.drinkit.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import guru.drinkit.common.DrinkitUtils
 import guru.drinkit.controller.RecipeController.Companion.RESOURCE_NAME
 import guru.drinkit.domain.Recipe
 import guru.drinkit.service.Criteria
@@ -42,7 +41,6 @@ open class RecipeController @Autowired constructor(
     @ResponseBody
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     open fun createRecipe(@RequestBody recipe: Recipe): Recipe {
-        DrinkitUtils.logOperation("Creating recipe", recipe)
         recipeService.insert(recipe)
         return recipe
     }
@@ -71,7 +69,6 @@ open class RecipeController @Autowired constructor(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     open fun deleteRecipe(@PathVariable recipeId: Int) {
-        DrinkitUtils.logOperation("Deleting recipe", recipeId)
         recipeService.delete(recipeId)
     }
 
@@ -79,7 +76,6 @@ open class RecipeController @Autowired constructor(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     open fun updateRecipe(@PathVariable recipeId: Int, @RequestBody @Valid recipe: Recipe) {
-        DrinkitUtils.logOperation("Updating recipe", recipe)
         recipeService.update(recipeId, recipe)
     }
 

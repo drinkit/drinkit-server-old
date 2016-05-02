@@ -14,7 +14,7 @@ data class Recipe(
         var description: String? = null,
         var name: String? = null,
         var options: List<Int>? = null,
-        var ingredientsWithQuantities: List<IngredientWithQuantity>? = null,
+        var ingredientsWithQuantities: List<IngredientWithQuantity> = emptyList(),
         var imageUrl: String? = null,
         var thumbnailUrl: String? = null,
         var createdDate: Date? = Date(),

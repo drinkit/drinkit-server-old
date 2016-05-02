@@ -1,8 +1,8 @@
 package guru.drinkit.controller
 
-import guru.drinkit.common.DrinkitUtils
 import guru.drinkit.controller.RecipeStatsController.Companion.RESOURCE_NAME
 import guru.drinkit.service.StatsService
+import guru.drinkit.service.getUserNameAndId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -30,7 +30,7 @@ class RecipeStatsController @Autowired constructor(
     @RequestMapping(method = arrayOf(RequestMethod.PATCH), value = "/{recipeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun incrementViewsCount(@PathVariable recipeId: Int) {
-        val userId = DrinkitUtils.getUserNameAndId().id!!
+        val userId = getUserNameAndId().id!!
         statsService.addViewToRecipe(recipeId, userId)
     }
 

@@ -1,13 +1,13 @@
 package guru.drinkit.service.impl
 
-import guru.drinkit.common.DrinkitUtils
-import guru.drinkit.common.RecipeComparatorByCriteria
 import guru.drinkit.domain.Recipe
 import guru.drinkit.exception.RecordNotFoundException
 import guru.drinkit.repository.RecipeRepository
 import guru.drinkit.service.Criteria
 import guru.drinkit.service.FileStoreService
 import guru.drinkit.service.RecipeService
+import guru.drinkit.service.getUserNameAndId
+import org.apache.commons.collections4.CollectionUtils.collect
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.util.Assert
@@ -24,7 +24,7 @@ open class RecipeServiceImpl @Autowired constructor(
         Assert.isNull(entity.id)
         val lastRecipeId = recipeRepository.findFirstByOrderByIdDesc()?.id ?: 0
         entity.id = lastRecipeId + 1;
-        entity.addedBy = DrinkitUtils.getUserNameAndId().name
+        entity.addedBy = getUserNameAndId().name
         entity.createdDate = Date()
         entity.stats = Recipe.Stats(0, 0)
         return recipeRepository.save(entity)
@@ -50,6 +50,24 @@ open class RecipeServiceImpl @Autowired constructor(
         val recipes = recipeRepository.findByCriteria(criteria)
         Collections.sort(recipes, RecipeComparatorByCriteria(criteria))
         return recipes
+    }
+
+    class RecipeComparatorByCriteria(val criteria: Criteria) : Comparator<Recipe> {
+
+        override fun compare(recipe1: Recipe, recipe2: Recipe): Int {
+            var result = getNotMatchesIngredientsCount(recipe1) - getNotMatchesIngredientsCount(recipe2)
+            if (result == 0) {
+                result = recipe2.ingredientsWithQuantities.size - recipe1.ingredientsWithQuantities.size
+            }
+            return result
+        }
+
+        private fun getNotMatchesIngredientsCount(recipe: Recipe): Int {
+            val ingredientsIdsFromRecipe = collect<Recipe.IngredientWithQuantity, Int>(recipe.ingredientsWithQuantities,
+                    { it -> it.ingredientId })
+            ingredientsIdsFromRecipe.removeAll(criteria.ingredients)
+            return ingredientsIdsFromRecipe.size
+        }
     }
 
     override fun find(id: Int) = recipeRepository.findOne(id) ?: throw RecordNotFoundException("Recipe not found")
