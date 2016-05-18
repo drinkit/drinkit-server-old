@@ -11,20 +11,20 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <spring.version>RELEASE</spring.version>
-        <jackson.version>2.7.3</jackson.version>
-        <kotlin.version>1.0.2</kotlin.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <id>bintray-nhaarman-maven</id>
-            <name>bintray</name>
-            <url>http://dl.bintray.com/nhaarman/maven</url>
-        </repository>
-    </repositories>
+    <!--<repositories>-->
+        <!--<repository>-->
+            <!--<id>eap</id>-->
+            <!--<url>http://maven.repository.redhat.com/techpreview/all</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
+    <!--</repositories>-->
 
 
 
@@ -75,42 +75,7 @@
     </profiles>
 
     <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-maven-plugin</artifactId>
-                    <version>${kotlin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>compile</id>
-                            <phase>process-sources</phase>
-                            <goals>
-                                <goal>compile</goal>
-                            </goals>
-                            <configuration>
-                                <sourceDirs>
-                                    <source>src/main/java</source>
-                                    <source>src/main/kotlin</source>
-                                    <source>src/main/resources</source>
-                                </sourceDirs>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>test-compile</id>
-                            <phase>process-test-sources</phase>
-                            <goals>
-                                <goal>test-compile</goal>
-                            </goals>
-                            <configuration>
-                                <sourceDirs>
-                                    <source>src/test/java</source>
-                                    <source>src/test/kotlin</source>
-                                    <source>src/test/resources</source>
-                                </sourceDirs>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
+        <plugins>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.17</version>
@@ -283,22 +248,17 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
+            <version>RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
+            <version>RELEASE</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-kotlin</artifactId>
-            <version>${jackson.version}</version>
+            <version>RELEASE</version>
         </dependency>
 
         <dependency>
@@ -416,21 +376,10 @@
             <version>3.4</version>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib</artifactId>
-            <version>${kotlin.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>5.2.4.Final</version>
         </dependency>
-        <dependency>
-            <groupId>com.nhaarman</groupId>
-            <artifactId>mockito-kotlin</artifactId>
-            <version>RELEASE</version>
-            <scope>test</scope>
-            <type>pom</type>
-        </dependency>
+
     </dependencies>
 </project>

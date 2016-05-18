@@ -35,7 +35,8 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
 
     @Test
     public void testAddNew() throws Exception {
-        User.BarItem barItem = new User.BarItem(1, true);
+        User.BarItem barItem = new User.BarItem();
+        barItem.setIngredientId(1);
         mockMvc.perform(
                 post("/users/" + testUserId + "/barItems")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -55,7 +56,9 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
 
     @Test
     public void testUpdate() throws Exception {
-        User.BarItem barItem = new User.BarItem(1, true);
+        User.BarItem barItem = new User.BarItem();
+        barItem.setIngredientId(1);
+        barItem.setActive(true);
         userRepository.addBarItem(testUserId, barItem);
         barItem.setActive(false);
         mockMvc.perform(
@@ -66,12 +69,13 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
                 .andExpect(status().isNoContent());
         List<User.BarItem> barItems = userRepository.findOne(testUserId).getBarItems();
         assertThat(barItems.size(), is(1));
-        assertThat(barItems.get(0).getActive(), is(false));
+        assertThat(barItems.get(0).isActive(), is(false));
     }
 
     @Test
     public void testRemove() throws Exception {
-        User.BarItem barItem = new User.BarItem(1, true);
+        User.BarItem barItem = new User.BarItem();
+        barItem.setIngredientId(1);
         userRepository.addBarItem(testUserId, barItem);
         mockMvc.perform(
                 delete("/users/" + testUserId + "/barItems/" + barItem.getIngredientId())

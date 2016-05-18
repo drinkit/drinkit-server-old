@@ -2,11 +2,9 @@ package guru.drinkit.springconfig;
 
 import javax.annotation.Resource;
 
-import guru.drinkit.repository.UserRepository;
 import guru.drinkit.security.CustomDigestAuthenticationEntryPoint;
 import guru.drinkit.security.SimpleCORSFilter;
-import guru.drinkit.service.BasicUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import guru.drinkit.service.impl.BasicUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -30,13 +28,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Resource
     Environment environment;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        return new BasicUserDetailsService(userRepository);
+        return new BasicUserDetailsService();
     }
 
     @Override

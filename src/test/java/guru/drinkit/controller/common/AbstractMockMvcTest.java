@@ -57,8 +57,7 @@ public abstract class AbstractMockMvcTest {
     @Autowired
     private Filter springSecurityFilterChain;
 
-    @Autowired
-    protected ObjectMapper objectMapper;
+    protected final ObjectMapper objectMapper = new ObjectMapper();
 
 
     protected MockMvc mockMvc;

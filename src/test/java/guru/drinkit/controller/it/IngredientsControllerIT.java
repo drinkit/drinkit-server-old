@@ -21,15 +21,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class IngredientsControllerIT extends AbstractRestMockMvc {
 
-    private static final String RESOURCE_ENDPOINT = "/ingredients";
     @Autowired
     private IngredientService ingredientService;
     @Autowired
     private UserRepository userRepository;
 
+    private static final String RESOURCE_ENDPOINT = "/ingredients";
+
     @Test
     public void testGetIngredients() throws Exception {
-        List<Ingredient> ingredients = ingredientService.findAll();
+        List<Ingredient> ingredients = ingredientService.getIngredients();
         assertTrue(ingredients.size() > 0);
         mockMvc.perform(get(RESOURCE_ENDPOINT))
                 .andExpect(status().isOk())
@@ -40,7 +41,7 @@ public class IngredientsControllerIT extends AbstractRestMockMvc {
     public void testAddNewIngredientWithDuplicatedName() throws Exception {
         Ingredient ingredient = new Ingredient();
         ingredient.setName(firstIngredient.getName());
-        ingredientService.insert(ingredient);
+        ingredientService.save(ingredient);
     }
 
     @Test
@@ -51,15 +52,15 @@ public class IngredientsControllerIT extends AbstractRestMockMvc {
     @Test
     public void testDelete() throws Exception {
         Integer ingredientId = firstIngredient.getId();
-        assertNotNull(ingredientService.find(ingredientId));
+        assertNotNull(ingredientService.getIngredientById(ingredientId));
         assertThat(userRepository.findByUserBarIngredientId(ingredientId).size()).isGreaterThan(0);
         mockMvc.perform(delete(RESOURCE_ENDPOINT + "/" + ingredientId))
                 .andExpect(status().isNoContent());
 
-        assertThat(ingredientService.find(ingredientId)).isNull();
+        assertThat(ingredientService.getIngredientById(ingredientId)).isNull();
         assertThat(userRepository.findByUserBarIngredientId(ingredientId).size()).isEqualTo(0);
 
-        assertNull(ingredientService.find(ingredientId));
+        assertNull(ingredientService.getIngredientById(ingredientId));
         mockMvc.perform(delete(RESOURCE_ENDPOINT + "/" + ingredientId))
                 .andExpect(status().isNotFound());
     }
