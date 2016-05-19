@@ -20,10 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author pkolmykov
  */
 @Configuration
-@ComponentScan({
-        "guru.drinkit.controller",
-        "guru.drinkit.common"
-})
+@ComponentScan("guru.drinkit.controller")
 @EnableWebMvc
 //@EnableAspectJAutoProxy
 public class WebConfig extends WebMvcConfigurerAdapter {
@@ -44,7 +41,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public ObjectMapper objectMapper(){
+    public ObjectMapper objectMapper() {
         return jackson2ObjectMapperBuilder().build();
     }
 
@@ -59,12 +56,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      * NOTE: For some reason default message converters registered before object mapper beans initialization.
      * And registered default {@link ObjectMapper}
      * To avoid this I should register it manually.
+     *
      * @param converters
      */
     @Override
     public void extendMessageConverters(final List<HttpMessageConverter<?>> converters) {
         for (final HttpMessageConverter<?> converter : converters) {
-            if (converter instanceof MappingJackson2HttpMessageConverter){
+            if (converter instanceof MappingJackson2HttpMessageConverter) {
                 ((MappingJackson2HttpMessageConverter) converter).setObjectMapper(objectMapper());
             }
         }
