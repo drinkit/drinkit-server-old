@@ -1,0 +1,380 @@
+= Auto-Generated API snippets
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+
+==== RecipeControllerTest.searchRecipes:http-request
+[source,http]
+----
+GET /rest/recipes?criteria=null HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.searchRecipes:http-response
+[source,http]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 3
+
+[ ]
+----
+==== RecipeControllerTest.searchRecipes:http-request
+[source,http]
+----
+GET /rest/recipes?criteria=null HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.searchRecipes:http-response
+[source,http]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 3
+
+[ ]
+----
+==== RecipeControllerTest.searchRecipes:http-request
+[source,http]
+----
+GET /rest/recipes?criteria=null HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.searchRecipes:http-response
+[source,http]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 3
+
+[ ]
+----
+==== RecipeControllerTest.updateRecipe:http-request
+[source,http]
+----
+PUT /rest/recipes/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 289
+
+{
+  "id" : 1,
+  "cocktailTypeId" : 0,
+  "description" : null,
+  "name" : null,
+  "options" : null,
+  "ingredientsWithQuantities" : [ ],
+  "imageUrl" : null,
+  "thumbnailUrl" : null,
+  "createdDate" : 1463859723736,
+  "addedBy" : null,
+  "published" : false,
+  "stats" : null
+}
+----
+==== RecipeControllerTest.updateRecipe:http-response
+[source,http]
+----
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+
+----
+==== RecipeControllerTest.deleteRecipe:http-request
+[source,http]
+----
+DELETE /rest/recipes/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.deleteRecipe:http-response
+[source,http]
+----
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+
+----
+==== RecipeControllerTest.getRecipeById:http-request
+[source,http]
+----
+GET /rest/recipes/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.getRecipeById:http-response
+[source,http]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 292
+
+{
+  "id" : null,
+  "cocktailTypeId" : 0,
+  "description" : null,
+  "name" : null,
+  "options" : null,
+  "ingredientsWithQuantities" : [ ],
+  "imageUrl" : null,
+  "thumbnailUrl" : null,
+  "createdDate" : 1463859723929,
+  "addedBy" : null,
+  "published" : false,
+  "stats" : null
+}
+----
+==== RecipeControllerTest.getRecipeById:http-request
+[source,http]
+----
+GET /rest/recipes/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.getRecipeById:http-response
+[source,http]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 292
+
+{
+  "id" : null,
+  "cocktailTypeId" : 0,
+  "description" : null,
+  "name" : null,
+  "options" : null,
+  "ingredientsWithQuantities" : [ ],
+  "imageUrl" : null,
+  "thumbnailUrl" : null,
+  "createdDate" : 1463859723929,
+  "addedBy" : null,
+  "published" : false,
+  "stats" : null
+}
+----
+==== RecipeControllerTest.getRecipeById:http-request
+[source,http]
+----
+GET /rest/recipes/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.getRecipeById:http-response
+[source,http]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 292
+
+{
+  "id" : null,
+  "cocktailTypeId" : 0,
+  "description" : null,
+  "name" : null,
+  "options" : null,
+  "ingredientsWithQuantities" : [ ],
+  "imageUrl" : null,
+  "thumbnailUrl" : null,
+  "createdDate" : 1463859723929,
+  "addedBy" : null,
+  "published" : false,
+  "stats" : null
+}
+----
+==== RecipeControllerTest.findRecipesByNamePart:http-request
+[source,http]
+----
+GET /rest/recipes/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.findRecipesByNamePart:http-response
+[source,http]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 292
+
+{
+  "id" : null,
+  "cocktailTypeId" : 0,
+  "description" : null,
+  "name" : null,
+  "options" : null,
+  "ingredientsWithQuantities" : [ ],
+  "imageUrl" : null,
+  "thumbnailUrl" : null,
+  "createdDate" : 1463859723954,
+  "addedBy" : null,
+  "published" : false,
+  "stats" : null
+}
+----
+==== RecipeControllerTest.findRecipesByNamePart:http-request
+[source,http]
+----
+GET /rest/recipes/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.findRecipesByNamePart:http-response
+[source,http]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 292
+
+{
+  "id" : null,
+  "cocktailTypeId" : 0,
+  "description" : null,
+  "name" : null,
+  "options" : null,
+  "ingredientsWithQuantities" : [ ],
+  "imageUrl" : null,
+  "thumbnailUrl" : null,
+  "createdDate" : 1463859723954,
+  "addedBy" : null,
+  "published" : false,
+  "stats" : null
+}
+----
+==== RecipeControllerTest.findRecipesByNamePart:http-request
+[source,http]
+----
+GET /rest/recipes/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 4
+
+null
+----
+==== RecipeControllerTest.findRecipesByNamePart:http-response
+[source,http]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 292
+
+{
+  "id" : null,
+  "cocktailTypeId" : 0,
+  "description" : null,
+  "name" : null,
+  "options" : null,
+  "ingredientsWithQuantities" : [ ],
+  "imageUrl" : null,
+  "thumbnailUrl" : null,
+  "createdDate" : 1463859723954,
+  "addedBy" : null,
+  "published" : false,
+  "stats" : null
+}
+----
+==== RecipeControllerTest.createRecipe:http-request
+[source,http]
+----
+POST /rest/recipes HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 345
+
+{
+  "id" : null,
+  "cocktailTypeId" : 0,
+  "description" : null,
+  "name" : null,
+  "options" : null,
+  "ingredientsWithQuantities" : [ {
+    "ingredientId" : 1,
+    "quantity" : 11
+  } ],
+  "imageUrl" : null,
+  "thumbnailUrl" : null,
+  "createdDate" : 1463859724002,
+  "addedBy" : null,
+  "published" : false,
+  "stats" : null
+}
+----
+==== RecipeControllerTest.createRecipe:http-response
+[source,http]
+----
+HTTP/1.1 201 Created
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 386
+
+{
+  "id" : 1,
+  "cocktailTypeId" : 0,
+  "description" : null,
+  "name" : null,
+  "options" : null,
+  "ingredientsWithQuantities" : [ {
+    "ingredientId" : 1,
+    "quantity" : 11
+  } ],
+  "imageUrl" : null,
+  "thumbnailUrl" : null,
+  "createdDate" : 1463859724009,
+  "addedBy" : "ANONYMOUS",
+  "published" : false,
+  "stats" : {
+    "likes" : 0,
+    "views" : 0
+  }
+}
+----

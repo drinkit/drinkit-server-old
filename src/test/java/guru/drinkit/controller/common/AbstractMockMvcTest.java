@@ -15,6 +15,7 @@ import guru.drinkit.springconfig.WebConfig;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,20 +62,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext
 public abstract class AbstractMockMvcTest {
 
+    private static CustomWriteResolver customWriteResolver;
     @Rule
     public RestDocumentation restDocumentation = new RestDocumentation("target/generated-snippets");
-
+    @Autowired
+    protected ObjectMapper objectMapper;
+    protected MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
-
     @Autowired
     private Filter springSecurityFilterChain;
 
-    @Autowired
-    protected ObjectMapper objectMapper;
-
-
-    protected MockMvc mockMvc;
+    @BeforeClass
+    public static void initOnce() {
+        customWriteResolver = new CustomWriteResolver();
+    }
 
     @Before
     public void setup() {
@@ -99,7 +101,11 @@ public abstract class AbstractMockMvcTest {
                         };
                     }
                 })
-                .apply(documentationConfiguration(this.restDocumentation).snippets().withDefaults(httpRequest(), httpResponse()))
+                .apply(
+                        documentationConfiguration(this.restDocumentation)
+                                .snippets().withDefaults(httpRequest(), httpResponse())
+                                .and().writerResolver(customWriteResolver)
+                )
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
     }
