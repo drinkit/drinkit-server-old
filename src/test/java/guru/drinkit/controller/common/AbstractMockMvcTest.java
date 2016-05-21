@@ -15,12 +15,16 @@ import guru.drinkit.springconfig.WebConfig;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.restdocs.RestDocumentation;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -36,6 +40,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcConfigurerAdapter;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.restdocs.http.HttpDocumentation.httpRequest;
+import static org.springframework.restdocs.http.HttpDocumentation.httpResponse;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -45,23 +55,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {WebConfig.class, SecurityConfig.class, MockDBConfig.class, AppConfig.class, SecurityConfig.class})
+@ContextConfiguration(classes = {WebConfig.class, SecurityConfig.class, MockDBConfig.class, AppConfig.class})
 @ActiveProfiles("test")
 @WebAppConfiguration
 @Configurable
 @DirtiesContext
 public abstract class AbstractMockMvcTest {
+
+    private static CustomWriteResolver customWriteResolver;
+    @Rule
+    public RestDocumentation restDocumentation = new RestDocumentation("target/generated-snippets");
+    @Autowired
+    protected ObjectMapper objectMapper;
+    protected MockMvc mockMvc;
     @Autowired
     private WebApplicationContext context;
-
     @Autowired
     private Filter springSecurityFilterChain;
 
-    @Autowired
-    protected ObjectMapper objectMapper;
-
-
-    protected MockMvc mockMvc;
+    @BeforeClass
+    public static void initOnce() {
+        customWriteResolver = new CustomWriteResolver();
+    }
 
     @Before
     public void setup() {
@@ -86,6 +101,11 @@ public abstract class AbstractMockMvcTest {
                         };
                     }
                 })
+                .apply(
+                        documentationConfiguration(this.restDocumentation)
+                                .snippets().withDefaults(httpRequest(), httpResponse())
+                                .and().writerResolver(customWriteResolver)
+                )
                 .apply(SecurityMockMvcConfigurers.springSecurity())
                 .build();
     }
@@ -103,8 +123,10 @@ public abstract class AbstractMockMvcTest {
             mockMvc.perform(getMockHttpServletRequestBuilder(httpMethod, uri, body)
                     .with(user("testUser").roles(role.name()))
             )
-//                    .andDo(MockMvcResultHandlers.print())
-                    .andExpect(resultMatcher);
+                    .andExpect(resultMatcher)
+                    .andDo(MockMvcRestDocumentation.document("{ClassName}/{methodName}",
+                            preprocessRequest(prettyPrint()),
+                            preprocessResponse(prettyPrint())));
             roles.remove(role);
         }
         if (roles.size() > 0) {
