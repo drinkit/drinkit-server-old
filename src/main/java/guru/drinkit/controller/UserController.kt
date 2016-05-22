@@ -1,5 +1,6 @@
 package guru.drinkit.controller
 
+import guru.drinkit.controller.UserController.Companion.RESOURCE_NAME
 import guru.drinkit.domain.User
 import guru.drinkit.repository.UserRepository
 import guru.drinkit.service.BasicUserDetailsService
@@ -16,21 +17,24 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseBody
 
 @Controller
-@RequestMapping("users")
-open class UserController
-@Autowired constructor(
+@RequestMapping(RESOURCE_NAME)
+open class UserController @Autowired constructor(
         private val basicUserDetailsService: BasicUserDetailsService,
         private val userRepository: UserRepository) {
+
+    companion object {
+        const val RESOURCE_NAME = "users";
+    }
 
     @RequestMapping("/principal")
     @ResponseBody
     @PreAuthorize("isAuthenticated()")
-    fun principal(): Any = SecurityContextHolder.getContext().authentication.principal
+    open fun principal(): Any = SecurityContextHolder.getContext().authentication.principal
 
     @RequestMapping("/me")
     @ResponseBody
     @PreAuthorize("isAuthenticated()")
-    fun currentUser(): User {
+    open fun currentUser(): User {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val username = (principal as UserDetails).username
         return userRepository.findOne(username)
@@ -39,7 +43,7 @@ open class UserController
 
     @PreAuthorize("isAnonymous()")
     @RequestMapping(method = arrayOf(RequestMethod.POST), value = "/register", headers = arrayOf("Content-Type=application/x-www-form-urlencoded"))
-    fun registerUser(@RequestParam email: String, @RequestParam password: String, @RequestParam displayName: String): ResponseEntity<User> {
+    open fun registerUser(@RequestParam email: String, @RequestParam password: String, @RequestParam displayName: String): ResponseEntity<User> {
         val user = User(username = email, password = password, displayName = displayName)
         val created = basicUserDetailsService.createUser(user)
         return ResponseEntity(if (created) HttpStatus.CREATED else HttpStatus.FORBIDDEN)

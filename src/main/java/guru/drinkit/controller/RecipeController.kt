@@ -21,7 +21,7 @@ import javax.validation.Valid
  */
 
 @Controller
-@RequestMapping(value = RESOURCE_NAME)
+@RequestMapping(RESOURCE_NAME)
 open class RecipeController @Autowired constructor(
         val recipeService: RecipeService,
         val objectMapper: ObjectMapper) {
