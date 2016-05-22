@@ -40,7 +40,7 @@ class RecipeControllerTest : AbstractMockMvcTest() {
 
     @Test
     fun getRecipeById() {
-        verifyAccess(GET, RESOURCE_NAME + "/1", status().isOk)
+        verifyAccess(httpMethod = GET, uri = RESOURCE_NAME + "/1", resultMatcher = status().isOk)
     }
 
     @Test
@@ -52,30 +52,30 @@ class RecipeControllerTest : AbstractMockMvcTest() {
 
     @Test
     fun searchRecipes() {
-        verifyAccess(GET, RESOURCE_NAME + "?criteria=null", status().isOk)
+        verifyAccess(httpMethod = GET, uri = RESOURCE_NAME + "?criteria=null", resultMatcher = status().isOk)
     }
 
     @Test
     fun deleteRecipe() {
-        verifyAccess(DELETE, RESOURCE_NAME + "/1", status().isNoContent, Role.ADMIN)
+        verifyAccess(httpMethod = DELETE, uri = RESOURCE_NAME + "/1", resultMatcher = status().isNoContent, allowed = Role.ADMIN)
     }
 
     @Test
     fun updateRecipe() {
         val recipe = Recipe()
         recipe.id = 1
-        verifyAccess(PUT, RESOURCE_NAME + "/1", recipe, status().isNoContent, Role.ADMIN)
+        verifyAccess(httpMethod = PUT, uri = RESOURCE_NAME + "/1", body = recipe, resultMatcher = status().isNoContent, allowed = Role.ADMIN)
     }
 
     @Test
     fun findRecipesByNamePart() {
-        verifyAccess(GET, RESOURCE_NAME + "/1", status().isOk)
+        verifyAccess(httpMethod = GET, uri = RESOURCE_NAME + "/1", resultMatcher = status().isOk)
     }
 
     @Test
     fun uploadMedia() {
         try {
-            verifyAccess(POST, RESOURCE_NAME + "/1/media", status().isNoContent, Role.ADMIN)
+            verifyAccess(httpMethod = POST, uri = RESOURCE_NAME + "/1/media", resultMatcher = status().isNoContent, allowed = Role.ADMIN)
         } catch(e: NestedServletException) {
             Assertions.assertThat(e.cause).isInstanceOf(IllegalArgumentException::class.java)
             Assertions.assertThat(e.cause?.message).isEqualTo("image AND thumbnail is required")
