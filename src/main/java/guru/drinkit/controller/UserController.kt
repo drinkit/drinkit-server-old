@@ -41,7 +41,7 @@ open class UserController @Autowired constructor(
     }
 
 
-    @PreAuthorize("isAnonymous()")
+    @PreAuthorize("permitAll")
     @RequestMapping(method = arrayOf(RequestMethod.POST), value = "/register", headers = arrayOf("Content-Type=application/x-www-form-urlencoded"))
     open fun registerUser(@RequestParam email: String, @RequestParam password: String, @RequestParam displayName: String): ResponseEntity<User> {
         val user = User(username = email, password = password, displayName = displayName)
