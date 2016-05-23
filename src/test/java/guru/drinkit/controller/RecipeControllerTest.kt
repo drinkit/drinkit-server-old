@@ -11,7 +11,10 @@ import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpMethod.*
+import org.springframework.http.MediaType.APPLICATION_JSON
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.web.util.NestedServletException
 
@@ -40,42 +43,50 @@ class RecipeControllerTest : AbstractMockMvcTest() {
 
     @Test
     fun getRecipeById() {
-        verifyAccess(httpMethod = GET, uri = RESOURCE_NAME + "/1", resultMatcher = status().isOk)
+        verifyAccess({ MockMvcRequestBuilders.get(RESOURCE_NAME + "/1") }, status().isOk)
     }
 
     @Test
     fun createRecipe() {
-        val recipe = Recipe()
-        recipe.ingredientsWithQuantities = listOf(Recipe.IngredientWithQuantity(1, 11))
-        verifyAccess(POST, RESOURCE_NAME, recipe, status().isCreated, Role.ADMIN)
+        val recipe = objectMapper.writeValueAsBytes(Recipe(ingredientsWithQuantities = listOf(Recipe.IngredientWithQuantity(1, 11))))
+        verifyAccess({ post(RESOURCE_NAME).content((recipe)).contentType(APPLICATION_JSON) },
+                status().isCreated, Role.ADMIN)
     }
 
     @Test
     fun searchRecipes() {
-        verifyAccess(httpMethod = GET, uri = RESOURCE_NAME + "?criteria=null", resultMatcher = status().isOk)
+        verifyAccess({
+            MockMvcRequestBuilders.get(RESOURCE_NAME + "?criteria=null")
+        }, status().isOk)
     }
 
     @Test
     fun deleteRecipe() {
-        verifyAccess(httpMethod = DELETE, uri = RESOURCE_NAME + "/1", resultMatcher = status().isNoContent, allowed = Role.ADMIN)
+        verifyAccess({ MockMvcRequestBuilders.delete(RESOURCE_NAME + "/1") },
+                status().isNoContent, Role.ADMIN)
     }
 
     @Test
     fun updateRecipe() {
-        val recipe = Recipe()
-        recipe.id = 1
-        verifyAccess(httpMethod = PUT, uri = RESOURCE_NAME + "/1", body = recipe, resultMatcher = status().isNoContent, allowed = Role.ADMIN)
+        val recipe = objectMapper.writeValueAsString(Recipe(id = 1))
+        verifyAccess({ put(RESOURCE_NAME + "/1").content(recipe).contentType(APPLICATION_JSON) }, status().isNoContent, Role.ADMIN)
     }
 
     @Test
     fun findRecipesByNamePart() {
-        verifyAccess(httpMethod = GET, uri = RESOURCE_NAME + "/1", resultMatcher = status().isOk)
+        verifyAccess({
+            MockMvcRequestBuilders.get(RESOURCE_NAME + "/1")
+        }, status().isOk)
     }
 
     @Test
     fun uploadMedia() {
         try {
-            verifyAccess(httpMethod = POST, uri = RESOURCE_NAME + "/1/media", resultMatcher = status().isNoContent, allowed = Role.ADMIN)
+            verifyAccess({
+                post(RESOURCE_NAME + "/1/media")
+                        .content("{}")
+                        .contentType(APPLICATION_JSON)
+            }, status().isNoContent, Role.ADMIN)
         } catch(e: NestedServletException) {
             Assertions.assertThat(e.cause).isInstanceOf(IllegalArgumentException::class.java)
             Assertions.assertThat(e.cause?.message).isEqualTo("image AND thumbnail is required")
