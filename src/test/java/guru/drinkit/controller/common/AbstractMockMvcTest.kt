@@ -1,6 +1,5 @@
 package guru.drinkit.controller.common
 
-import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import guru.drinkit.security.Role
 import guru.drinkit.springconfig.AppConfig
@@ -13,8 +12,6 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Configurable
-import org.springframework.http.HttpMethod
-import org.springframework.http.MediaType
 import org.springframework.restdocs.RestDocumentation
 import org.springframework.restdocs.http.HttpDocumentation.httpRequest
 import org.springframework.restdocs.http.HttpDocumentation.httpResponse
@@ -30,7 +27,6 @@ import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.ResultMatcher
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request
 import org.springframework.test.web.servlet.request.RequestPostProcessor
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder
@@ -52,6 +48,10 @@ import javax.servlet.Filter
 @WebAppConfiguration
 @Configurable
 abstract class AbstractMockMvcTest {
+
+    companion object {
+        private val customWriteResolver = CustomWriteResolver()
+    }
 
     @get:Rule
     var restDocumentation = RestDocumentation("target/generated-snippets")
@@ -84,13 +84,13 @@ abstract class AbstractMockMvcTest {
     }
 
 
-    protected fun verifyAccess(httpMethod: HttpMethod, uri: String, body: Any? = null, resultMatcher: ResultMatcher, vararg allowed: Role = Role.values()) {
+    fun verifyAccess(mockHttpServletRequestBuilder: () -> MockHttpServletRequestBuilder, resultMatcher: ResultMatcher, vararg allowed: Role = Role.values()) {
         var documented = false
 
         val roles = ArrayList(Arrays.asList(*Role.values()))
 
         for (role in allowed) {
-            val actions = mockMvc.perform(getMockHttpServletRequestBuilder(httpMethod, uri, body).with(user("testUser").roles(role.name))).andExpect(resultMatcher)
+            val actions = mockMvc.perform(mockHttpServletRequestBuilder.invoke().with(user("testUser").roles(role.name))).andExpect(resultMatcher)
             if (!documented) {
                 actions
                         .andDo(MockMvcRestDocumentation.document("{ClassName}/{methodName}",
@@ -103,27 +103,12 @@ abstract class AbstractMockMvcTest {
         }
         if (roles.size > 0) {
             mockMvc.perform(
-                    getMockHttpServletRequestBuilder(httpMethod, uri, body)
+                    mockHttpServletRequestBuilder.invoke()
                             .with(user("testUser").roles(*CollectionUtils.collect(roles) { role -> role.name }.toTypedArray())
 
                             )).andExpect(status().isForbidden)
         }
 
-    }
-
-    @Throws(JsonProcessingException::class)
-    private fun getMockHttpServletRequestBuilder(httpMethod: HttpMethod, uri: String, body: Any?): MockHttpServletRequestBuilder {
-        return request(httpMethod, uri).content(objectMapper.writeValueAsBytes(body)).contentType(MediaType.APPLICATION_JSON)
-    }
-
-    companion object {
-
-        private val customWriteResolver = CustomWriteResolver()
-
-//        @BeforeClass
-//        fun initOnce() {
-//            customWriteResolver = CustomWriteResolver()
-//        }
     }
 
 }
