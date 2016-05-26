@@ -37,7 +37,7 @@ open class UserController @Autowired constructor(
     open fun currentUser(): User {
         val principal = SecurityContextHolder.getContext().authentication.principal
         val username = (principal as UserDetails).username
-        return userRepository.findOne(username)
+        return userRepository.findByUsername(username)!!
     }
 
 
