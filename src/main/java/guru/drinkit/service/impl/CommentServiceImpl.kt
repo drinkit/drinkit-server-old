@@ -21,7 +21,7 @@ open class CommentServiceImpl @Autowired constructor(
 
     fun insert(entity: Comment, user: User): Comment {
         entity.posted = Date()
-        entity.author = Comment.Author(user.id!!, user.displayName)
+        entity.author = Comment.Author(user.username, user.displayName)
         return super<CrudServiceImpl>.insert(entity)
     }
 }

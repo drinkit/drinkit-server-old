@@ -30,7 +30,7 @@ public class UserBarControllerIT extends AbstractRestMockMvc {
         User testUser = new User();
         testUser.setUsername("test user");
         userRepository.save(testUser);
-        testUserId = testUser.getId();
+        testUserId = testUser.getUsername();
     }
 
     @Test

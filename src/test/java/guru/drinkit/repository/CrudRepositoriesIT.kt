@@ -86,31 +86,30 @@ class CrudRepositoriesIT : AbstractBaseTest() {
 
     @Test
     fun testUser() {
-        val raw = User(null, "name", "pass", "disp", User.ACCESS_LVL_USER, emptyList(), emptyMap())
-        val id = userRepository.save(raw).id!!
-        assertThat(id).isNotNull();
-        val inserted = userRepository.findOne(id)
+        val username = "name"
+        val raw = User(username, "pass", "disp", User.AuthorityRole.USER, emptyList(), emptyMap())
+        val inserted = userRepository.findOne(username)
         assertThat(raw).isEqualTo(inserted)
         val toUpdate = inserted.copy(displayName = "updated text")
         userRepository.save(toUpdate)
-        assertThat(userRepository.findOne(id)).isEqualTo(toUpdate)
+        assertThat(userRepository.findOne(username)).isEqualTo(toUpdate)
 
         assertThat(userRepository.findByUsername("name")).isEqualTo(toUpdate)
 
-        userRepository.incrementRecipeViews(id, 2)
-        assertThat(userRepository.findOne(id).recipeStatsMap[2]?.views).isEqualTo(1)
-        assertThat(userRepository.changeRecipeLike(id, 2, true))
-        assertThat(userRepository.findOne(id).recipeStatsMap[2]?.liked).isTrue()
+        userRepository.incrementRecipeViews(username, 2)
+        assertThat(userRepository.findOne(username).recipeStatsMap[2]?.views).isEqualTo(1)
+        assertThat(userRepository.changeRecipeLike(username, 2, true))
+        assertThat(userRepository.findOne(username).recipeStatsMap[2]?.liked).isTrue()
         val barItem = User.BarItem(2, true)
-        userRepository.addBarItem(id, barItem)
+        userRepository.addBarItem(username, barItem)
         assertThat(userRepository.findByUserBarIngredientId(2)).isNotEmpty()
-        assertThat(userRepository.findOne(id).barItems).containsExactly(barItem)
-        assertThat(userRepository.updateBarItem(id, barItem.copy(active = false)))
-        assertThat(userRepository.findOne(id).barItems[0].active).isFalse()
-        userRepository.removeBarItem(id, 2)
-        assertThat(userRepository.findOne(id).barItems).isEmpty()
+        assertThat(userRepository.findOne(username).barItems).containsExactly(barItem)
+        assertThat(userRepository.updateBarItem(username, barItem.copy(active = false)))
+        assertThat(userRepository.findOne(username).barItems[0].active).isFalse()
+        userRepository.removeBarItem(username, 2)
+        assertThat(userRepository.findOne(username).barItems).isEmpty()
 
-        userRepository.delete(id)
-        assertThat(userRepository.findOne(id)).isNull()
+        userRepository.delete(username)
+        assertThat(userRepository.findOne(username)).isNull()
     }
 }
