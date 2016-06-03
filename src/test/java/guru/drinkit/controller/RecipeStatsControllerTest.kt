@@ -25,10 +25,12 @@ class RecipeStatsControllerTest : AbstractMockMvcTest() {
     @Test
     fun incrementViewsCount() {
         verifyAccess({
-            MockMvcRequestBuilders.patch(RecipeStatsController.RESOURCE_NAME + "/1")
-                    .content("{\"\$inc\" : {\"views\" : 1}}")
+            MockMvcRequestBuilders.patch(RecipeStatsController.RESOURCE_NAME + "/1/views")
+                    .param("inc", "1")
                     .contentType(MediaType.APPLICATION_JSON)
-        }, MockMvcResultMatchers.status().isNoContent)
+        }, MockMvcResultMatchers.status().isNoContent
+//                RequestDocumentation.requestParameters(RequestDocumentation.parameterWithName("inc").description("=1")
+        )
         Mockito.verify(userRepository, Mockito.times(3)).incrementRecipeViews(Matchers.anyString(), Matchers.eq(1))
         Mockito.verify(recipeRepository, Mockito.times(3)).incrementViews(1)
     }
