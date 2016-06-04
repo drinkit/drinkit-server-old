@@ -17,7 +17,7 @@ class StatsServiceImpl @Autowired constructor(
 
     private val ANONYMOUS_USER_ID = "anonymous"
 
-    override fun changeLikes(userId: String, recipeId: Int, liked: Boolean) {
+    override fun changeLike(userId: String, recipeId: Int, liked: Boolean) {
         userRepository.changeRecipeLike(userId, recipeId, liked)
         recipeRepository.adjustLikesCount(recipeId, if (liked) 1 else -1)
     }

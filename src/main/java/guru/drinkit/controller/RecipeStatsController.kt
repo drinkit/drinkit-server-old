@@ -5,11 +5,9 @@ import guru.drinkit.service.StatsService
 import guru.drinkit.service.getUser
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.*
 
 
 /**
@@ -17,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseStatus
  */
 @Controller
 @RequestMapping(value = RESOURCE_NAME)
-class RecipeStatsController @Autowired constructor(
-        private val statsService: StatsService
+open class RecipeStatsController @Autowired constructor(
+        val statsService: StatsService
 
 ) {
 
@@ -29,26 +27,19 @@ class RecipeStatsController @Autowired constructor(
 
     @RequestMapping(method = arrayOf(RequestMethod.PATCH), value = "/{recipeId}/views", params = arrayOf("inc=1"))
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun incrementViewsCount(@PathVariable recipeId: Int) {
+    open fun incrementViewsCount(@PathVariable recipeId: Int) {
         val userName = getUser()?.username
-//        when {
-//            jsonNode.get("\$inc")?.get("views")?.intValue() == 1 -> {
-                statsService.addViewToRecipe(userName, recipeId)
-//            }
-
-//            getUser()?.authorities.contains() jsonNode.get("liked")?.isBoolean == true ->
-//                statsService.changeLikes(userName?: throw ForbiddenActionException(), recipeId, jsonNode.get("liked").booleanValue())
-
-//            else -> throw BadRequestException()
-        }
-
+        statsService.addViewToRecipe(userName, recipeId)
     }
 
 
-//}
+    @RequestMapping(method = arrayOf(RequestMethod.PATCH), value = "/{recipeId}/liked", params = arrayOf("value"))
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ROLE_USER')")
+    open fun changeLike(@PathVariable recipeId: Int, @RequestParam value: Boolean) {
+        val userName = getUser()?.username
+        statsService.changeLike(userName ?: throw ForbiddenActionException(), recipeId, value)
+    }
 
-//class PatchOperation {
-//    data class Increment(val value:Int)
-//    data class Update()
-//}
 
+}

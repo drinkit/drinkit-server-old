@@ -27,7 +27,7 @@ interface IngredientService : CrudService<Int, Ingredient>
 interface StatsService {
     fun addViewToRecipe(userId: String?, recipeId: Int)
 
-    fun changeLikes(userId: String, recipeId: Int, liked: Boolean)
+    fun changeLike(userId: String, recipeId: Int, liked: Boolean)
 }
 
 interface CommentService : CrudService<String, Comment> {

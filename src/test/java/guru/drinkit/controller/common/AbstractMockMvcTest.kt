@@ -18,8 +18,6 @@ import org.springframework.restdocs.http.HttpDocumentation.httpResponse
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration
 import org.springframework.restdocs.operation.preprocess.Preprocessors.*
-import org.springframework.restdocs.request.RequestDocumentation
-import org.springframework.restdocs.snippet.Snippet
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers
 import org.springframework.test.context.ActiveProfiles
@@ -53,6 +51,7 @@ abstract class AbstractMockMvcTest {
 
     companion object {
         private val customWriteResolver = CustomWriteResolver()
+        const val USER_NAME = "testUser"
     }
 
     @get:Rule
@@ -85,22 +84,20 @@ abstract class AbstractMockMvcTest {
                 documentationConfiguration(this.restDocumentation).snippets().withDefaults(httpRequest(), httpResponse()).and().writerResolver(customWriteResolver)).apply<DefaultMockMvcBuilder>(SecurityMockMvcConfigurers.springSecurity()).build()
     }
 
-    fun verifyAccess(mockHttpServletRequestBuilder: () -> MockHttpServletRequestBuilder, resultMatcher: ResultMatcher, vararg allowed: Role = Role.values()) {
-        verifyAccess(mockHttpServletRequestBuilder, resultMatcher, RequestDocumentation.relaxedPathParameters(), *allowed)
-    }
 
-    fun verifyAccess(mockHttpServletRequestBuilder: () -> MockHttpServletRequestBuilder, resultMatcher: ResultMatcher, params: Snippet = RequestDocumentation.relaxedPathParameters(), vararg allowed: Role = Role.values()) {
+    fun verifyAccess(mockHttpServletRequestBuilder: () -> MockHttpServletRequestBuilder, resultMatcher: ResultMatcher, vararg allowed: Role = Role.values()) {
         var documented = false
 
         val roles = ArrayList(Arrays.asList(*Role.values()))
 
         for (role in allowed) {
-            val actions = mockMvc.perform(mockHttpServletRequestBuilder.invoke().with(user("testUser").roles(role.name))).andExpect(resultMatcher)
+            val actions = mockMvc.perform(mockHttpServletRequestBuilder.invoke().with(user(USER_NAME).roles(role.name))).andExpect(resultMatcher)
             if (!documented) {
+
                 actions
                         .andDo(MockMvcRestDocumentation.document("{ClassName}/{methodName}",
                                 preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint())
+                                preprocessResponse(prettyPrint(), removeHeaders())
                         ))
                 documented = true
             }

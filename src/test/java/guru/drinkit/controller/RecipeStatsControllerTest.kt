@@ -22,11 +22,15 @@ class RecipeStatsControllerTest : AbstractMockMvcTest() {
     @Autowired
     private lateinit var recipeRepository: RecipeRepository
 
+    companion object {
+        private const val RECIPE_ID = 1
+    }
+
     @Test
     fun incrementViewsCount() {
         verifyAccess({
-            MockMvcRequestBuilders.patch(RecipeStatsController.RESOURCE_NAME + "/1/views")
-                    .param("inc", "1")
+            MockMvcRequestBuilders.patch(RecipeStatsController.RESOURCE_NAME + "/1/views?inc=1")
+//                    .param("inc", "1")
                     .contentType(MediaType.APPLICATION_JSON)
         }, MockMvcResultMatchers.status().isNoContent
 //                RequestDocumentation.requestParameters(RequestDocumentation.parameterWithName("inc").description("=1")
@@ -38,12 +42,10 @@ class RecipeStatsControllerTest : AbstractMockMvcTest() {
     @Test
     fun changeLikes() {
         verifyAccess({
-            MockMvcRequestBuilders.patch(RecipeStatsController.RESOURCE_NAME + "/1")
-                    .content("{\"liked\" : true}")
+            MockMvcRequestBuilders.patch(RecipeStatsController.RESOURCE_NAME + "/1/liked?value=true")
                     .contentType(MediaType.APPLICATION_JSON)
-        }, MockMvcResultMatchers.status().isNoContent, Role.ADMIN, Role.USER)
-        Mockito.verify(userRepository, Mockito.times(2)).changeRecipeLike(Matchers.anyString(), Matchers.eq(1), Matchers.eq(true))
-        Mockito.verify(recipeRepository, Mockito.times(2)).adjustLikesCount(1, 1)
+        }, MockMvcResultMatchers.status().isNoContent, Role.USER)
+        Mockito.verify(userRepository, Mockito.times(1)).changeRecipeLike(USER_NAME, RECIPE_ID, true)
     }
 
 }
