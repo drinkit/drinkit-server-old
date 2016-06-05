@@ -24,7 +24,7 @@ fun getUser(): org.springframework.security.core.userdetails.User? = (SecurityCo
         as? org.springframework.security.core.userdetails.User)
 
 @Component
-class BasicUserDetailsService @Autowired constructor(
+open class BasicUserDetailsService @Autowired constructor(
         private val userRepository: UserRepository
 ) : UserDetailsService {
 
