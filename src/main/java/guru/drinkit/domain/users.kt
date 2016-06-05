@@ -1,5 +1,7 @@
 package guru.drinkit.domain
 
+import guru.drinkit.domain.User.AuthorityRole.USER
+import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
@@ -9,11 +11,10 @@ import java.util.*
  */
 @Document
 data class User(
-        var id: String? = null,
-        @Indexed(unique = true) var username: String = ANONYMOUS_USER_NAME,
+        @Id var username: String = ANONYMOUS_USER_NAME,
         var password: String = "",
         var displayName: String = "",
-        var accessLevel: Int = ACCESS_LVL_USER,
+        var role: AuthorityRole = USER,
         var barItems: List<BarItem> = emptyList(),
         var recipeStatsMap: Map<Int, RecipeStats> = emptyMap()) {
 
@@ -23,6 +24,10 @@ data class User(
             val views: Int,
             val lastViewed: Date,
             val liked: Boolean?)
+
+    enum class AuthorityRole {
+        ADMIN, USER;
+    }
 
     companion object {
         const val ACCESS_LVL_USER = 9
@@ -39,7 +44,7 @@ data class Comment(
         var posted: Date,
         var author: Author,
         val text: String) : Entity<String> {
-    data class Author(val userId: String, val name: String)
+    data class Author(val username: String, val name: String)
 }
 
 

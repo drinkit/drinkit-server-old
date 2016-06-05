@@ -47,7 +47,7 @@ open class IngredientServiceImpl @Autowired constructor(
     private fun removeBarItems(ingredientId: Int): Int {
         val userList = userRepository.findByUserBarIngredientId(ingredientId)
         for (user in userList) {
-            userRepository.removeBarItem(user.id!!, ingredientId)
+            userRepository.removeBarItem(user.username, ingredientId)
         }
         return userList.size
     }

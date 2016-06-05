@@ -51,6 +51,7 @@ abstract class AbstractMockMvcTest {
 
     companion object {
         private val customWriteResolver = CustomWriteResolver()
+        const val USER_NAME = "testUser"
     }
 
     @get:Rule
@@ -90,12 +91,14 @@ abstract class AbstractMockMvcTest {
         val roles = ArrayList(Arrays.asList(*Role.values()))
 
         for (role in allowed) {
-            val actions = mockMvc.perform(mockHttpServletRequestBuilder.invoke().with(user("testUser").roles(role.name))).andExpect(resultMatcher)
+            val actions = mockMvc.perform(mockHttpServletRequestBuilder.invoke().with(user(USER_NAME).roles(role.name))).andExpect(resultMatcher)
             if (!documented) {
+
                 actions
                         .andDo(MockMvcRestDocumentation.document("{ClassName}/{methodName}",
                                 preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint())))
+                                preprocessResponse(prettyPrint(), removeHeaders())
+                        ))
                 documented = true
             }
 

@@ -25,7 +25,9 @@ data class Criteria(
 interface IngredientService : CrudService<Int, Ingredient>
 
 interface StatsService {
-    fun addViewToRecipe(recipeId: Int, userId: String)
+    fun addViewToRecipe(userId: String?, recipeId: Int)
+
+    fun changeLike(userId: String, recipeId: Int, liked: Boolean)
 }
 
 interface CommentService : CrudService<String, Comment> {

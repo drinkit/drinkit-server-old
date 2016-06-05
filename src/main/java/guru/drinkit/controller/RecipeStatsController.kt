@@ -2,14 +2,12 @@ package guru.drinkit.controller
 
 import guru.drinkit.controller.RecipeStatsController.Companion.RESOURCE_NAME
 import guru.drinkit.service.StatsService
-import guru.drinkit.service.getUserNameAndId
+import guru.drinkit.service.getUser
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.ResponseStatus
+import org.springframework.web.bind.annotation.*
 
 
 /**
@@ -17,21 +15,30 @@ import org.springframework.web.bind.annotation.ResponseStatus
  */
 @Controller
 @RequestMapping(value = RESOURCE_NAME)
-class RecipeStatsController @Autowired constructor(
-        private val statsService: StatsService
+open class RecipeStatsController @Autowired constructor(
+        val statsService: StatsService
 
 ) {
 
     companion object {
-        const val RESOURCE_NAME = "user/me/recipeStats"
+        const val RESOURCE_NAME = "users/me/recipeStats"
     }
 
 
-    @RequestMapping(method = arrayOf(RequestMethod.PATCH), value = "/{recipeId}")
+    @RequestMapping(method = arrayOf(RequestMethod.PATCH), value = "/{recipeId}/views", params = arrayOf("inc=1"))
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun incrementViewsCount(@PathVariable recipeId: Int) {
-        val userId = getUserNameAndId().id!!
-        statsService.addViewToRecipe(recipeId, userId)
+    open fun incrementViewsCount(@PathVariable recipeId: Int) {
+        val userName = getUser()?.username
+        statsService.addViewToRecipe(userName, recipeId)
+    }
+
+
+    @RequestMapping(method = arrayOf(RequestMethod.PATCH), value = "/{recipeId}/liked", params = arrayOf("value"))
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ROLE_USER')")
+    open fun changeLike(@PathVariable recipeId: Int, @RequestParam value: Boolean) {
+        val userName = getUser()?.username
+        statsService.changeLike(userName ?: throw ForbiddenActionException(), recipeId, value)
     }
 
 

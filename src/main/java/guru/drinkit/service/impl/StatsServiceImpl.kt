@@ -15,8 +15,15 @@ class StatsServiceImpl @Autowired constructor(
         private val userRepository: UserRepository
 ) : StatsService {
 
-    override fun addViewToRecipe(recipeId: Int, userId: String) {
-        userRepository.incrementRecipeViews(userId, recipeId)
+    private val ANONYMOUS_USER_ID = "anonymous"
+
+    override fun changeLike(userId: String, recipeId: Int, liked: Boolean) {
+        userRepository.changeRecipeLike(userId, recipeId, liked)
+        recipeRepository.adjustLikesCount(recipeId, if (liked) 1 else -1)
+    }
+
+    override fun addViewToRecipe(userId: String?, recipeId: Int) {
+        userRepository.incrementRecipeViews(userId ?: ANONYMOUS_USER_ID, recipeId)
         recipeRepository.incrementViews(recipeId)
     }
 

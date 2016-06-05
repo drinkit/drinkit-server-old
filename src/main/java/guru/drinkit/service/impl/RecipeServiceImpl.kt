@@ -20,7 +20,7 @@ open class RecipeServiceImpl @Autowired constructor(
         Assert.isNull(entity.id)
         val lastRecipeId = recipeRepository.findFirstByOrderByIdDesc()?.id ?: 0
         entity.id = lastRecipeId + 1;
-        entity.addedBy = getUserNameAndId().name
+        entity.addedBy = getUsername()
         entity.createdDate = Date()
         entity.stats = Recipe.Stats(0, 0)
         return recipeRepository.save(entity)
