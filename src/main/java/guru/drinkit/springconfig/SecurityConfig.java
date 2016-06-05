@@ -3,7 +3,6 @@ package guru.drinkit.springconfig;
 import javax.annotation.Resource;
 
 import guru.drinkit.repository.UserRepository;
-import guru.drinkit.security.CustomDigestAuthenticationEntryPoint;
 import guru.drinkit.security.SimpleCORSFilter;
 import guru.drinkit.service.BasicUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public DigestAuthenticationEntryPoint digestAuthenticationEntryPoint() {
-        DigestAuthenticationEntryPoint digestAuthenticationEntryPoint = new CustomDigestAuthenticationEntryPoint();
+        DigestAuthenticationEntryPoint digestAuthenticationEntryPoint = new DigestAuthenticationEntryPoint();
         digestAuthenticationEntryPoint.setRealmName("DrinkIt");
         digestAuthenticationEntryPoint.setKey(environment.getRequiredProperty("digest.key"));
         return digestAuthenticationEntryPoint;
