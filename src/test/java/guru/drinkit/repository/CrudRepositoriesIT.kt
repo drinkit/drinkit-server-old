@@ -88,13 +88,14 @@ class CrudRepositoriesIT : AbstractBaseTest() {
     fun testUser() {
         val username = "name"
         val raw = User(username, "pass", "disp", User.AuthorityRole.USER, emptyList(), emptyMap())
+        userRepository.save(raw)
         val inserted = userRepository.findOne(username)
         assertThat(raw).isEqualTo(inserted)
         val toUpdate = inserted.copy(displayName = "updated text")
         userRepository.save(toUpdate)
         assertThat(userRepository.findOne(username)).isEqualTo(toUpdate)
 
-        assertThat(userRepository.findByUsername("name")).isEqualTo(toUpdate)
+        assertThat(userRepository.findByUsername(username)).isEqualTo(toUpdate)
 
         userRepository.incrementRecipeViews(username, 2)
         assertThat(userRepository.findOne(username).recipeStatsMap[2]?.views).isEqualTo(1)
