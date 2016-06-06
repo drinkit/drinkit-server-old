@@ -25,6 +25,9 @@ data class User(
             val lastViewed: Date,
             val liked: Boolean?)
 
+    /**
+     * Note! Ordinal determinates roles accomulation. Higher role accomulates lowers
+     */
     enum class AuthorityRole {
         ADMIN, USER;
     }
