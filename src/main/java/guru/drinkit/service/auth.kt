@@ -40,7 +40,7 @@ open class BasicUserDetailsService @Autowired constructor(
 
     private fun getAuthorities(authorityRole: User.AuthorityRole): Collection<GrantedAuthority> =
             User.AuthorityRole.values()
-                    .filter { role -> role.ordinal < authorityRole.ordinal }
+                    .filter { role -> role.ordinal >= authorityRole.ordinal }
                     .map { role -> SimpleGrantedAuthority("ROLE_${role.name}") }
 
     fun createUser(user: User): Boolean {
