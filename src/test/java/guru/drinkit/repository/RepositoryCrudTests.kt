@@ -14,16 +14,14 @@ import java.util.*
 /**
  * @author pkolmykov
  */
-class CrudRepositoriesIT : AbstractBaseTest() {
 
-    private val INGREDIENT_ID = 123
+private val INGREDIENT_ID = 123
 
-    private val RECIPE_ID = 1
+private val RECIPE_ID = 1
+
+class CommentRepositoryCrudIT : AbstractBaseTest(){
 
     @Autowired lateinit var commentRepository: CommentRepository
-    @Autowired lateinit var recipeRepository: RecipeRepository
-    @Autowired lateinit var ingredientRepository: IngredientRepository
-    @Autowired lateinit var userRepository: UserRepository
 
     @Test
     fun testComment() {
@@ -39,6 +37,11 @@ class CrudRepositoriesIT : AbstractBaseTest() {
         commentRepository.delete(id)
         assertThat(commentRepository.findOne(id)).isNull()
     }
+}
+
+class RecipeRepositoryCrudIT : AbstractBaseTest(){
+
+    @Autowired lateinit var recipeRepository: RecipeRepository
 
     @Test
     fun testRecipe() {
@@ -66,23 +69,12 @@ class CrudRepositoriesIT : AbstractBaseTest() {
         recipeRepository.delete(id)
         assertThat(recipeRepository.findOne(id)).isNull()
     }
+}
 
-    @Test
-    fun testIngredient() {
-        val raw = Ingredient(INGREDIENT_ID, "test name", null, "desc", null, null)
-        val id = ingredientRepository.insert(raw).id
-        assertThat(id).isNotNull();
-        val inserted = ingredientRepository.findOne(id)
-        assertThat(raw).isEqualTo(inserted)
-        val toUpdate = inserted.copy(description = "updated text")
-        ingredientRepository.save(toUpdate)
-        assertThat(ingredientRepository.findOne(id)).isEqualTo(toUpdate)
 
-        assertThat(ingredientRepository.findFirstByOrderByIdDesc()).isEqualTo(toUpdate)
+class UserRepositoryCrudIT : AbstractBaseTest() {
 
-        ingredientRepository.delete(id)
-        assertThat(ingredientRepository.findOne(id)).isNull()
-    }
+    @Autowired lateinit var userRepository: UserRepository
 
     @Test
     fun testUser() {
@@ -112,5 +104,27 @@ class CrudRepositoriesIT : AbstractBaseTest() {
 
         userRepository.delete(username)
         assertThat(userRepository.findOne(username)).isNull()
+    }
+}
+
+class IngredientRepositoryCrudIT : AbstractBaseTest() {
+
+    @Autowired lateinit var ingredientRepository: IngredientRepository
+
+    @Test
+    fun testIngredient() {
+        val raw = Ingredient(INGREDIENT_ID, "test name", null, "desc", null, null)
+        val id = ingredientRepository.insert(raw).id
+        assertThat(id).isNotNull();
+        val inserted = ingredientRepository.findOne(id)
+        assertThat(raw).isEqualTo(inserted)
+        val toUpdate = inserted.copy(description = "updated text")
+        ingredientRepository.save(toUpdate)
+        assertThat(ingredientRepository.findOne(id)).isEqualTo(toUpdate)
+
+        assertThat(ingredientRepository.findFirstByOrderByIdDesc()).isEqualTo(toUpdate)
+
+        ingredientRepository.delete(id)
+        assertThat(ingredientRepository.findOne(id)).isNull()
     }
 }
