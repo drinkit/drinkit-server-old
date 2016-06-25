@@ -35,7 +35,9 @@ public class SitemapController {
         // recipes
         List<Recipe> recipes = recipeRepository.findAll();
         for (Recipe recipe : recipes) {
-            sitemapGenerator.addPage(new WebPageBuilder().name("recipes/" + recipe.getId().toString()).build());
+            if (recipe.getPublished()) {
+                sitemapGenerator.addPage(new WebPageBuilder().name("recipes/" + recipe.getId().toString()).build());
+            }
         }
         return sitemapGenerator.constructSitemapString();
     }
