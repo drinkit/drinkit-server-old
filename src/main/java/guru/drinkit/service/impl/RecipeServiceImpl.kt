@@ -55,8 +55,8 @@ open class RecipeServiceImpl @Autowired constructor(
         override fun compare(recipe1: Recipe, recipe2: Recipe): Int {
             var result = getNotMatchesIngredientsCount(recipe1) - getNotMatchesIngredientsCount(recipe2)
             if (result == 0) {
-                var weight1 = recipe1.stats?.views ?: 0 + (recipe1.stats?.likes ?: 0) * likesFactor
-                var weight2 = recipe2.stats?.views ?: 0 + (recipe2.stats?.likes ?: 0) * likesFactor
+                var weight1 = (recipe1.stats?.views ?: 0) + ((recipe1.stats?.likes ?: 0) * likesFactor)
+                var weight2 = (recipe2.stats?.views ?: 0) + ((recipe2.stats?.likes ?: 0) * likesFactor)
                 result = weight2 - weight1
             }
             return result
