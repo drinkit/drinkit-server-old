@@ -57,7 +57,7 @@ open class RecipeServiceImpl @Autowired constructor(
             if (result == 0) {
                 var weight1 = recipe1.stats?.views ?: 0 + (recipe1.stats?.likes ?: 0 * likesFactor)
                 var weight2 = recipe2.stats?.views ?: 0 + (recipe2.stats?.likes ?: 0 * likesFactor)
-                result = weight1 - weight2
+                result = weight2 - weight1
             }
             return result
         }
