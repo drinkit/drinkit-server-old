@@ -50,10 +50,14 @@ open class RecipeServiceImpl @Autowired constructor(
 
     class RecipeComparatorByCriteria(val criteria: Criteria) : Comparator<Recipe> {
 
+        var likesFactor:Int = 20
+
         override fun compare(recipe1: Recipe, recipe2: Recipe): Int {
             var result = getNotMatchesIngredientsCount(recipe1) - getNotMatchesIngredientsCount(recipe2)
             if (result == 0) {
-                result = recipe2.ingredientsWithQuantities.size - recipe1.ingredientsWithQuantities.size
+                var weight1 = (recipe1.stats?.views ?: 0) + ((recipe1.stats?.likes ?: 0) * likesFactor)
+                var weight2 = (recipe2.stats?.views ?: 0) + ((recipe2.stats?.likes ?: 0) * likesFactor)
+                result = weight2 - weight1
             }
             return result
         }
