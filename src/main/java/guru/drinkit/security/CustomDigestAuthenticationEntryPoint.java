@@ -1,5 +1,14 @@
 package guru.drinkit.security;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.AuthenticationException;
@@ -8,19 +17,11 @@ import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.web.authentication.www.DigestAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.NonceExpiredException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 /**
  * Copy-pasted class from parent with slight difference:
  * added "_" symbol before authenticateHeader for disabling browser authentication.
  */
+@SuppressWarnings("ALL")
 public class CustomDigestAuthenticationEntryPoint extends DigestAuthenticationEntryPoint {
     private static final Log logger = LogFactory.getLog(DigestAuthenticationEntryPoint.class);
 

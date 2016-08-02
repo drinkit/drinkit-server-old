@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>guru.drinkit</groupId>
@@ -10,21 +10,21 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
-        <spring.version>RELEASE</spring.version>
+        <spring.version>4.2.6.RELEASE</spring.version>
+        <jackson.version>2.7.3</jackson.version>
+        <kotlin.version>1.0.2</kotlin.version>
     </properties>
 
-    <!--<repositories>-->
-        <!--<repository>-->
-            <!--<id>eap</id>-->
-            <!--<url>http://maven.repository.redhat.com/techpreview/all</url>-->
-            <!--<releases>-->
-                <!--<enabled>true</enabled>-->
-            <!--</releases>-->
-            <!--<snapshots>-->
-                <!--<enabled>true</enabled>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-    <!--</repositories>-->
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-nhaarman-maven</id>
+            <name>bintray</name>
+            <url>http://dl.bintray.com/nhaarman/maven</url>
+        </repository>
+    </repositories>
 
 
 
@@ -42,7 +42,9 @@
                 <finalName>tomcat7</finalName>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
                         <executions>
                             <execution>
                                 <phase>test</phase>
@@ -61,7 +63,7 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-war-plugin</artifactId>
-                        <version>2.1.1</version>
+                        <version>2.4</version>
                         <configuration>
                             <outputDirectory>webapps</outputDirectory>
                             <warName>ROOT</warName>
@@ -73,7 +75,42 @@
     </profiles>
 
     <build>
-        <plugins>
+            <plugins>
+                <plugin>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-maven-plugin</artifactId>
+                    <version>${kotlin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>compile</id>
+                            <phase>process-sources</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <configuration>
+                                <sourceDirs>
+                                    <source>src/main/java</source>
+                                    <source>src/main/kotlin</source>
+                                    <source>src/main/resources</source>
+                                </sourceDirs>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>test-compile</id>
+                            <phase>process-test-sources</phase>
+                            <goals>
+                                <goal>test-compile</goal>
+                            </goals>
+                            <configuration>
+                                <sourceDirs>
+                                    <source>src/test/java</source>
+                                    <source>src/test/kotlin</source>
+                                    <source>src/test/resources</source>
+                                </sourceDirs>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             <plugin>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.17</version>
@@ -205,7 +242,7 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>RELEASE</version>
+            <version>3.1.0</version>
         </dependency>
 
 
@@ -228,6 +265,14 @@
             <version>4.11</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>2.0.2-beta</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
@@ -238,17 +283,22 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>RELEASE</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>RELEASE</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>RELEASE</version>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
@@ -313,6 +363,13 @@
             <artifactId>spring-security-config</artifactId>
             <version>RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+
+
         <!--<dependency>-->
             <!--<groupId>org.mockito</groupId>-->
             <!--<artifactId>mockito-all</artifactId>-->
@@ -357,6 +414,34 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.2.4.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nhaarman</groupId>
+            <artifactId>mockito-kotlin</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>cz.jiripinkas</groupId>
+            <artifactId>jsitemapgenerator</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.restdocs</groupId>
+            <artifactId>spring-restdocs-mockmvc</artifactId>
+            <version>1.1.0.RELEASE</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
