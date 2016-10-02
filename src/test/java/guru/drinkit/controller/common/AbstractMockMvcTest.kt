@@ -10,9 +10,9 @@ import org.apache.commons.collections4.CollectionUtils
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Configurable
-import org.springframework.restdocs.RestDocumentation
+import org.springframework.restdocs.JUnitRestDocumentation
 import org.springframework.restdocs.http.HttpDocumentation.httpRequest
 import org.springframework.restdocs.http.HttpDocumentation.httpResponse
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation
@@ -41,12 +41,10 @@ import javax.servlet.Filter
 /**
  * @author pkolmykov
  */
-@SuppressWarnings("SpringJavaAutowiringInspection")
 @RunWith(SpringJUnit4ClassRunner::class)
 @ContextConfiguration(classes = arrayOf(WebConfig::class, SecurityConfig::class, MockDBConfig::class, AppConfig::class))
 @ActiveProfiles("test")
 @WebAppConfiguration
-@Configurable
 abstract class AbstractMockMvcTest {
 
     companion object {
@@ -55,7 +53,7 @@ abstract class AbstractMockMvcTest {
     }
 
     @get:Rule
-    var restDocumentation = RestDocumentation("target/generated-snippets")
+    var restDocumentation = JUnitRestDocumentation("target/generated-snippets")
     @Autowired
     lateinit protected var objectMapper: ObjectMapper
     lateinit protected var mockMvc: MockMvc
@@ -113,5 +111,12 @@ abstract class AbstractMockMvcTest {
         }
 
     }
+
+    fun <T> anyObject(): T {
+        Mockito.anyObject<T>()
+        return uninitialized()
+    }
+
+    private fun <T> uninitialized(): T = null as T
 
 }

@@ -6,6 +6,96 @@
 :toclevels: 4
 :sectlinks:
 
+==== IngredientControllerTest.delete:http-request
+[source,http,options="nowrap"]
+----
+DELETE /rest/ingredients/1 HTTP/1.1
+Host: localhost
+
+----
+==== IngredientControllerTest.delete:http-response
+[source,http,options="nowrap"]
+----
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+
+----
+==== IngredientControllerTest.addNewIngredient:http-request
+[source,http,options="nowrap"]
+----
+POST /rest/ingredients HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 122
+
+{
+  "id" : null,
+  "name" : "ingr",
+  "vol" : 40,
+  "description" : "any",
+  "category" : "cat",
+  "alias" : null
+}
+----
+==== IngredientControllerTest.addNewIngredient:http-response
+[source,http,options="nowrap"]
+----
+HTTP/1.1 201 Created
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+
+----
+==== IngredientControllerTest.editIngredient:http-request
+[source,http,options="nowrap"]
+----
+PUT /rest/ingredients/1 HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 119
+
+{
+  "id" : 1,
+  "name" : "ingr",
+  "vol" : 40,
+  "description" : "any",
+  "category" : "cat",
+  "alias" : null
+}
+----
+==== IngredientControllerTest.editIngredient:http-response
+[source,http,options="nowrap"]
+----
+HTTP/1.1 204 No Content
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+
+----
+==== IngredientControllerTest.getIngredients:http-request
+[source,http,options="nowrap"]
+----
+GET /rest/ingredients HTTP/1.1
+Host: localhost
+
+----
+==== IngredientControllerTest.getIngredients:http-response
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 124
+
+[ {
+  "id" : null,
+  "name" : null,
+  "vol" : null,
+  "description" : null,
+  "category" : null,
+  "alias" : null
+} ]
+----
 ==== RecipeControllerTest.searchRecipes:http-request
 [source,http,options="nowrap"]
 ----
