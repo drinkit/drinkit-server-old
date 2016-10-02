@@ -19,7 +19,6 @@ import javax.validation.Valid
 /**
  * @author pkolmykov
  */
-
 @Controller
 @RequestMapping(RESOURCE_NAME)
 open class RecipeController @Autowired constructor(

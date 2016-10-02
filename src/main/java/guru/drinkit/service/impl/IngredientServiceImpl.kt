@@ -20,7 +20,7 @@ open class IngredientServiceImpl @Autowired constructor(
 
     override fun insert(entity: Ingredient): Ingredient {
         val lastRecipeId = ingredientRepository.findFirstByOrderByIdDesc()?.id ?: 0
-        entity.id = lastRecipeId + 1;
+        entity.id = lastRecipeId + 1
         return ingredientRepository.save(entity)
     }
 

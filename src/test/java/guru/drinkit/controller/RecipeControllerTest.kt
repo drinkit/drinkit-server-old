@@ -8,7 +8,6 @@ import guru.drinkit.security.Role
 import org.assertj.core.api.Assertions
 import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType.APPLICATION_JSON
@@ -21,7 +20,7 @@ import org.springframework.web.util.NestedServletException
 /**
  * @author pkolmykov
  */
-@SuppressWarnings("SpringJavaAutowiringInspection")
+@Suppress("SpringKotlinAutowiredMembers")
 class RecipeControllerTest : AbstractMockMvcTest() {
 
     @Autowired
@@ -32,14 +31,6 @@ class RecipeControllerTest : AbstractMockMvcTest() {
         `when`(recipeRepository.findOne(1)).thenReturn(Recipe())
         `when`(recipeRepository.save(anyObject<Recipe>())).thenReturn(Recipe(id = 1))
     }
-
-    fun <T> anyObject(): T {
-        Mockito.anyObject<T>()
-        return uninitialized()
-    }
-
-    private fun <T> uninitialized(): T = null as T
-
 
     @Test
     fun getRecipeById() {
