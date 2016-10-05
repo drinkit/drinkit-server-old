@@ -39,7 +39,7 @@ public class SitemapController {
         for (Recipe recipe : recipes) {
             if (recipe.getPublished()) {
                 WebPage recipePage = new WebPageBuilder().name("recipes/" + recipe.getId().toString()).build();
-                recipePage.addImage(new ImageBuilder().loc("https://prod-drunkedguru.rhcloud.com/" + recipe.getImageUrl())
+                recipePage.addImage(new ImageBuilder().loc("https://prod-drunkedguru.rhcloud.com" + recipe.getImageUrl())
                         .license("https://creativecommons.org/licenses/by-nc-nd/4.0/")
                         .build());
                 sitemapGenerator.addPage(recipePage);
