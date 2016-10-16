@@ -3,6 +3,7 @@ package guru.drinkit.controller
 import guru.drinkit.controller.IngredientController.Companion.RESOURCE_NAME
 import guru.drinkit.domain.Ingredient
 import guru.drinkit.service.IngredientService
+import guru.drinkit.service.SuggestingService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
@@ -18,6 +19,8 @@ open class IngredientController {
 
     @Autowired
     open lateinit var ingredientService: IngredientService
+    @Autowired
+    open lateinit var suggestingService: SuggestingService
 
     companion object {
         const val RESOURCE_NAME = "ingredients"
@@ -47,6 +50,10 @@ open class IngredientController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     open fun delete(@PathVariable id: Int) =
             ingredientService.delete(id)
+
+    @RequestMapping(path = arrayOf("/suggest"))
+    @ResponseBody
+    open fun suggestIngredients(@RequestParam(name = "id") userIngredients: Set<Int>) = suggestingService.suggestIngredients(userIngredients)
 
 
 }
