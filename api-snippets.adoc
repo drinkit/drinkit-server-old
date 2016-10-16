@@ -6,6 +6,27 @@
 :toclevels: 4
 :sectlinks:
 
+==== IngredientControllerTest.suggest:http-request
+[source,http,options="nowrap"]
+----
+GET /rest/ingredients/suggest?id=1&id=2 HTTP/1.1
+Host: localhost
+
+----
+==== IngredientControllerTest.suggest:http-response
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 54
+
+[ {
+  "ingredientId" : 3,
+  "recipeIds" : [ 1 ]
+} ]
+----
 ==== IngredientControllerTest.delete:http-request
 [source,http,options="nowrap"]
 ----
@@ -85,10 +106,10 @@ HTTP/1.1 200 OK
 Access-Control-Allow-Origin: *
 Access-Control-Expose-Headers: WWW-Authenticate
 Content-Type: application/json;charset=UTF-8
-Content-Length: 124
+Content-Length: 121
 
 [ {
-  "id" : null,
+  "id" : 1,
   "name" : null,
   "vol" : null,
   "description" : null,
@@ -131,7 +152,7 @@ Content-Length: 289
   "ingredientsWithQuantities" : [ ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1465059850106,
+  "createdDate" : 1476656001747,
   "addedBy" : null,
   "published" : false,
   "stats" : null
@@ -185,7 +206,7 @@ Content-Length: 292
   "ingredientsWithQuantities" : [ ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1465059850227,
+  "createdDate" : 1476656001888,
   "addedBy" : null,
   "published" : false,
   "stats" : null
@@ -216,7 +237,7 @@ Content-Length: 292
   "ingredientsWithQuantities" : [ ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1465059850249,
+  "createdDate" : 1476656001913,
   "addedBy" : null,
   "published" : false,
   "stats" : null
@@ -242,7 +263,7 @@ Content-Length: 345
   } ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1465059850290,
+  "createdDate" : 1476656001967,
   "addedBy" : null,
   "published" : false,
   "stats" : null
@@ -269,7 +290,7 @@ Content-Length: 385
   } ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1465059850294,
+  "createdDate" : 1476656001972,
   "addedBy" : "testUser",
   "published" : false,
   "stats" : {

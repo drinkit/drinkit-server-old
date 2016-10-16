@@ -4,6 +4,7 @@ import guru.drinkit.domain.Comment
 import guru.drinkit.domain.Entity
 import guru.drinkit.domain.Ingredient
 import guru.drinkit.domain.Recipe
+import guru.drinkit.dto.SuggestedIngredientDto
 import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.ResponseStatus
@@ -63,6 +64,10 @@ interface CrudService<ID, T : Entity<ID>> {
 
     fun delete(entity: T)
 
+}
+
+interface SuggestingService {
+    fun suggestIngredients(ingredients: Set<Int>): List<SuggestedIngredientDto>
 }
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Record not found")
