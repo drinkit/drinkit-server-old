@@ -2,6 +2,7 @@ package guru.drinkit.controller
 
 import guru.drinkit.controller.IngredientController.Companion.RESOURCE_NAME
 import guru.drinkit.domain.Ingredient
+import guru.drinkit.dto.SuggestedIngredientDto
 import guru.drinkit.service.IngredientService
 import guru.drinkit.service.SuggestingService
 import org.springframework.beans.factory.annotation.Autowired
@@ -53,7 +54,10 @@ open class IngredientController {
 
     @RequestMapping(path = arrayOf("/suggest"))
     @ResponseBody
-    open fun suggestIngredients(@RequestParam(name = "id") userIngredients: Set<Int>) = suggestingService.suggestIngredients(userIngredients)
+    open fun suggestIngredients(@RequestParam(name = "id[]") userIngredients: Set<Int>): List<SuggestedIngredientDto> {
+        if (userIngredients.size < 3) return emptyList()
+        return suggestingService.suggestIngredients(userIngredients)
+    }
 
 
 }

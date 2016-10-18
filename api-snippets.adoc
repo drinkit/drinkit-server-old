@@ -9,7 +9,7 @@
 ==== IngredientControllerTest.suggest:http-request
 [source,http,options="nowrap"]
 ----
-GET /rest/ingredients/suggest?id=1&id=2 HTTP/1.1
+GET /rest/ingredients/suggest?id%5B%5D=1&id%5B%5D=2&id%5B%5D=3 HTTP/1.1
 Host: localhost
 
 ----
