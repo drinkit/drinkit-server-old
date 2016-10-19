@@ -64,7 +64,10 @@ class IngredientControllerTest : AbstractMockMvcTest() {
     fun suggest() {
         `when`(recipeRepository.findAll()).thenReturn(listOf(createRecipe(1, 3)))
         verifyAccess({
-            get(RESOURCE_NAME + "/suggest").param("id", "1").param("id", "2")
+            get(RESOURCE_NAME + "/suggest")
+                    .param("id[]", "1")
+                    .param("id[]", "2")
+                    .param("id[]", "3")
         }, status().isOk)
 
     }
