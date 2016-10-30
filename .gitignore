@@ -4,9 +4,3 @@
 *.iml
 target
 
-#Static resources
-/src/main/webapp/*
-!/src/main/webapp/robots.txt
-
-#Build resouces
-/classes/
