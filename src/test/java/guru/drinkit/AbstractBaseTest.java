@@ -1,8 +1,5 @@
 package guru.drinkit;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import com.mongodb.BasicDBObject;
 import guru.drinkit.domain.Ingredient;
 import guru.drinkit.domain.Recipe;
@@ -18,6 +15,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created with IntelliJ IDEA.
@@ -77,8 +77,8 @@ public abstract class AbstractBaseTest {
         recipe.setName("Recipe for integration tests");
         recipe.setOptions(Arrays.asList(1, 2));
         recipe.setIngredientsWithQuantities(Arrays.asList(
-                new Recipe.IngredientWithQuantity(firstIngredient.getId(), 50),
-                new Recipe.IngredientWithQuantity(secondIngredient.getId(), 60)));
+            new Recipe.IngredientWithQuantity(firstIngredient.getId(), 50, null),
+            new Recipe.IngredientWithQuantity(secondIngredient.getId(), 60, null)));
         return recipe;
     }
 

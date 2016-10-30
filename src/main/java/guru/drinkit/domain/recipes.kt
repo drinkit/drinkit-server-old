@@ -20,9 +20,9 @@ data class Recipe(
         var createdDate: Date? = Date(),
         var addedBy: String? = null,
         var published: Boolean = false,
-        var stats: Stats? = null) : Entity<Int>{
+        var stats: Stats? = null) : Entity<Int> {
     data class Stats(val likes: Int = 0, val views: Int = 0)
-    data class IngredientWithQuantity(val ingredientId: Int, val quantity: Int?)
+    data class IngredientWithQuantity(val ingredientId: Int, val quantity: Int? = null, val unit: String? = null)
 }
 
 @Document
