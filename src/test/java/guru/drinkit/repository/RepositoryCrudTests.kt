@@ -27,7 +27,7 @@ class CommentRepositoryCrudIT : AbstractBaseTest(){
     fun testComment() {
         val raw = Comment(null, RECIPE_ID, Date(), Comment.Author(ObjectId().toHexString(), "4yvak"), "bla bla bla")
         val id = commentRepository.insert(raw).id
-        assertThat(id).isNotNull();
+        assertThat(id).isNotNull()
         val inserted = commentRepository.findOne(id)
         assertThat(raw).isEqualTo(inserted)
         val toUpdate = inserted.copy(text = "updated text")
@@ -45,9 +45,9 @@ class RecipeRepositoryCrudIT : AbstractBaseTest(){
 
     @Test
     fun testRecipe() {
-        val raw = Recipe(RECIPE_ID, 1, "desc", "test name", listOf(1), listOf(Recipe.IngredientWithQuantity(INGREDIENT_ID, null)), null, null, Date(), null, true, null)
+        val raw = Recipe(RECIPE_ID, 1, "desc", "test name", listOf(1), listOf(Recipe.IngredientWithQuantity(INGREDIENT_ID, null, null)), null, null, Date(), null, true, null)
         val id = recipeRepository.insert(raw).id
-        assertThat(id).isNotNull();
+        assertThat(id).isNotNull()
         val inserted = recipeRepository.findOne(id)
         assertThat(raw).isEqualTo(inserted)
         val toUpdate = inserted.copy(description = "updated text")
@@ -115,7 +115,7 @@ class IngredientRepositoryCrudIT : AbstractBaseTest() {
     fun testIngredient() {
         val raw = Ingredient(INGREDIENT_ID, "test name", null, "desc", null, null)
         val id = ingredientRepository.insert(raw).id
-        assertThat(id).isNotNull();
+        assertThat(id).isNotNull()
         val inserted = ingredientRepository.findOne(id)
         assertThat(raw).isEqualTo(inserted)
         val toUpdate = inserted.copy(description = "updated text")

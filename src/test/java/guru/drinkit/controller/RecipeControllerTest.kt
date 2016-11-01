@@ -39,7 +39,7 @@ class RecipeControllerTest : AbstractMockMvcTest() {
 
     @Test
     fun createRecipe() {
-        val recipe = objectMapper.writeValueAsBytes(Recipe(ingredientsWithQuantities = listOf(Recipe.IngredientWithQuantity(1, 11))))
+        val recipe = objectMapper.writeValueAsBytes(Recipe(ingredientsWithQuantities = listOf(Recipe.IngredientWithQuantity(1, 11, null))))
         verifyAccess({ post(RESOURCE_NAME).content((recipe)).contentType(APPLICATION_JSON) },
                 status().isCreated, Role.ADMIN)
     }

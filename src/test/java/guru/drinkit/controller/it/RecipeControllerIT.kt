@@ -89,7 +89,7 @@ class RecipeControllerIT : AbstractRestMockMvc() {
     @Test
     @Throws(Exception::class)
     fun testUpdateRecipe() {
-        insertedRecipe.ingredientsWithQuantities = listOf(Recipe.IngredientWithQuantity(firstIngredient.id!!, 13))
+        insertedRecipe.ingredientsWithQuantities = listOf(Recipe.IngredientWithQuantity(firstIngredient.id!!, 13, null))
         insertedRecipe.name = "modified"
         mockMvc.perform(
                 put(RESOURCE_ENDPOINT + "/" + insertedRecipe.id!!).content(objectMapper.writeValueAsBytes(insertedRecipe)).contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNoContent)
