@@ -45,7 +45,7 @@ class RecipeRepositoryCrudIT : AbstractBaseTest(){
 
     @Test
     fun testRecipe() {
-        val raw = Recipe(RECIPE_ID, 1, "desc", "test name", listOf(1), listOf(Recipe.IngredientWithQuantity(INGREDIENT_ID, null, null)), null, null, Date(), null, true, null)
+        val raw = Recipe(RECIPE_ID, 1, "desc", "test name", "test original name", listOf(1), listOf(Recipe.IngredientWithQuantity(INGREDIENT_ID, null, null)), null, null, Date(), null, true, null)
         val id = recipeRepository.insert(raw).id
         assertThat(id).isNotNull()
         val inserted = recipeRepository.findOne(id)

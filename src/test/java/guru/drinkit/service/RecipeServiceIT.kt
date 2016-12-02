@@ -17,7 +17,7 @@ class RecipeServiceIT : AbstractBaseTest() {
 
     @Test
     fun recipePersistenceTest() {
-        val id = recipeService.insert(Recipe(null, 1, "desc", "name", listOf(1),
+        val id = recipeService.insert(Recipe(null, 1, "desc", "name", "original name", listOf(1),
                 listOf(Recipe.IngredientWithQuantity(1, 10, null)),
                 null, null, null, null, true, null)).id!!
         val recipe = recipeService.find(id)!!

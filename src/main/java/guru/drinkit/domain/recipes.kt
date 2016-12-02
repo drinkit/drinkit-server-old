@@ -13,6 +13,7 @@ data class Recipe(
         var cocktailTypeId: Int = 0,
         var description: String? = null,
         var name: String? = null,
+        var originalName: String? = null,
         var options: List<Int>? = null,
         var ingredientsWithQuantities: List<IngredientWithQuantity> = emptyList(),
         var imageUrl: String? = null,
