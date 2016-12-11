@@ -68,6 +68,7 @@ class IngredientControllerTest : AbstractMockMvcTest() {
                     .param("id[]", "1")
                     .param("id[]", "2")
                     .param("id[]", "3")
+                    .param("viewAll", "true")
         }, status().isOk)
 
     }

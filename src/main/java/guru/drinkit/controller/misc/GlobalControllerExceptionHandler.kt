@@ -1,4 +1,4 @@
-package guru.drinkit.controller
+package guru.drinkit.controller.misc
 
 import com.rollbar.Rollbar
 import org.apache.commons.io.IOUtils
