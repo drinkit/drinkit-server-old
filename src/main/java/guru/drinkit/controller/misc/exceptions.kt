@@ -1,4 +1,4 @@
-package guru.drinkit.controller
+package guru.drinkit.controller.misc
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

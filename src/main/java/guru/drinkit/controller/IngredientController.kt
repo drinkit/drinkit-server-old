@@ -54,9 +54,12 @@ open class IngredientController {
 
     @RequestMapping(path = arrayOf("/suggest"))
     @ResponseBody
-    open fun suggestIngredients(@RequestParam(name = "id[]") userIngredients: Set<Int>): List<SuggestedIngredientDto> {
+    open fun suggestIngredients(
+            @RequestParam(name = "id[]") userIngredients: Set<Int>,
+            @RequestParam(defaultValue = "true") viewAll: Boolean
+    ): List<SuggestedIngredientDto> {
         if (userIngredients.size < 3) return emptyList()
-        return suggestingService.suggestIngredients(userIngredients)
+        return suggestingService.suggestIngredients(userIngredients, viewAll)
     }
 
 

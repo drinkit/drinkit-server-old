@@ -1,6 +1,7 @@
 package guru.drinkit.controller
 
 import guru.drinkit.controller.RecipeStatsController.Companion.RESOURCE_NAME
+import guru.drinkit.controller.misc.ForbiddenActionException
 import guru.drinkit.service.StatsService
 import guru.drinkit.service.getUser
 import org.springframework.beans.factory.annotation.Autowired

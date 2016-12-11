@@ -2,6 +2,7 @@ package guru.drinkit.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import guru.drinkit.controller.RecipeController.Companion.RESOURCE_NAME
+import guru.drinkit.controller.misc.BadRequestException
 import guru.drinkit.domain.Recipe
 import guru.drinkit.service.Criteria
 import guru.drinkit.service.RecipeService

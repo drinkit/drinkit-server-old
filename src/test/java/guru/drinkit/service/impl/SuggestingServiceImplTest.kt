@@ -36,7 +36,7 @@ class SuggestingServiceImplTest : AbstractMockMvcTest() {
         `when`(ingredientRepository.findAll()).thenReturn(arrayListOf(Ingredient(1), Ingredient(2), Ingredient(3), Ingredient(4)))
 
 
-        val matchedRecipes = suggestingService.suggestIngredients(setOf(1, 2))
+        val matchedRecipes = suggestingService.suggestIngredients(setOf(1, 2), true)
 
         println(matchedRecipes)
 
