@@ -1,6 +1,5 @@
 package guru.drinkit.domain
 
-import org.springframework.data.annotation.PersistenceConstructor
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
@@ -14,6 +13,7 @@ data class Recipe(
         var cocktailTypeId: Int = 0,
         var description: String? = null,
         var name: String? = null,
+        var originalName: String? = null,
         var options: List<Int>? = null,
         var ingredientsWithQuantities: List<IngredientWithQuantity> = emptyList(),
         var imageUrl: String? = null,
@@ -23,11 +23,10 @@ data class Recipe(
         var published: Boolean = false,
         var stats: Stats? = null) : Entity<Int> {
     data class Stats(val likes: Int = 0, val views: Int = 0)
-    data class IngredientWithQuantity
-    @PersistenceConstructor constructor(
+    data class IngredientWithQuantity(
             val ingredientId: Int,
-            val quantity: Int? = null,
-            val unit: String? = null)
+            val quantity: Int?,
+            val unit: String?)
 }
 
 @Document
