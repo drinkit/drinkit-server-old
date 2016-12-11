@@ -1,6 +1,7 @@
 package guru.drinkit.controller
 
 import com.rollbar.Rollbar
+import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory.getLogger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -11,7 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
-import java.util.stream.Collectors.joining
+import java.nio.charset.Charset
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -36,7 +37,7 @@ constructor(@Value("\${rollbar.token}") token: String, @Value("\${rollbar.env}")
     private fun logToRollbar(e: RuntimeException, request: HttpServletRequest) {
         rollbar.log(e, mapOf(
                 Pair("user", "${request.remoteUser} ${(request.userPrincipal as UsernamePasswordAuthenticationToken).authorities}"),
-                Pair("body", request.inputStream.bufferedReader().lines().collect(joining()))
+                Pair("body", IOUtils.toString(request.inputStream, Charset.defaultCharset()))
 
         ), "${request.method} ${request.requestURI}")
     }
