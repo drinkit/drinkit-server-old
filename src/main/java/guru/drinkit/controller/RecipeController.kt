@@ -22,8 +22,8 @@ import javax.validation.Valid
 @Controller
 @RequestMapping(RESOURCE_NAME)
 open class RecipeController @Autowired constructor(
-        val recipeService: RecipeService,
-        val objectMapper: ObjectMapper) {
+        var recipeService: RecipeService,
+        var objectMapper: ObjectMapper) {
 
     companion object {
         const val RESOURCE_NAME = "recipes"
@@ -93,7 +93,7 @@ open class RecipeController @Autowired constructor(
         val image = objectMapper.convertValue(root.get("image"), ByteArray::class.java)
         val thumbnail = objectMapper.convertValue(root.get("thumbnail"), ByteArray::class.java)
         if (image == null || thumbnail == null) {
-            throw IllegalArgumentException("image AND thumbnail is required")
+            throw BadRequestException()
         }
         recipeService.saveMedia(recipeId, image, thumbnail)
     }

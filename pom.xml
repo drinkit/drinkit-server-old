@@ -337,6 +337,11 @@
             <version>RELEASE</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>com.rollbar</groupId>
+            <artifactId>rollbar</artifactId>
+            <version>RELEASE</version>
+        </dependency>
         <!--Spring Security-->
 
         <dependency>

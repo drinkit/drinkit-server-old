@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 @Controller
 @RequestMapping(value = RESOURCE_NAME)
 open class RecipeStatsController @Autowired constructor(
-        val statsService: StatsService
+        var statsService: StatsService
 
 ) {
 
