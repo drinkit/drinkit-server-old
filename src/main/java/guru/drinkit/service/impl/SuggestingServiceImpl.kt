@@ -18,8 +18,8 @@ class SuggestingServiceImpl
 constructor(private val ingredientService: IngredientService,
             private val recipeService: RecipeService) : SuggestingService {
 
-    override fun suggestIngredients(ingredients: Set<Int>): List<SuggestedIngredientDto> {
-        val allRecipesMasks = getRecipesMasks()
+    override fun suggestIngredients(ingredients: Set<Int>, viewAll: Boolean): List<SuggestedIngredientDto> {
+        val allRecipesMasks = getRecipesMasks(viewAll)
         val existingRecipes = findMatchedRecipes(ingredients, allRecipesMasks)
         val newRecipeMasks = allRecipesMasks.filter { !existingRecipes.contains(it.key) }
         return populateWithMatchedRecipes(ingredients, newRecipeMasks)
@@ -35,7 +35,8 @@ constructor(private val ingredientService: IngredientService,
                     .associateBy({ it }, { findMatchedRecipes(ingredients.plusElement(it), recipeMasks) })
 
     //todo caching
-    private fun getRecipesMasks() = recipeService.findAll()//todo filter devs
+    private fun getRecipesMasks(viewAll: Boolean) = recipeService.findAll()
+            .filter { viewAll || it.published }
             .associateBy(Recipe::id, { toRecipeMask(it) })
 
     private fun toRecipeMask(recipe: Recipe) = recipe.ingredientsWithQuantities

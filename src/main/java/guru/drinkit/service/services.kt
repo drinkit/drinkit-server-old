@@ -67,7 +67,7 @@ interface CrudService<ID, T : Entity<ID>> {
 }
 
 interface SuggestingService {
-    fun suggestIngredients(ingredients: Set<Int>): List<SuggestedIngredientDto>
+    fun suggestIngredients(ingredients: Set<Int>, viewAll: Boolean): List<SuggestedIngredientDto>
 }
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Record not found")
