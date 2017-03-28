@@ -32,6 +32,11 @@ open class IngredientController {
     open fun getIngredients(): List<Ingredient> =
             ingredientService.findAll()
 
+    @RequestMapping(value = "{id}", method = arrayOf(RequestMethod.GET))
+    @ResponseBody
+    open fun getIngredientById(@PathVariable id: Int) =
+            ingredientService.find(id)
+
     @RequestMapping(method = arrayOf(RequestMethod.POST))
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
