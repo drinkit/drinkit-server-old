@@ -5,6 +5,7 @@ import guru.drinkit.repository.IngredientRepository
 import guru.drinkit.repository.RecipeRepository
 import guru.drinkit.repository.UserRepository
 import guru.drinkit.service.IngredientService
+import guru.drinkit.service.RecordNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -36,6 +37,8 @@ open class IngredientServiceImpl @Autowired constructor(
         ingredientRepository.delete(id)
         removeBarItems(id)
     }
+
+    override fun find(id: Int) = ingredientRepository.findOne(id) ?: throw RecordNotFoundException("Ingredient not found")
 
     @ResponseStatus(value = HttpStatus.CONFLICT, reason = "Found recipes with this ingredient")
     class IngredientConstraintException(val size: Int) :
