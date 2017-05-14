@@ -5,7 +5,9 @@ import cz.jiripinkas.jsitemapgenerator.ImageBuilder;
 import cz.jiripinkas.jsitemapgenerator.WebPage;
 import cz.jiripinkas.jsitemapgenerator.WebPageBuilder;
 import cz.jiripinkas.jsitemapgenerator.generator.SitemapGenerator;
+import guru.drinkit.domain.Ingredient;
 import guru.drinkit.domain.Recipe;
+import guru.drinkit.repository.IngredientRepository;
 import guru.drinkit.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -27,6 +29,9 @@ public class SitemapController {
     @Autowired
     RecipeRepository recipeRepository;
 
+    @Autowired
+    IngredientRepository ingredientRepository;
+
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
     @ResponseBody
     public String getSitemap() {
@@ -45,6 +50,13 @@ public class SitemapController {
                 sitemapGenerator.addPage(recipePage);
             }
         }
+        // ingredients
+        List<Ingredient> ingredients = ingredientRepository.findAll();
+        for (Ingredient ingredient : ingredients) {
+            WebPage ingredientPage = new WebPageBuilder().name("ingredients/" + ingredient.getId().toString()).build();
+            sitemapGenerator.addPage(ingredientPage);
+        }
+
         return sitemapGenerator.constructSitemapString();
     }
 }
