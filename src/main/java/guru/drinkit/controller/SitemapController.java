@@ -36,10 +36,14 @@ public class SitemapController {
     @ResponseBody
     public String getSitemap() {
         SitemapGenerator sitemapGenerator = new SitemapGenerator("https://drinkit.guru", new SitemapGenerator.AdditionalNamespace[]{SitemapGenerator.AdditionalNamespace.IMAGE});
-        // const pages
         sitemapGenerator.addPage(new WebPageBuilder().build());
         sitemapGenerator.addPage(new WebPageBuilder().name("bar").build());
-        // recipes
+        generateRecipesPages(sitemapGenerator);
+        generateIngredientsPages(sitemapGenerator);
+        return sitemapGenerator.constructSitemapString();
+    }
+
+    private void generateRecipesPages(SitemapGenerator sitemapGenerator) {
         List<Recipe> recipes = recipeRepository.findAll();
         for (Recipe recipe : recipes) {
             if (recipe.getPublished()) {
@@ -50,13 +54,13 @@ public class SitemapController {
                 sitemapGenerator.addPage(recipePage);
             }
         }
-        // ingredients
+    }
+
+    private void generateIngredientsPages(SitemapGenerator sitemapGenerator) {
         List<Ingredient> ingredients = ingredientRepository.findAll();
         for (Ingredient ingredient : ingredients) {
             WebPage ingredientPage = new WebPageBuilder().name("ingredients/" + ingredient.getId().toString()).build();
             sitemapGenerator.addPage(ingredientPage);
         }
-
-        return sitemapGenerator.constructSitemapString();
     }
 }
