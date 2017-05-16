@@ -29,7 +29,7 @@ open class IngredientServiceImpl @Autowired constructor(
         findSafe(id)
 
         val count = recipeRepository.countByIngredientId(id)
-        if (count === 0) {
+        if (count == 0) {
             ingredientRepository.delete(id)
         } else {
             throw IngredientConstraintException(count)
