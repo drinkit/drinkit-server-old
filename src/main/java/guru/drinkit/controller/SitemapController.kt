@@ -39,7 +39,7 @@ constructor(private val recipeRepository: RecipeRepository,
 
     private fun generateRecipesPages() = recipeRepository.findAll()
             .filter(Recipe::published)
-            .map(this::convertRecipe)
+            .map { convertRecipe(it) }
 
 
     private fun convertRecipe(recipe: Recipe): WebPage {
