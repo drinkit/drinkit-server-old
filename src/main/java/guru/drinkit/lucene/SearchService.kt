@@ -61,7 +61,7 @@ open class SearchService @Autowired constructor(
         document.add(StoredField("id", recipe.id!!))
         document.add(TextField(RecipeFields.localizedName.name, recipe.name, NO).also { it.setBoost(2.9f) })
         recipe.originalName?.let { document.add(TextField(RecipeFields.originalName.name, it, NO).also { it.setBoost(2.1f) }) }
-        document.add(TextField(RecipeFields.description.name, recipe.description, NO))
+        recipe.description?.let { document.add(TextField(RecipeFields.description.name, it, NO)) }
         recipe.ingredientsWithQuantities
                 .map { it.ingredientId }
                 .map { ingredients[it] }
