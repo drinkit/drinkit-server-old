@@ -26,8 +26,8 @@ class RecipeControllerTest : AbstractMockMvcTest() {
 
     @Before
     fun setUp() {
-        `when`(recipeRepository.findOne(1)).thenReturn(Recipe())
-        `when`(recipeRepository.save(anyObject<Recipe>())).thenReturn(Recipe(id = 1))
+        `when`(recipeRepository.findOne(1)).thenReturn(Recipe(name = ""))
+        `when`(recipeRepository.save(anyObject<Recipe>())).thenReturn(Recipe(id = 1, name = ""))
     }
 
     @Test
@@ -37,7 +37,7 @@ class RecipeControllerTest : AbstractMockMvcTest() {
 
     @Test
     fun createRecipe() {
-        val recipe = objectMapper.writeValueAsBytes(Recipe(ingredientsWithQuantities = listOf(Recipe.IngredientWithQuantity(1, 11, null))))
+        val recipe = objectMapper.writeValueAsBytes(Recipe(ingredientsWithQuantities = listOf(Recipe.IngredientWithQuantity(1, 11, null)), name = ""))
         verifyAccess({ post(RESOURCE_NAME).content((recipe)).contentType(APPLICATION_JSON) },
                 status().isCreated, Role.ADMIN)
     }
@@ -57,7 +57,7 @@ class RecipeControllerTest : AbstractMockMvcTest() {
 
     @Test
     fun updateRecipe() {
-        val recipe = objectMapper.writeValueAsString(Recipe(id = 1))
+        val recipe = objectMapper.writeValueAsString(Recipe(id = 1, name = ""))
         verifyAccess({ put(RESOURCE_NAME + "/1").content(recipe).contentType(APPLICATION_JSON) }, status().isNoContent, Role.ADMIN)
     }
 

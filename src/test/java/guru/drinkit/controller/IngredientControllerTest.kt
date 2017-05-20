@@ -79,5 +79,5 @@ class IngredientControllerTest : AbstractMockMvcTest() {
     }
 
     private fun createRecipe(recipeId: Int, vararg ingrIds: Int) =
-            Recipe(id = recipeId, ingredientsWithQuantities = ingrIds.map { Recipe.IngredientWithQuantity(it, null, null) })
+            Recipe(id = recipeId, ingredientsWithQuantities = ingrIds.map { Recipe.IngredientWithQuantity(it, null, null) }, name = "")
 }
