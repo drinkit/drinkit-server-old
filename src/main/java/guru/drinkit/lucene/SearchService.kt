@@ -83,5 +83,6 @@ open class SearchService @Autowired constructor(
     fun indexRecipe(recipe: Recipe) {
         val ingredients = ingredientRepository.findAll().associateBy { it.id!! }
         recipeIndexWriter.addDocument(transformToDocument(recipe, ingredients))
+        recipeIndexWriter.commit()
     }
 }
