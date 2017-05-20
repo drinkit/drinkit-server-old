@@ -17,9 +17,9 @@ open class RecipeServiceImpl @Autowired constructor(
 ) : RecipeService {
 
     override fun insert(entity: Recipe): Recipe {
-        Assert.isNull(entity.id)
+        Assert.isNull(entity.id, "Id should be empty for insert")
         val lastRecipeId = recipeRepository.findFirstByOrderByIdDesc()?.id ?: 0
-        entity.id = lastRecipeId + 1;
+        entity.id = lastRecipeId + 1
         entity.addedBy = getUsername()
         entity.createdDate = Date()
         entity.stats = Recipe.Stats(0, 0)
@@ -27,7 +27,7 @@ open class RecipeServiceImpl @Autowired constructor(
     }
 
     override fun save(entity: Recipe): Recipe {
-        Assert.notNull(entity.id)
+        Assert.notNull(entity.id, "Id should be provided for update")
         val original = find(entity.id!!)
         recipeRepository.save(entity.copy(
                 stats = original.stats,
@@ -40,7 +40,7 @@ open class RecipeServiceImpl @Autowired constructor(
         recipeRepository.delete(entity)
     }
 
-    override fun findAll() = recipeRepository.findAll()
+    override fun findAll(): List<Recipe> = recipeRepository.findAll()
 
     override fun findByCriteria(criteria: Criteria): List<Recipe> {
         val recipes = recipeRepository.findByCriteria(criteria)
@@ -55,8 +55,8 @@ open class RecipeServiceImpl @Autowired constructor(
         override fun compare(recipe1: Recipe, recipe2: Recipe): Int {
             var result = getNotMatchesIngredientsCount(recipe1) - getNotMatchesIngredientsCount(recipe2)
             if (result == 0) {
-                var weight1 = (recipe1.stats?.views ?: 0) + ((recipe1.stats?.likes ?: 0) * likesFactor)
-                var weight2 = (recipe2.stats?.views ?: 0) + ((recipe2.stats?.likes ?: 0) * likesFactor)
+                val weight1 = (recipe1.stats?.views ?: 0) + ((recipe1.stats?.likes ?: 0) * likesFactor)
+                val weight2 = (recipe2.stats?.views ?: 0) + ((recipe2.stats?.likes ?: 0) * likesFactor)
                 result = weight2 - weight1
             }
             return result

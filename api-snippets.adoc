@@ -20,12 +20,9 @@ HTTP/1.1 200 OK
 Access-Control-Allow-Origin: *
 Access-Control-Expose-Headers: WWW-Authenticate
 Content-Type: application/json;charset=UTF-8
-Content-Length: 54
+Content-Length: 3
 
-[ {
-  "ingredientId" : 3,
-  "recipeIds" : [ 1 ]
-} ]
+[ ]
 ----
 ==== IngredientControllerTest.delete:http-request
 [source,http,options="nowrap"]
@@ -41,6 +38,31 @@ HTTP/1.1 204 No Content
 Access-Control-Allow-Origin: *
 Access-Control-Expose-Headers: WWW-Authenticate
 
+----
+==== IngredientControllerTest.getIngredientById:http-request
+[source,http,options="nowrap"]
+----
+GET /rest/ingredients/1 HTTP/1.1
+Host: localhost
+
+----
+==== IngredientControllerTest.getIngredientById:http-response
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+Content-Type: application/json;charset=UTF-8
+Content-Length: 117
+
+{
+  "id" : 1,
+  "name" : null,
+  "vol" : null,
+  "description" : null,
+  "category" : null,
+  "alias" : null
+}
 ----
 ==== IngredientControllerTest.addNewIngredient:http-request
 [source,http,options="nowrap"]
@@ -106,10 +128,24 @@ HTTP/1.1 200 OK
 Access-Control-Allow-Origin: *
 Access-Control-Expose-Headers: WWW-Authenticate
 Content-Type: application/json;charset=UTF-8
-Content-Length: 121
+Content-Length: 359
 
 [ {
   "id" : 1,
+  "name" : null,
+  "vol" : null,
+  "description" : null,
+  "category" : null,
+  "alias" : null
+}, {
+  "id" : 2,
+  "name" : null,
+  "vol" : null,
+  "description" : null,
+  "category" : null,
+  "alias" : null
+}, {
+  "id" : 3,
   "name" : null,
   "vol" : null,
   "description" : null,
@@ -141,18 +177,19 @@ Content-Length: 3
 PUT /rest/recipes/1 HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 289
+Content-Length: 315
 
 {
   "id" : 1,
   "cocktailTypeId" : 0,
   "description" : null,
   "name" : null,
+  "originalName" : null,
   "options" : null,
   "ingredientsWithQuantities" : [ ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1476656001747,
+  "createdDate" : 1490720743475,
   "addedBy" : null,
   "published" : false,
   "stats" : null
@@ -195,18 +232,19 @@ HTTP/1.1 200 OK
 Access-Control-Allow-Origin: *
 Access-Control-Expose-Headers: WWW-Authenticate
 Content-Type: application/json;charset=UTF-8
-Content-Length: 292
+Content-Length: 318
 
 {
   "id" : null,
   "cocktailTypeId" : 0,
   "description" : null,
   "name" : null,
+  "originalName" : null,
   "options" : null,
   "ingredientsWithQuantities" : [ ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1476656001888,
+  "createdDate" : 1490720743585,
   "addedBy" : null,
   "published" : false,
   "stats" : null
@@ -226,22 +264,41 @@ HTTP/1.1 200 OK
 Access-Control-Allow-Origin: *
 Access-Control-Expose-Headers: WWW-Authenticate
 Content-Type: application/json;charset=UTF-8
-Content-Length: 292
+Content-Length: 318
 
 {
   "id" : null,
   "cocktailTypeId" : 0,
   "description" : null,
   "name" : null,
+  "originalName" : null,
   "options" : null,
   "ingredientsWithQuantities" : [ ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1476656001913,
+  "createdDate" : 1490720743608,
   "addedBy" : null,
   "published" : false,
   "stats" : null
 }
+----
+==== RecipeControllerTest.uploadMedia:http-request
+[source,http,options="nowrap"]
+----
+POST /rest/recipes/1/media HTTP/1.1
+Content-Type: application/json
+Host: localhost
+Content-Length: 3
+
+{ }
+----
+==== RecipeControllerTest.uploadMedia:http-response
+[source,http,options="nowrap"]
+----
+HTTP/1.1 400 Bad Request
+Access-Control-Allow-Origin: *
+Access-Control-Expose-Headers: WWW-Authenticate
+
 ----
 ==== RecipeControllerTest.createRecipe:http-request
 [source,http,options="nowrap"]
@@ -249,21 +306,23 @@ Content-Length: 292
 POST /rest/recipes HTTP/1.1
 Content-Type: application/json
 Host: localhost
-Content-Length: 345
+Content-Length: 391
 
 {
   "id" : null,
   "cocktailTypeId" : 0,
   "description" : null,
   "name" : null,
+  "originalName" : null,
   "options" : null,
   "ingredientsWithQuantities" : [ {
     "ingredientId" : 1,
-    "quantity" : 11
+    "quantity" : 11,
+    "unit" : null
   } ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1476656001967,
+  "createdDate" : 1490720743643,
   "addedBy" : null,
   "published" : false,
   "stats" : null
@@ -276,21 +335,23 @@ HTTP/1.1 201 Created
 Access-Control-Allow-Origin: *
 Access-Control-Expose-Headers: WWW-Authenticate
 Content-Type: application/json;charset=UTF-8
-Content-Length: 385
+Content-Length: 431
 
 {
   "id" : 1,
   "cocktailTypeId" : 0,
   "description" : null,
   "name" : null,
+  "originalName" : null,
   "options" : null,
   "ingredientsWithQuantities" : [ {
     "ingredientId" : 1,
-    "quantity" : 11
+    "quantity" : 11,
+    "unit" : null
   } ],
   "imageUrl" : null,
   "thumbnailUrl" : null,
-  "createdDate" : 1476656001972,
+  "createdDate" : 1490720743649,
   "addedBy" : "testUser",
   "published" : false,
   "stats" : {
