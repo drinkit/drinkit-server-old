@@ -1,23 +1,22 @@
 package guru.drinkit.lucene
 
+import guru.drinkit.domain.Ingredient
 import guru.drinkit.domain.Recipe
+import guru.drinkit.repository.IngredientRepository
+import guru.drinkit.repository.RecipeRepository
 import org.apache.lucene.analysis.Analyzer
-import org.apache.lucene.analysis.ru.RussianAnalyzer
-import org.apache.lucene.document.*
+import org.apache.lucene.document.Document
 import org.apache.lucene.document.Field.Store.NO
-import org.apache.lucene.document.Field.Store.YES
+import org.apache.lucene.document.StoredField
+import org.apache.lucene.document.TextField
 import org.apache.lucene.index.DirectoryReader
 import org.apache.lucene.index.IndexWriter
-import org.apache.lucene.index.IndexWriterConfig
 import org.apache.lucene.queryparser.classic.MultiFieldQueryParser
-import org.apache.lucene.queryparser.classic.ParseException
 import org.apache.lucene.search.IndexSearcher
 import org.apache.lucene.store.Directory
-import org.apache.lucene.store.RAMDirectory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.io.IOException
-import java.util.*
+import javax.annotation.PostConstruct
 
 /**
  * @author pkolmykov
@@ -26,64 +25,58 @@ import java.util.*
 open class SearchService @Autowired constructor(
         val recipeIndexWriter: IndexWriter,
         val analyzer: Analyzer,
-        val recipeDirectory: Directory
+        val recipeDirectory: Directory,
+        val recipeRepository: RecipeRepository,
+        val ingredientRepository: IngredientRepository
 ) {
 
-    fun searchRecipes(searchString: String): List<Int> {
-        val queryParser = MultiFieldQueryParser(arrayOf("id", "name", "originalName", "description"), analyzer)
-        val searcher = IndexSearcher(DirectoryReader.open(recipeDirectory))
-        val topDocs = searcher.search(queryParser.parse(searchString), 50)
-        return topDocs.scoreDocs.map { searcher.doc(it.doc).getField("id").numericValue().toInt() }
+    enum class RecipeFields {
+        localizedName,
+        originalName,
+        description,
+        ingredientName,
+        ingredientDesc,
+        ingredientAlias
     }
 
-    fun indexRecipes(recipes: Iterable<Recipe>) {
-        val documents = recipes.map { transformToDocument(it) }
+    @PostConstruct
+    open fun index() {
+        try {
+            indexRecipes(recipeRepository.findAll())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            //todo rollbar
+        }
+    }
+
+    private fun indexRecipes(recipes: Iterable<Recipe>) {
+        val ingredients = ingredientRepository.findAll().associateBy { it.id!! }
+        val documents = recipes.map { transformToDocument(it, ingredients) }
         recipeIndexWriter.addDocuments(documents)
         recipeIndexWriter.commit()
     }
 
-    private fun transformToDocument(recipe: Recipe): Document {
+    private fun transformToDocument(recipe: Recipe, ingredients: Map<Int, Ingredient>): Document {
         val document = Document()
         document.add(StoredField("id", recipe.id!!))
-        document.add(TextField("name", recipe.name, NO))
-        document.add(TextField("originalName", recipe.originalName, NO))
-        document.add(TextField("description", recipe.description, NO))
+        document.add(TextField(RecipeFields.localizedName.name, recipe.name, NO).also { it.setBoost(2.9f) })
+        recipe.originalName?.let { document.add(TextField(RecipeFields.originalName.name, it, NO).also { it.setBoost(2.1f) }) }
+        document.add(TextField(RecipeFields.description.name, recipe.description, NO))
+        recipe.ingredientsWithQuantities
+                .map { it.ingredientId }
+                .map { ingredients[it] }
+                .forEach {
+                    document.add(TextField(RecipeFields.ingredientName.name, it!!.name, NO).also { it.setBoost(1.5f) })
+                    document.add(TextField(RecipeFields.ingredientDesc.name, it.description, NO).also { it.setBoost(0.5f) })
+                    it.alias?.forEach { document.add(TextField(RecipeFields.ingredientAlias.name, it, NO).also { it.setBoost(0.5f) }) }
+                }
         return document
     }
 
-    companion object {
-
-        @Throws(IOException::class, ParseException::class)
-        @JvmStatic fun main(args: Array<String>) {
-            val analyzer = RussianAnalyzer()
-            val index = RAMDirectory()
-            val config = IndexWriterConfig(analyzer)
-
-            val indexWriter = IndexWriter(index, config)
-            val recipe = Recipe()
-            recipe.id = 1
-            recipe.name = "водка со льдом"
-            recipe.description = "desc"
-            val doc = Document()
-            doc.add(IntField("id", recipe.id!!, YES))
-            doc.add(TextField("name", recipe.name!!, Field.Store.NO))
-            doc.add(TextField("desc", recipe.description!!, Field.Store.NO))
-            indexWriter.addDocument(doc)
-            indexWriter.commit()
-            //        recipeIndexWriter.close();
-            //        recipeIndexWriter.close();
-            val doc2 = Document()
-            doc2.add(IntField("id", recipe.id!!, YES))
-            doc2.add(TextField("name", "вискарь", Field.Store.NO))
-            doc2.add(TextField("desc", "вкусный вискарь", Field.Store.NO))
-            indexWriter.addDocument(doc2)
-            indexWriter.commit()
-            val query = MultiFieldQueryParser(arrayOf("name", "desc"), analyzer).parse("вискарь водка")
-            println(query)
-            val searcher = IndexSearcher(DirectoryReader.open(index))
-            val res = searcher.search(query, 10)
-            println(Arrays.toString(res.scoreDocs))
-            println(searcher.doc(res.scoreDocs[0].doc))
-        }
+    fun findRecipes(searchString: String): List<Int> {
+        val queryParser = MultiFieldQueryParser(RecipeFields.values().map { it.name }.toTypedArray(), analyzer)
+        val searcher = IndexSearcher(DirectoryReader.open(recipeDirectory))
+        val topDocs = searcher.search(queryParser.parse(searchString), 50)
+        return topDocs.scoreDocs.map { searcher.doc(it.doc).getField("id").numericValue().toInt() }
     }
 }
