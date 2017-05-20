@@ -1,6 +1,7 @@
 package guru.drinkit.service.impl
 
 import guru.drinkit.domain.Recipe
+import guru.drinkit.lucene.SearchService
 import guru.drinkit.repository.RecipeRepository
 import guru.drinkit.service.*
 import org.apache.commons.collections4.CollectionUtils.collect
@@ -11,9 +12,11 @@ import java.util.*
 
 
 @Service
-open class RecipeServiceImpl @Autowired constructor(
-        @Autowired private val fileStoreService: FileStoreService,
-        @Autowired private val recipeRepository: RecipeRepository
+open class RecipeServiceImpl
+@Autowired constructor(
+        private val fileStoreService: FileStoreService,
+        private val recipeRepository: RecipeRepository,
+        private val searchService: SearchService
 ) : RecipeService {
 
     override fun insert(entity: Recipe): Recipe {
@@ -23,7 +26,9 @@ open class RecipeServiceImpl @Autowired constructor(
         entity.addedBy = getUsername()
         entity.createdDate = Date()
         entity.stats = Recipe.Stats(0, 0)
-        return recipeRepository.save(entity)
+        val savedRecipe = recipeRepository.save(entity)
+        searchService.indexRecipe(savedRecipe)
+        return savedRecipe
     }
 
     override fun save(entity: Recipe): Recipe {
@@ -50,7 +55,7 @@ open class RecipeServiceImpl @Autowired constructor(
 
     class RecipeComparatorByCriteria(val criteria: Criteria) : Comparator<Recipe> {
 
-        var likesFactor:Int = 20
+        var likesFactor: Int = 20
 
         override fun compare(recipe1: Recipe, recipe2: Recipe): Int {
             var result = getNotMatchesIngredientsCount(recipe1) - getNotMatchesIngredientsCount(recipe2)
@@ -72,8 +77,15 @@ open class RecipeServiceImpl @Autowired constructor(
 
     override fun find(id: Int) = recipeRepository.findOne(id) ?: throw RecordNotFoundException("Recipe not found")
 
-    override fun findByRecipeNameContaining(namePart: String) =
-            recipeRepository.findByNameContainingIgnoreCase(namePart)
+    override fun findByRecipeNameContaining(namePart: String): List<Recipe> {
+        val recipeIds = searchService.findRecipes(namePart)
+        if (recipeIds.isEmpty()) {
+            return emptyList()
+        } else {
+            val recipes = recipeRepository.findByIdIn(recipeIds).associateBy { it.id }
+            return recipeIds.mapNotNull { recipes[it] }
+        }
+    }
 
     override fun saveMedia(recipeId: Int, image: ByteArray, thumbnail: ByteArray) {
         val recipe = find(recipeId)

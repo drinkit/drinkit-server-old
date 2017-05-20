@@ -2,10 +2,7 @@ package guru.drinkit.controller.common
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import guru.drinkit.security.Role
-import guru.drinkit.springconfig.AppConfig
-import guru.drinkit.springconfig.MockDBConfig
-import guru.drinkit.springconfig.SecurityConfig
-import guru.drinkit.springconfig.WebConfig
+import guru.drinkit.springconfig.*
 import org.apache.commons.collections4.CollectionUtils
 import org.junit.Before
 import org.junit.Rule
@@ -42,7 +39,7 @@ import javax.servlet.Filter
  * @author pkolmykov
  */
 @RunWith(SpringJUnit4ClassRunner::class)
-@ContextConfiguration(classes = arrayOf(WebConfig::class, SecurityConfig::class, MockDBConfig::class, AppConfig::class))
+@ContextConfiguration(classes = arrayOf(WebConfig::class, SecurityConfig::class, MockDBConfig::class, AppConfig::class, LuceneConfig::class))
 @ActiveProfiles("test")
 @WebAppConfiguration
 abstract class AbstractMockMvcTest {

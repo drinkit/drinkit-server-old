@@ -1,6 +1,13 @@
 package guru.drinkit.controller.it;
 
-import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import guru.drinkit.controller.common.AbstractRestMockMvc;
 import guru.drinkit.domain.Ingredient;
@@ -11,14 +18,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.List;
 
 public class IngredientsControllerIT extends AbstractRestMockMvc {
 
@@ -42,7 +42,7 @@ public class IngredientsControllerIT extends AbstractRestMockMvc {
     @Test(expected = DuplicateKeyException.class)//todo test through controller
     public void testAddNewIngredientWithDuplicatedName() throws Exception {
         Ingredient ingredient = new Ingredient();
-        ingredient.setName(firstIngredient.getName());
+        ingredient.setName(getFirstIngredient().getName());
         ingredientService.insert(ingredient);
     }
 
@@ -53,7 +53,7 @@ public class IngredientsControllerIT extends AbstractRestMockMvc {
 
     @Test
     public void testDelete() throws Exception {
-        Integer ingredientId = firstIngredient.getId();
+        Integer ingredientId = getFirstIngredient().getId();
         assertNotNull(ingredientService.find(ingredientId));
         assertThat(userRepository.findByUserBarIngredientId(ingredientId).size()).isGreaterThan(0);
         mockMvc.perform(delete(RESOURCE_ENDPOINT + "/" + ingredientId))

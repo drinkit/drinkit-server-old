@@ -30,6 +30,8 @@ interface RecipeRepository : MongoRepository<Recipe, Int>, RecipeRepositoryCusto
     fun findFirstByOrderByIdDesc(): Recipe?
     @Query(value = "{ingredientsWithQuantities : {\$elemMatch : {ingredientId : ?0}}}", count = true)
     fun countByIngredientId(id: Int): Int
+
+    fun findByIdIn(recipeIds: Iterable<Int>): List<Recipe>
 }
 
 interface RecipeRepositoryCustom {
