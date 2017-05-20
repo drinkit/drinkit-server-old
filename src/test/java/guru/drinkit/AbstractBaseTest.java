@@ -7,6 +7,7 @@ import guru.drinkit.domain.User;
 import guru.drinkit.repository.UserRepository;
 import guru.drinkit.service.IngredientService;
 import guru.drinkit.springconfig.AppConfig;
+import guru.drinkit.springconfig.LuceneConfig;
 import guru.drinkit.springconfig.MongoConfig;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ import java.util.Arrays;
  * Date: 09.11.2014
  * Time: 16:45
  */
-@ContextConfiguration(classes = {AppConfig.class, MongoConfig.class})
+@ContextConfiguration(classes = {AppConfig.class, MongoConfig.class, LuceneConfig.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles("test")
 public abstract class AbstractBaseTest {
