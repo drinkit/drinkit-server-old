@@ -29,7 +29,7 @@ class LocalFSFileStoreService @Autowired constructor(
 
         val folder = File(mediaFolder)
         folder.mkdirs()
-        val files = folder.listFiles { dir, name -> name.startsWith(filePrefix) }
+        val files = folder.listFiles { _, name -> name.startsWith(filePrefix) }
         if (files != null) {
             for (file in files) {
                 file.delete()

@@ -4,6 +4,7 @@ import java.util.List;
 
 import guru.drinkit.controller.common.AbstractRestMockMvc;
 import guru.drinkit.domain.Ingredient;
+import guru.drinkit.repository.IngredientRepository;
 import guru.drinkit.repository.UserRepository;
 import guru.drinkit.service.IngredientService;
 import org.junit.Test;
@@ -24,6 +25,8 @@ public class IngredientsControllerIT extends AbstractRestMockMvc {
     private static final String RESOURCE_ENDPOINT = "/ingredients";
     @Autowired
     private IngredientService ingredientService;
+    @Autowired
+    private IngredientRepository ingredientRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -55,11 +58,8 @@ public class IngredientsControllerIT extends AbstractRestMockMvc {
         assertThat(userRepository.findByUserBarIngredientId(ingredientId).size()).isGreaterThan(0);
         mockMvc.perform(delete(RESOURCE_ENDPOINT + "/" + ingredientId))
                 .andExpect(status().isNoContent());
-
-        assertThat(ingredientService.find(ingredientId)).isNull();
+        assertNull(ingredientRepository.findOne(ingredientId));
         assertThat(userRepository.findByUserBarIngredientId(ingredientId).size()).isEqualTo(0);
-
-        assertNull(ingredientService.find(ingredientId));
         mockMvc.perform(delete(RESOURCE_ENDPOINT + "/" + ingredientId))
                 .andExpect(status().isNotFound());
     }

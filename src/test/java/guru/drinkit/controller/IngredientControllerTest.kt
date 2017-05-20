@@ -42,6 +42,11 @@ class IngredientControllerTest : AbstractMockMvcTest() {
     }
 
     @Test
+    fun getIngredientById() {
+        verifyAccess({ MockMvcRequestBuilders.get(RESOURCE_NAME + "/1") }, status().isOk)
+    }
+
+    @Test
     fun addNewIngredient() {
         val ingredientJson = objectMapper.writeValueAsBytes(Ingredient(name = "ingr", description = "any", vol = 40, category = "cat"))
         verifyAccess({ MockMvcRequestBuilders.post(RESOURCE_NAME).content((ingredientJson)).contentType(MediaType.APPLICATION_JSON) },
