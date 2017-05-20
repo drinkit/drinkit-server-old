@@ -31,7 +31,7 @@ interface RecipeRepository : MongoRepository<Recipe, Int>, RecipeRepositoryCusto
     @Query(value = "{ingredientsWithQuantities : {\$elemMatch : {ingredientId : ?0}}}", count = true)
     fun countByIngredientId(id: Int): Int
 
-    fun findByIdIn(recipeIds: List<Int>): List<Recipe>
+    fun findByIdIn(recipeIds: Iterable<Int>): List<Recipe>
 }
 
 interface RecipeRepositoryCustom {
