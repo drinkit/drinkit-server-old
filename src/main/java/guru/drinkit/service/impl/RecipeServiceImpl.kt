@@ -26,7 +26,9 @@ open class RecipeServiceImpl
         entity.addedBy = getUsername()
         entity.createdDate = Date()
         entity.stats = Recipe.Stats(0, 0)
-        return recipeRepository.save(entity)
+        val savedRecipe = recipeRepository.save(entity)
+        searchService.indexRecipe(savedRecipe)
+        return savedRecipe
     }
 
     override fun save(entity: Recipe): Recipe {

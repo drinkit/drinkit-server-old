@@ -79,4 +79,9 @@ open class SearchService @Autowired constructor(
         val topDocs = searcher.search(queryParser.parse(searchString), 50)
         return topDocs.scoreDocs.map { searcher.doc(it.doc).getField("id").numericValue().toInt() }
     }
+
+    fun indexRecipe(recipe: Recipe) {
+        val ingredients = ingredientRepository.findAll().associateBy { it.id!! }
+        recipeIndexWriter.addDocument(transformToDocument(recipe, ingredients))
+    }
 }
