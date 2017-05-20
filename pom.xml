@@ -11,6 +11,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <spring.version>4.3.8.RELEASE</spring.version>
+        <spring.web.version>4.2.2.RELEASE</spring.web.version>
         <jackson.version>2.7.3</jackson.version>
         <kotlin.version>1.1.1</kotlin.version>
     </properties>
@@ -375,17 +376,17 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>RELEASE</version>
+            <version>${spring.web.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>RELEASE</version>
+            <version>${spring.web.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <version>RELEASE</version>
+            <version>${spring.web.version}</version>
         </dependency>
 
 
@@ -469,12 +470,6 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
-            <version>${kotlin.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-test</artifactId>
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
