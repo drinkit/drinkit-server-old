@@ -6,6 +6,7 @@ import guru.drinkit.repository.IngredientRepository
 import guru.drinkit.repository.RecipeRepository
 import org.apache.lucene.analysis.Analyzer
 import org.apache.lucene.document.Document
+import org.apache.lucene.document.Field
 import org.apache.lucene.document.Field.Store.NO
 import org.apache.lucene.document.StoredField
 import org.apache.lucene.document.TextField
@@ -30,45 +31,37 @@ open class SearchService @Autowired constructor(
         val ingredientRepository: IngredientRepository
 ) {
 
-    enum class RecipeFields {
-        localizedName,
-        originalName,
-        description,
-        ingredientName,
-        ingredientDesc,
-        ingredientAlias
-    }
-
     @PostConstruct
     open fun index() {
         try {
-            indexRecipes(recipeRepository.findAll())
+            recipeIndexWriter.deleteAll()
+            recipeIndexWriter.addDocuments(indexRecipes())
+            recipeIndexWriter.commit()
         } catch (e: Exception) {
             e.printStackTrace()
             //todo rollbar
         }
     }
 
-    private fun indexRecipes(recipes: Iterable<Recipe>) {
+    private fun indexRecipes(): List<Document> {
+        val recipes = recipeRepository.findAll()
         val ingredients = ingredientRepository.findAll().associateBy { it.id!! }
-        val documents = recipes.map { transformToDocument(it, ingredients) }
-        recipeIndexWriter.addDocuments(documents)
-        recipeIndexWriter.commit()
+        return recipes.map { transformToDocument(it, ingredients) }
     }
 
     private fun transformToDocument(recipe: Recipe, ingredients: Map<Int, Ingredient>): Document {
         val document = Document()
         document.add(StoredField("id", recipe.id!!))
-        document.add(TextField(RecipeFields.localizedName.name, recipe.name, NO).also { it.setBoost(2.9f) })
-        recipe.originalName?.let { document.add(TextField(RecipeFields.originalName.name, it, NO).also { it.setBoost(2.1f) }) }
-        recipe.description?.let { document.add(TextField(RecipeFields.description.name, it, NO)) }
+        recipe.name?.let { document.add(RecipeFields.localizedName.toField(it)) }
+        recipe.originalName?.let { document.add(RecipeFields.originalName.toField(it)) }
+        recipe.description?.let { document.add(RecipeFields.description.toField(it)) }
         recipe.ingredientsWithQuantities
                 .map { it.ingredientId }
-                .map { ingredients[it] }
-                .forEach {
-                    document.add(TextField(RecipeFields.ingredientName.name, it!!.name, NO).also { it.setBoost(1.5f) })
-                    document.add(TextField(RecipeFields.ingredientDesc.name, it.description, NO).also { it.setBoost(0.5f) })
-                    it.alias?.forEach { document.add(TextField(RecipeFields.ingredientAlias.name, it, NO).also { it.setBoost(0.5f) }) }
+                .mapNotNull { ingredients[it] }
+                .forEach { ingredient ->
+                    ingredient.name?.let { document.add(RecipeFields.ingredientName.toField(it)) }
+                    ingredient.description?.let { document.add(RecipeFields.ingredientDesc.toField(it)) }
+                    ingredient.alias?.forEach { document.add(RecipeFields.ingredientAlias.toField(it)) }
                 }
         return document
     }
@@ -85,5 +78,20 @@ open class SearchService @Autowired constructor(
         val ingredients = ingredientRepository.findAll().associateBy { it.id!! }
         recipeIndexWriter.addDocument(transformToDocument(recipe, ingredients))
         recipeIndexWriter.commit()
+    }
+
+    companion object {
+        enum class RecipeFields(val boost: Float) {
+            localizedName(2.9f),
+            originalName(2.1f),
+            description(1.0f),
+            ingredientName(1.5f),
+            ingredientDesc(0.5f),
+            ingredientAlias(0.5f);
+
+            fun toField(value: String): Field {
+                return TextField(this.name, value, NO).apply { setBoost(boost) }
+            }
+        }
     }
 }
