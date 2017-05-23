@@ -19,6 +19,7 @@ open class LuceneConfig {
 
     @Bean open fun recipeDirectory() = RAMDirectory()
 
+    //todo AnalWrapper
     @Bean open fun analyzer(): Analyzer = RussianAnalyzer()
 
     @Bean open fun recipeIndexWriter(directory: Directory, analyzer: Analyzer): IndexWriter

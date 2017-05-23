@@ -31,12 +31,15 @@ open class SearchService @Autowired constructor(
         val ingredientRepository: IngredientRepository
 ) {
 
+    private lateinit var recipeSearcher: IndexSearcher
+
     @PostConstruct
     open fun index() {
         try {
             recipeIndexWriter.deleteAll()
             recipeIndexWriter.addDocuments(convertRecipes())
             recipeIndexWriter.commit()
+            recipeSearcher = IndexSearcher(DirectoryReader.open(recipeDirectory))
         } catch (e: Exception) {
             e.printStackTrace()
             //todo rollbar
@@ -55,23 +58,21 @@ open class SearchService @Autowired constructor(
         recipe.name?.let { document.add(RecipeFields.localizedName.toField(it)) }
         recipe.originalName?.let { document.add(RecipeFields.originalName.toField(it)) }
         recipe.description?.let { document.add(RecipeFields.description.toField(it)) }
-        recipe.ingredientsWithQuantities
+        recipe.ingredientsWithQuantities.asSequence()
                 .map { it.ingredientId }
                 .mapNotNull { ingredients[it] }
                 .forEach { ingredient ->
                     ingredient.name?.let { document.add(RecipeFields.ingredientName.toField(it)) }
-                    ingredient.description?.let { document.add(RecipeFields.ingredientDesc.toField(it)) }
                     ingredient.alias?.forEach { document.add(RecipeFields.ingredientAlias.toField(it)) }
                 }
         return document
     }
 
+    private val recipeQueryParser = recipeQueryParser()
+
     fun findRecipes(searchString: String): Collection<Int> {
-        val queryParser = MultiFieldQueryParser(RecipeFields.values().map { it.name }.toTypedArray(), analyzer)
-        val searcher = IndexSearcher(DirectoryReader.open(recipeDirectory))
-        val topDocs = searcher.search(queryParser.parse(searchString), 50)
-        //todo fix duplicates
-        return topDocs.scoreDocs.map { searcher.doc(it.doc).getField("id").numericValue().toInt() }
+        val topDocs = recipeSearcher.search(recipeQueryParser.parse(searchString), 50)
+        return topDocs.scoreDocs.map { recipeSearcher.doc(it.doc).getField("id").numericValue().toInt() }
     }
 
     fun indexRecipe(recipe: Recipe) {
@@ -80,17 +81,22 @@ open class SearchService @Autowired constructor(
         recipeIndexWriter.commit()
     }
 
+    private fun recipeQueryParser(): MultiFieldQueryParser = MultiFieldQueryParser(
+            RecipeFields.values().map { it.name }.toTypedArray(),
+            analyzer,
+            RecipeFields.values().associate { it.name to it.boost }
+    )
+
     companion object {
         enum class RecipeFields(val boost: Float) {
             localizedName(2.9f),
             originalName(2.1f),
-            description(1.0f),
+            description(0.1f),
             ingredientName(1.5f),
-            ingredientDesc(0.5f),
-            ingredientAlias(0.5f);
+            ingredientAlias(1f);
 
             fun toField(value: String): Field {
-                return TextField(this.name, value, NO).apply { setBoost(boost) }
+                return TextField(this.name, value, NO)
             }
         }
     }
