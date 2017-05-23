@@ -35,7 +35,7 @@ open class SearchService @Autowired constructor(
     open fun index() {
         try {
             recipeIndexWriter.deleteAll()
-            recipeIndexWriter.addDocuments(indexRecipes())
+            recipeIndexWriter.addDocuments(convertRecipes())
             recipeIndexWriter.commit()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -43,7 +43,7 @@ open class SearchService @Autowired constructor(
         }
     }
 
-    private fun indexRecipes(): List<Document> {
+    private fun convertRecipes(): List<Document> {
         val recipes = recipeRepository.findAll()
         val ingredients = ingredientRepository.findAll().associateBy { it.id!! }
         return recipes.map { transformToDocument(it, ingredients) }
