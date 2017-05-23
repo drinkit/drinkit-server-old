@@ -66,12 +66,12 @@ open class SearchService @Autowired constructor(
         return document
     }
 
-    fun findRecipes(searchString: String): Set<Int> {
+    fun findRecipes(searchString: String): Collection<Int> {
         val queryParser = MultiFieldQueryParser(RecipeFields.values().map { it.name }.toTypedArray(), analyzer)
         val searcher = IndexSearcher(DirectoryReader.open(recipeDirectory))
         val topDocs = searcher.search(queryParser.parse(searchString), 50)
         //todo fix duplicates
-        return topDocs.scoreDocs.map { searcher.doc(it.doc).getField("id").numericValue().toInt() }.toSet()
+        return topDocs.scoreDocs.map { searcher.doc(it.doc).getField("id").numericValue().toInt() }
     }
 
     fun indexRecipe(recipe: Recipe) {
