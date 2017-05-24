@@ -22,13 +22,20 @@ open class LuceneConfig {
 
     @Bean open fun recipeDirectory() = RAMDirectory()
 
-    //todo AnalWrapper
     @Bean open fun analyzer(): Analyzer = PerFieldAnalyzerWrapper(
             RussianAnalyzer(),
-            mapOf(SearchService.Companion.RecipeFields.originalName.name to EnglishAnalyzer()
+            mapOf(
+                    SearchService.Companion.RecipeFields.originalName.name to EnglishAnalyzer(),
+                    SearchService.Companion.RecipeFields.description.name to descriptionAnalyzer()
             ))
 
     @Bean open fun recipeIndexWriter(directory: Directory, analyzer: Analyzer): IndexWriter
             = IndexWriter(directory, IndexWriterConfig(analyzer()))
+
+    @Bean open fun descriptionAnalyzer(): Analyzer = RussianAnalyzer(
+            RussianAnalyzer.getDefaultStopSet().apply {
+                add("рецепт")
+                add("коктейль")
+            })
 
 }
