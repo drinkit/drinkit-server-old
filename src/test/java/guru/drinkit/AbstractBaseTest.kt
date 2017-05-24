@@ -9,6 +9,7 @@ import guru.drinkit.service.IngredientService
 import guru.drinkit.springconfig.AppConfig
 import guru.drinkit.springconfig.LuceneConfig
 import guru.drinkit.springconfig.MongoConfig
+import org.apache.lucene.index.IndexWriter
 import org.junit.Before
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,11 +33,13 @@ abstract class AbstractBaseTest {
     protected lateinit var secondIngredient: Ingredient
     protected lateinit var user: User
     @Autowired
-    internal var mongoTemplate: MongoTemplate? = null
+    internal lateinit var mongoTemplate: MongoTemplate
     @Autowired
-    private val ingredientService: IngredientService? = null
+    private lateinit var ingredientService: IngredientService
     @Autowired
-    private val userRepository: UserRepository? = null
+    private lateinit var userRepository: UserRepository
+    @Autowired
+    private lateinit var indexWriter: IndexWriter
 
     @Before
     fun initTestData() {
@@ -45,7 +48,7 @@ abstract class AbstractBaseTest {
         firstIngredient.description = "firstIngredient"
         firstIngredient.name = "First"
         firstIngredient.vol = 30
-        firstIngredient = ingredientService!!.insert(firstIngredient)
+        firstIngredient = ingredientService.insert(firstIngredient)
 
         secondIngredient = Ingredient()
         secondIngredient.description = "secondIngredient"
@@ -60,14 +63,16 @@ abstract class AbstractBaseTest {
                 add(User.BarItem(firstIngredient.id!!, true))
             }
         }
-        userRepository!!.save(user)
+        userRepository.save(user)
     }
 
     private fun cleanUp() {
-        for (collectionName in mongoTemplate!!.collectionNames) {
-            if (!collectionName.startsWith("system.")) {
-                mongoTemplate!!.getCollection(collectionName).remove(BasicDBObject())
-            }
+        mongoTemplate.collectionNames
+                .filterNot { it.startsWith("system.") }
+                .forEach { mongoTemplate.getCollection(it).remove(BasicDBObject()) }
+        indexWriter.apply {
+            deleteAll()
+            commit()
         }
     }
 
